@@ -10,6 +10,8 @@
     --line: #E3E1F0; --accent: #1E3A78; --accent-ink: #FFFFFF; --accent-soft: #E3EAF7;
     --gold: #A9711E; --gold-soft: #F5EBD9;
     --type-solo-bg: #1F8A5F; --type-solo-fg: #FFFFFF; --type-duo-bg: #C97A1D; --type-duo-fg: #FFFFFF;
+    --sev-yellow-bg: #FFF2CC; --sev-yellow-fg: #7A5C00;
+    --sev-red-bg: #F8CBAD; --sev-red-fg: #8A2E00;
     --shadow: 0 1px 2px rgba(20, 35, 29, 0.06), 0 6px 20px -8px rgba(20, 35, 29, 0.18);
   }
   @media (prefers-color-scheme: dark) {
@@ -18,6 +20,8 @@
       --line: #2A2F46; --accent: #6C8FE0; --accent-ink: #0B1430; --accent-soft: rgba(108,143,224,0.16);
       --gold: #E3AD54; --gold-soft: rgba(227,173,84,0.14);
       --type-solo-bg: #4FD48A; --type-solo-fg: #06231B; --type-duo-bg: #F2A65A; --type-duo-fg: #2B1400;
+      --sev-yellow-bg: rgba(232,182,63,0.18); --sev-yellow-fg: #E8B63F;
+      --sev-red-bg: rgba(224,110,74,0.18); --sev-red-fg: #E88566;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -10px rgba(0,0,0,0.5);
     }
   }
@@ -26,6 +30,8 @@
     --line: #2A2F46; --accent: #6C8FE0; --accent-ink: #0B1430; --accent-soft: rgba(108,143,224,0.16);
     --gold: #E3AD54; --gold-soft: rgba(227,173,84,0.14);
     --type-solo-bg: #4FD48A; --type-solo-fg: #06231B; --type-duo-bg: #F2A65A; --type-duo-fg: #2B1400;
+    --sev-yellow-bg: rgba(232,182,63,0.18); --sev-yellow-fg: #E8B63F;
+    --sev-red-bg: rgba(224,110,74,0.18); --sev-red-fg: #E88566;
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -10px rgba(0,0,0,0.5);
   }
   :root[data-theme="light"] {
@@ -33,6 +39,8 @@
     --line: #E3E1F0; --accent: #1E3A78; --accent-ink: #FFFFFF; --accent-soft: #E3EAF7;
     --gold: #A9711E; --gold-soft: #F5EBD9;
     --type-solo-bg: #1F8A5F; --type-solo-fg: #FFFFFF; --type-duo-bg: #C97A1D; --type-duo-fg: #FFFFFF;
+    --sev-yellow-bg: #FFF2CC; --sev-yellow-fg: #7A5C00;
+    --sev-red-bg: #F8CBAD; --sev-red-fg: #8A2E00;
     --shadow: 0 1px 2px rgba(20,35,29,0.06), 0 6px 20px -8px rgba(20,35,29,0.18);
   }
   * { box-sizing: border-box; }
@@ -120,9 +128,15 @@
   details.coach-day[open] summary::after { transform: rotate(45deg); }
   details.coach-day[open] summary { border-bottom: 1px solid var(--line); }
   .coach-day-body { padding: 10px; display: flex; flex-direction: column; gap: 10px; }
-  .slot { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; }
+  .slot { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid transparent; border-radius: 12px; padding: 11px 12px; }
+  .slot.sev-yellow { border-left-color: var(--sev-yellow-fg); }
+  .slot.sev-red { border-left-color: var(--sev-red-fg); }
   .slot-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 9px; }
   .slot-time { font-size: 16px; font-weight: 700; }
+  .sev-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .sev-badge.sev-ok { background: var(--surface-2); color: var(--muted); }
+  .sev-badge.sev-yellow { background: var(--sev-yellow-bg); color: var(--sev-yellow-fg); }
+  .sev-badge.sev-red { background: var(--sev-red-bg); color: var(--sev-red-fg); }
   .floor-matches { display: flex; flex-direction: column; gap: 6px; }
   .coach-match { background: var(--surface-2); border-radius: 10px; padding: 8px 10px; }
   .coach-match-top { font-size: 14px; }
@@ -134,6 +148,13 @@
   details.team-group > summary .group-name { background: var(--gold); color: var(--accent-ink); }
   details.team-entry summary { font-weight: 700; }
   .note-banner { background: var(--accent-soft); color: var(--accent); border-radius: 10px; padding: 10px 13px; font-size: 12px; line-height: 1.7; margin: 4px 0 14px; }
+
+  .coach-summary { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px 14px 16px; margin-bottom: 16px; }
+  .coach-summary .day-label:first-child { margin-top: 0; }
+  .coach-summary .day-label { margin-top: 16px; }
+  table.coach-summary-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 0 0 4px; }
+  table.coach-summary-table th, table.coach-summary-table td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  table.coach-summary-table th { color: var(--muted); font-weight: 600; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; }
 
   @media (prefers-reduced-motion: reduce) { details summary::after { transition: none; } }
 </style>
@@ -2871,7 +2892,28 @@
       <div id="empty-state">找不到符合的選手</div>
     </div>
     <div id="view-coach">
-      <div class="note-banner">依日期分組，每個時段列出當時進行中的所有場次與場地。這裡只涵蓋資格賽（循環小組賽）；晉級後的會內賽對戰表請另行查閱大會公告。</div>
+      <div class="note-banner">依日期分組，每個時段列出當時進行中的所有場次與場地。這裡只涵蓋資格賽（循環小組賽）；晉級後的會內賽對戰表請另行查閱大會公告。　目前預設隨隊教練 2 位，同時段場次數超過時會標示缺口。</div>
+<div class="coach-summary"><div class="day-label">8/31（一）</div>
+    <table class="coach-summary-table">
+      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
+      <tr><td class="mono">08:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">11:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:40</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:35</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:20</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:40</td><td>3</td><td><span class="sev-badge sev-yellow">同時 3 組・教練缺口 1 位</span></td></tr><tr><td class="mono">18:40</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
+    </table><div class="day-label">9/1（二）</div>
+    <table class="coach-summary-table">
+      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
+      <tr><td class="mono">08:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:40</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">10:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">11:20</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">12:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">12:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">13:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:45</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">15:00</td><td>3</td><td><span class="sev-badge sev-yellow">同時 3 組・教練缺口 1 位</span></td></tr><tr><td class="mono">15:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">18:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">18:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">18:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">19:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
+    </table><div class="day-label">9/2（三）</div>
+    <table class="coach-summary-table">
+      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
+      <tr><td class="mono">09:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">16:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">19:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">20:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
+    </table><div class="day-label">9/3（四）</div>
+    <table class="coach-summary-table">
+      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
+      <tr><td class="mono">09:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:45</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">10:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">10:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">11:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">13:34</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:51</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:08</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:25</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:16</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:33</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">16:41</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:58</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:49</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:57</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
+    </table><div class="day-label">9/4（五）</div>
+    <table class="coach-summary-table">
+      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
+      <tr><td class="mono">08:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">08:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">08:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:18</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">09:36</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:54</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">10:12</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">10:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">10:48</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">11:24</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">12:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">12:18</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">12:36</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">13:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:48</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:06</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:18</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:48</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:06</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:24</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr>
+    </table></div>
       <div class="roster-meta"><span>依日期分組，點時段看場地與對戰</span></div>
       <div id="coach-view-body">
 <details class="coach-day">
@@ -2882,6 +2924,7 @@
           <div class="coach-day-body"><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">08:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2895,6 +2938,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">11:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2908,6 +2952,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2921,6 +2966,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:40</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2934,6 +2980,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">15:35</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2947,6 +2994,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:30</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2968,6 +3016,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2981,6 +3030,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:20</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -2991,9 +3041,10 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #22</div>
       
     </div></div>
-            </div><div class="slot">
+            </div><div class="slot sev-yellow">
               <div class="slot-head">
                 <span class="slot-time mono">17:40</span>
+                <span class="sev-badge sev-yellow">同時 3 組・教練缺口 1 位</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3023,6 +3074,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:40</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3042,6 +3094,7 @@
           <div class="coach-day-body"><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">08:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3055,6 +3108,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:40</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3076,6 +3130,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">10:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3089,6 +3144,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">11:20</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3110,6 +3166,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">12:30</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3131,6 +3188,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">12:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3144,6 +3202,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3157,6 +3216,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:15</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3178,6 +3238,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3191,6 +3252,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3212,6 +3274,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:45</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3230,9 +3293,10 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #54</div>
       
     </div></div>
-            </div><div class="slot">
+            </div><div class="slot sev-yellow">
               <div class="slot-head">
                 <span class="slot-time mono">15:00</span>
+                <span class="sev-badge sev-yellow">同時 3 組・教練缺口 1 位</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3262,6 +3326,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">15:15</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3275,6 +3340,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">15:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3288,6 +3354,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3301,6 +3368,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:15</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3314,6 +3382,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3327,6 +3396,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3340,6 +3410,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:15</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3361,6 +3432,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:30</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3382,6 +3454,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3403,6 +3476,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:15</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3416,6 +3490,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:30</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3437,6 +3512,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3450,6 +3526,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">19:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3471,6 +3548,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">19:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3490,6 +3568,7 @@
           <div class="coach-day-body"><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3503,6 +3582,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3524,6 +3604,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:15</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3545,6 +3626,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3558,6 +3640,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3571,6 +3654,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:15</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3592,6 +3676,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3605,6 +3690,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3618,6 +3704,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3631,6 +3718,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3644,6 +3732,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3657,6 +3746,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3670,6 +3760,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">19:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3683,6 +3774,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">19:15</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3696,6 +3788,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">19:30</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3717,6 +3810,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">19:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3730,6 +3824,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">20:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3749,6 +3844,7 @@
           <div class="coach-day-body"><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:15</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3762,6 +3858,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3775,6 +3872,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:45</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3796,6 +3894,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">10:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3809,6 +3908,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">10:15</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3830,6 +3930,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">11:45</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3843,6 +3944,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3864,6 +3966,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:34</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3877,6 +3980,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:51</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3890,6 +3994,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:08</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3903,6 +4008,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:25</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3916,6 +4022,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">15:16</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3929,6 +4036,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">15:33</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3950,6 +4058,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:41</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3963,6 +4072,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:58</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3984,6 +4094,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:15</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -3997,6 +4108,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:49</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4010,6 +4122,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:57</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4029,6 +4142,7 @@
           <div class="coach-day-body"><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">08:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4050,6 +4164,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">08:15</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4071,6 +4186,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">08:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4084,6 +4200,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:00</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4097,6 +4214,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:18</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4118,6 +4236,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:36</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4131,6 +4250,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">09:54</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4144,6 +4264,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">10:12</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4157,6 +4278,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">10:30</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4178,6 +4300,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">10:48</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4191,6 +4314,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">11:24</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4204,6 +4328,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">12:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4225,6 +4350,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">12:18</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4238,6 +4364,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">12:36</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4259,6 +4386,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:30</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4272,6 +4400,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">13:48</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4293,6 +4422,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">14:06</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4306,6 +4436,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">15:18</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4319,6 +4450,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">16:48</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4340,6 +4472,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:06</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4353,6 +4486,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">17:24</span>
+                <span class="sev-badge sev-ok">同時 1 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
@@ -4366,6 +4500,7 @@
             </div><div class="slot">
               <div class="slot-head">
                 <span class="slot-time mono">18:00</span>
+                <span class="sev-badge sev-ok">同時 2 組・教練足夠</span>
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">

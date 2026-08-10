@@ -113,10 +113,11 @@
   .tab-radio { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
   .tab-bar { display: flex; gap: 6px; padding: 12px 18px; background: var(--bg); border-bottom: 1px solid var(--line); }
   .tab-bar label { flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: var(--muted); background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.12s ease, color 0.12s ease; }
-  #tab-player:checked ~ .tab-bar label[for="tab-player"], #tab-coach:checked ~ .tab-bar label[for="tab-coach"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
-  #view-player, #view-coach { display: none; }
+  #tab-player:checked ~ .tab-bar label[for="tab-player"], #tab-coach:checked ~ .tab-bar label[for="tab-coach"], #tab-summary:checked ~ .tab-bar label[for="tab-summary"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  #view-player, #view-coach, #view-summary { display: none; }
   #tab-player:checked ~ main #view-player { display: block; }
   #tab-coach:checked ~ main #view-coach { display: block; }
+  #tab-summary:checked ~ main #view-summary { display: block; }
 
   #coach-view-body { display: flex; flex-direction: column; gap: 10px; }
   details.coach-day { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
@@ -149,12 +150,22 @@
   details.team-entry summary { font-weight: 700; }
   .note-banner { background: var(--accent-soft); color: var(--accent); border-radius: 10px; padding: 10px 13px; font-size: 12px; line-height: 1.7; margin: 4px 0 14px; }
 
-  .coach-summary { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px 14px 16px; margin-bottom: 16px; }
-  .coach-summary .day-label:first-child { margin-top: 0; }
-  .coach-summary .day-label { margin-top: 16px; }
-  table.coach-summary-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 0 0 4px; }
-  table.coach-summary-table th, table.coach-summary-table td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-  table.coach-summary-table th { color: var(--muted); font-weight: 600; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .coach-summary { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin-bottom: 16px; }
+  .coach-summary-legend { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .coach-summary-legend .grid-count { margin: 0 2px; }
+  .coach-summary-scroll { overflow-x: auto; }
+  table.coach-summary-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.coach-summary-table th, table.coach-summary-table td { text-align: center; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  table.coach-summary-table th { color: var(--muted); font-weight: 600; font-size: 10px; letter-spacing: 0.01em; }
+  table.coach-summary-table th:first-child, table.coach-summary-table td.grid-time { text-align: left; position: sticky; left: 0; background: var(--surface-2); }
+  table.coach-summary-table td.grid-empty { color: var(--line); }
+  .grid-count { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; padding: 2px 6px; border-radius: 6px; font-weight: 700; color: var(--ink); }
+  .grid-count.sev-yellow { background: var(--sev-yellow-bg); color: var(--sev-yellow-fg); }
+  .grid-count.sev-red { background: var(--sev-red-bg); color: var(--sev-red-fg); }
+  details.grid-cell summary { list-style: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  details.grid-cell summary::-webkit-details-marker { display: none; }
+  details.grid-cell[open] summary .grid-count { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .grid-detail { margin-top: 8px; text-align: left; white-space: normal; width: max-content; max-width: 240px; display: flex; flex-direction: column; gap: 6px; }
 
   @media (prefers-reduced-motion: reduce) { details summary::after { transition: none; } }
 </style>
@@ -168,9 +179,11 @@
   </header>
   <input class="tab-radio" type="radio" name="view-tab" id="tab-player" checked>
   <input class="tab-radio" type="radio" name="view-tab" id="tab-coach">
+  <input class="tab-radio" type="radio" name="view-tab" id="tab-summary">
   <div class="tab-bar">
     <label for="tab-player">選手版</label>
     <label for="tab-coach">教練版</label>
+    <label for="tab-summary">彙整版</label>
   </div>
   <main>
     <div id="view-player">
@@ -2892,28 +2905,7 @@
       <div id="empty-state">找不到符合的選手</div>
     </div>
     <div id="view-coach">
-      <div class="note-banner">依日期分組，每個時段列出當時進行中的所有場次與場地。這裡只涵蓋資格賽（循環小組賽）；晉級後的會內賽對戰表請另行查閱大會公告。　目前預設隨隊教練 2 位，同時段場次數超過時會標示缺口。</div>
-<div class="coach-summary"><div class="day-label">8/31（一）</div>
-    <table class="coach-summary-table">
-      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
-      <tr><td class="mono">08:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">11:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:40</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:35</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:20</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:40</td><td>3</td><td><span class="sev-badge sev-yellow">同時 3 組・教練缺口 1 位</span></td></tr><tr><td class="mono">18:40</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
-    </table><div class="day-label">9/1（二）</div>
-    <table class="coach-summary-table">
-      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
-      <tr><td class="mono">08:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:40</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">10:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">11:20</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">12:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">12:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">13:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:45</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">15:00</td><td>3</td><td><span class="sev-badge sev-yellow">同時 3 組・教練缺口 1 位</span></td></tr><tr><td class="mono">15:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">18:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">18:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">18:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">19:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
-    </table><div class="day-label">9/2（三）</div>
-    <table class="coach-summary-table">
-      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
-      <tr><td class="mono">09:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">16:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">19:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">19:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">20:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
-    </table><div class="day-label">9/3（四）</div>
-    <table class="coach-summary-table">
-      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
-      <tr><td class="mono">09:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:45</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">10:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">10:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">11:45</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">13:34</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:51</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:08</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">14:25</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:16</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:33</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">16:41</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:58</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:15</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:49</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:57</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr>
-    </table><div class="day-label">9/4（五）</div>
-    <table class="coach-summary-table">
-      <tr><th>時段</th><th>組數</th><th>教練狀態</th></tr>
-      <tr><td class="mono">08:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">08:15</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">08:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:00</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:18</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">09:36</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">09:54</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">10:12</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">10:30</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">10:48</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">11:24</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">12:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">12:18</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">12:36</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">13:30</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">13:48</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">14:06</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">15:18</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">16:48</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr><tr><td class="mono">17:06</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">17:24</td><td>1</td><td><span class="sev-badge sev-ok">同時 1 組・教練足夠</span></td></tr><tr><td class="mono">18:00</td><td>2</td><td><span class="sev-badge sev-ok">同時 2 組・教練足夠</span></td></tr>
-    </table></div>
+      <div class="note-banner">依日期分組，每個時段列出當時進行中的所有場次與場地。這裡只涵蓋資格賽（循環小組賽）；晉級後的會內賽對戰表請另行查閱大會公告。</div>
       <div class="roster-meta"><span>依日期分組，點時段看場地與對戰</span></div>
       <div id="coach-view-body">
 <details class="coach-day">
@@ -4522,6 +4514,1315 @@
             </div></div>
         </details>
       </div>
+    </div>
+    <div id="view-summary">
+      <div class="note-banner">橫軸為日期，縱軸為賽程表上實際出現過的時間點；數字＝該時段同時進行的組數（每組需 1 位教練，預設隨隊 2 位）。點數字可展開看該時段的對戰內容。</div>
+<div class="coach-summary">
+    <div class="coach-summary-legend">數字＝同時進行組數（每組需 1 位教練，預設 2 位隨隊）；
+      <span class="grid-count sev-yellow">黃</span>＝缺口 1 位，
+      <span class="grid-count sev-red">紅</span>＝缺口 2 位以上。</div>
+    <div class="coach-summary-scroll">
+    <table class="coach-summary-table">
+      <tr><th>時間</th><th>8/31（一）</th><th>9/1（二）</th><th>9/2（三）</th><th>9/3（四）</th><th>9/4（五）</th></tr>
+      <tr><td class="mono grid-time">08:00</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">五男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市幸安國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地9 · #9</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">五男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">臺北市雙永國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地9 · #29</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡皓宇／李融載</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">喻以誠／黃笙迪（台中市大鵬國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地4 · #34</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">顏弘寔／吳敏岳</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">王子碩／魏宏展（台北市雙蓮國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地5 · #35</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">08:15</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">呂循崴／黃梓家</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">呂秉哲／洪翌宸（台中市大鵬國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地7 · #47</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">吳梣安／陳奕辰</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林昱謙／郭明親（台北市福德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地10 · #50</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">08:30</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">楊富凱／林祐慬</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳建均／吳予丞（桃園市建德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地6 · #56</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">09:00</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">洪永宸／黃致堯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃品羿／陳品硯（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級男子雙打 · 場地5 · #36</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">09:15</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">于衍恩</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">鍾妘苡（桃園市文山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地10 · #32</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">09:18</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林妍妡／程禾亘</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林詠潔／夏可桐（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地4 · #3</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">于衍恩／安在芸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳妍儒／周忻妤（新北市文德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地5 · #4</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">09:30</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡澤亞</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">郭宇倞（飛迅南市文化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地5 · #13</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林妍妡</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳韵宜（林口康橋國際學校）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地6 · #36</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">09:36</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">田馥菲／陳昱璇</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃奕晨／詹紫晴（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地10 · #10</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">09:40</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">四男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">日新鳳凰</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級男子團體 · 場地3 · #28</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">四女團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市民權國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地6 · #7</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">09:45</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">安在芸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">廖庭語（飛迅南市文化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地7 · #45</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">程禾亘</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃宥菲（新北市秀朗國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地10 · #48</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">09:54</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芸安／彭怡臻</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">吳祤杉／陳嵱橙（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地6 · #2</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">10:00</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">謝佳玲</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">吳祤杉（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地10 · #2</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">10:12</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">謝佳玲／黃祤芯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">李米樂／王杏芙（新北市金龍國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地4 · #10</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">10:15</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">彭怡臻</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林昕璇（新竹縣松林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地6 · #8</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃祤芯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">劉沐橙（新北市秀山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地10 · #12</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">10:30</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">六男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市民權國小B</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #31</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃筠雅</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">李沐澄（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地1 · #7</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">包清之／羅翊嫙</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">劉姿聿／曹又晨（新北市頭前國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地10 · #16</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">10:48</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">田馥菲／陳昱璇</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">郭絜儀／陳芯樂（台北市石牌國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地8 · #24</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">11:00</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">六男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台中市大鵬國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #7</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">11:20</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">六女團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">雲林縣僑真國小*3</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級女子團體 · 場地6 · #20</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃丞禾／陳彥森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳建燁／陳奕帆（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地9 · #2</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">11:24</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">洪永宸／黃致堯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃允謙／吳瑞恩（新北市義學國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級男子雙打 · 場地8 · #58</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">11:45</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳昱璇</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">曹又晨（新北市頭前國小*5/8）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地10 · #18</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">12:00</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">謝佳玲／黃祤芯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳若頤／陳姿帆（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地3 · #20</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">顏弘寔／吳敏岳</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳宥榮／王宥捷（彰化市南郭國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地8 · #65</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">12:18</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">呂循崴／黃梓家</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">楊爵愷／吳禹廷（台北市民生國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地10 · #77</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">12:30</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芠頡／王宥程</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">許鎧恩／李紹安（新北市文德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地9 · #22</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">廖思維／鄭韋綸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林邑達／郭友錡（新竹縣松林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地10 · #23</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">12:36</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">吳梣安／陳奕辰</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">曾品瑋／陳忠鼎（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地3 · #80</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">楊富凱／林祐慬</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">蔡典均／許迦恩（台中市忠明國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地9 · #86</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">12:45</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張喬椉／詹堉禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳禹衡／楊超捷（日新鳳凰）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地3 · #26</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">13:00</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">顏弘寔</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">張大帥（台北市敦化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地6 · #11</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">包清之</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃秀穎（新北市麗林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地1 · #19</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">羅翊嫙</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">孫立欣（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地9 · #27</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">13:15</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">吳梣安</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">連橙睿（新北市昌平國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #16</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">李融載</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">呂宥橙（桃園市錦興國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地9 · #24</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">13:30</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">包清尹</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳宇萱（台北市石牌國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地10 · #22</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">13:34</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">于衍恩</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林彥妤（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地3 · #56</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">13:45</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">四男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市民權國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級男子團體 · 場地10 · #18</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃梓家</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">吳昱鋐（宜蘭縣成功國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地6 · #41</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">13:48</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芸安</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">幸芯（台北市敦化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地5 · #41</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">彭怡臻</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">康羽昕（新北市中正國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地10 · #46</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">13:51</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">安在芸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">楊函毓（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地6 · #69</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">14:00</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">楊富凱</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">謝宗翰（彰化市南郭國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #46</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林祐慬</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳譽（台北市民生國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地8 · #53</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡書亞</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳虹亦（新北市秀山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地7 · #43</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳俞儒</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">倪鹿元（台北市民生國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地10 · #46</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">14:06</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃祤芯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳若頤（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地4 · #50</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">14:08</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">洪永宸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">夏志洋（彰化市南郭國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地2 · #111</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">14:15</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡澤亞</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">蔡亞恩（台北市雙蓮國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地8 · #54</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張時曦</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">鄭程元（新北市金龍國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地10 · #56</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">14:25</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">謝宇森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">胡尋（桃園市文山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地6 · #125</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">14:40</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">四女團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市民生國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地3 · #4</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">14:45</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">廖思維／鄭韋綸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">郭士毅／洪稚鈞（台北市敦化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地4 · #51</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張喬椉／詹堉禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">程群智／程亦廷（台北市福德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #54</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">程祺恩</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃亭瀚（新竹市龍山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地3 · #69</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">15:00</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count sev-yellow">3</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">呂循崴</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">周立勛（台北市濱江國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #58</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡皓宇</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">詹凱桀（彰化縣田中國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地9 · #66</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">顏弘寔</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">劉謹賢（新北市頭前國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地10 · #67</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">15:15</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">吳敏岳</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">周怡成（台中市忠明國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地7 · #74</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">15:16</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃致堯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">方在寅（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地3 · #152</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">15:18</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">田馥菲</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">吳若琳（新北市秀朗國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地5 · #68</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">15:33</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">謝佳玲</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">曾李品希（新北市文德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地5 · #21</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芸安</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳語（新竹縣新社國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地6 · #22</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">15:35</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">六男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市濱江國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地1 · #18</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">15:45</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳奕辰</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">江俋頡（新竹縣新社國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地7 · #94</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">16:00</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">楊富凱</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃立宇（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地5 · #102</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林妍妡</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">童資涵（台北市民生國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地6 · #12</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">16:15</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃丞禾／陳彥森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">湯泓琦／裴家穎（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #58</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">程禾亘</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">楊孫菀（台中市東海國小*2）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地8 · #24</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡書亞</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">洪宇熙（新北市麗林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地10 · #84</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">16:30</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">六女團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">臺北市雙永國小</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級女子團體 · 場地3 · #13</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃丞禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林仁傑（屏東縣忠孝國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #6</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳俞儒</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃翊宸（新北市昌平國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地3 · #87</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">16:41</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">田馥菲</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">謝安妤（新北市秀山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地8 · #39</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">16:45</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芠頡／王宥程</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳佑鈞／丁冠華（新北市麗林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #78</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張時曦</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">張泳樂（台北市濱江國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地3 · #97</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">16:48</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林妍妡／程禾亘</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林亞鍹／詹宜儒（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地5 · #21</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">于衍恩／安在芸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">施淳薰／陳芊睿（台北市敦化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地6 · #22</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">16:58</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳昱璇</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳幸妍（雲林縣僑真國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地6 · #47</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">包清之</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">詹礎綾（台北市幸安國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地7 · #48</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:00</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張喬椉</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">蕭宇佑（台北市敦化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #7</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">呂循崴</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">蔣旻哲（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地5 · #114</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">程祺恩</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">余定睿（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地6 · #110</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:06</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芸安／彭怡臻</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">李博霏／郭辰穎（台北市敦化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地3 · #22</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">17:15</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡皓宇</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">葉峖霆（新北市樹林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地3 · #122</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">吳梣安</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳忠鼎（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地9 · #128</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">羅翊嫙</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">蔡昱萱（新竹市龍山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地5 · #56</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:20</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">詹堉禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">何丹力（新北市金龍國小*5/8）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #22</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:24</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">包清之／羅翊嫙</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">郭於晴／蔡若緁（新北市江翠國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地3 · #30</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">17:30</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">吳敏岳</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林楷軒（台北市石牌國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #130</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">李融載</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">郭明親（台北市福德國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地7 · #136</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">洪永宸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">張語晉（新北市昌平國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地2 · #57</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:40</td><td><details class="grid-cell">
+              <summary><span class="grid-count sev-yellow">3</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳彥森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">湯劭均（台中市大鵬國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #27</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芠頡</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳奕帆（台北市中山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地3 · #29</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">王宥程</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">賴威宇（台北市石牌國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #31</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:45</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">謝宇森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">劉恩碩（飛迅南市文化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地6 · #71</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">17:49</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">蔡皓宇／李融載</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林雍哲／李宸濬（台北市東門國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地7 · #4</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">18:00</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳奕辰</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">詹寓程（彰化縣田中國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #150</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃梓家</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">夏毅豐（新北市金龍國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地4 · #153</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃筠雅</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳以芊（林口康橋國際學校）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地2 · #31</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">包清尹</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">鄭可妤（新北市重陽國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地5 · #34</div>
+      
+    </div></div>
+            </details></td></tr><tr><td class="mono grid-time">18:15</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林祐慬</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">高湛寬（豐盈中市大勇）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地6 · #165</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">18:30</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃丞禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">劉秉元（台中市大鵬國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #64</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張喬椉</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">楊田丞（新北市昌平國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #65</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">黃致堯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">莊子昂（高雄市新光國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地3 · #98</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">18:40</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">鄭韋綸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳佑鈞（新北市麗林國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #57</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">18:45</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">廖思維</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">孫孝謙（新北市太平國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地4 · #73</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">18:57</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">洪永宸／黃致堯</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">劉恩碩／姚嘉濬（飛迅南市文化國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級男子雙打 · 場地9 · #16</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">19:00</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">詹堉禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林佑晨（桃園市文山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #80</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳彥森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">張辰愷（台南市崇學國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #84</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">廖思維</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃可贊（日新鳳凰*3/4）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地8 · #131</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">19:15</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">陳彥森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">曾宸碩（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #143</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">19:30</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張睿宸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林柏寬（日新鳳凰）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地4 · #103</div>
+      
+    </div></div>
+            </details></td><td><details class="grid-cell">
+              <summary><span class="grid-count">2</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">林芠頡</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">王紹帆（新北市秀山國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地2 · #145</div>
+      
+    </div><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">王宥程</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">黃柏綸（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地4 · #147</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">19:45</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">張睿宸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">談沐嘉（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地8 · #161</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr><tr><td class="mono grid-time">20:00</td><td class="grid-empty">－</td><td class="grid-empty">－</td><td><details class="grid-cell">
+              <summary><span class="grid-count">1</span></summary>
+              <div class="grid-detail"><div class="coach-match">
+      <div class="coach-match-top">
+        <span class="coach-player">鄭韋綸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳秉駿（台北市民權國小）</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #173</div>
+      
+    </div></div>
+            </details></td><td class="grid-empty">－</td><td class="grid-empty">－</td></tr>
+    </table>
+    </div>
+  </div>
     </div>
   </main>
   <footer class="app-foot">資料整理自大會賽程表。對手情報／近一年戰績尚待補充。如有異動請以主辦單位公告為準。</footer>

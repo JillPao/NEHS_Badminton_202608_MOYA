@@ -113,11 +113,12 @@
   .tab-radio { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
   .tab-bar { display: flex; gap: 6px; padding: 12px 18px; background: var(--bg); border-bottom: 1px solid var(--line); }
   .tab-bar label { flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: var(--muted); background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.12s ease, color 0.12s ease; }
-  #tab-player:checked ~ .tab-bar label[for="tab-player"], #tab-coach:checked ~ .tab-bar label[for="tab-coach"], #tab-summary:checked ~ .tab-bar label[for="tab-summary"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
-  #view-player, #view-coach, #view-summary { display: none; }
+  #tab-player:checked ~ .tab-bar label[for="tab-player"], #tab-coach:checked ~ .tab-bar label[for="tab-coach"], #tab-summary:checked ~ .tab-bar label[for="tab-summary"], #tab-intel:checked ~ .tab-bar label[for="tab-intel"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  #view-player, #view-coach, #view-summary, #view-intel { display: none; }
   #tab-player:checked ~ main #view-player { display: block; }
   #tab-coach:checked ~ main #view-coach { display: block; }
   #tab-summary:checked ~ main #view-summary { display: block; }
+  #tab-intel:checked ~ main #view-intel { display: block; }
 
   #coach-view-body { display: flex; flex-direction: column; gap: 10px; }
   details.coach-day { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
@@ -168,6 +169,42 @@
   .grid-detail { margin-top: 8px; text-align: left; white-space: normal; width: max-content; max-width: 240px; display: flex; flex-direction: column; gap: 6px; }
 
   @media (prefers-reduced-motion: reduce) { details summary::after { transition: none; } }
+
+  .intel-my-search { margin-bottom: 4px; }
+  #intel-empty { color: var(--muted); font-size: 14px; padding: 32px 8px; text-align: center; }
+  .my-result-block { background: var(--accent-soft); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
+  .my-result-block .my-name { font-weight: 700; color: var(--accent); font-size: 14.5px; }
+  .my-result-block .my-opp-line { font-size: 13px; color: var(--ink); margin-top: 6px; line-height: 1.6; }
+  .my-result-block .my-opp-line b { color: var(--accent); }
+  .my-result-block .my-opp-line .ev { color: var(--muted); font-size: 12px; }
+  .intel-notice { background: var(--sev-yellow-bg); color: var(--sev-yellow-fg); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; line-height: 1.7; margin: 4px 0 16px; }
+  .intel-h { font-size: 15px; margin: 22px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .intel-h:first-of-type { border-top: none; padding-top: 0; }
+  .intel-highlights { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+  .highlight-item { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; font-size: 13px; line-height: 1.6; }
+  .highlight-item b { color: var(--accent); }
+  .intel-table-wrap { overflow-x: auto; }
+  table.intel-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 6px 0 4px; }
+  table.intel-table th, table.intel-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.intel-table th { color: var(--muted); font-weight: 600; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+  .conf { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 2px 9px; letter-spacing: 0.02em; white-space: nowrap; }
+  .conf-high { background: var(--type-solo-bg); color: var(--type-solo-fg); }
+  .conf-mid { background: var(--accent-soft); color: var(--accent); }
+  .conf-low { background: var(--gold-soft); color: var(--gold); }
+  .conf-none { background: var(--surface-2); color: var(--muted); }
+  details.opp { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: 8px; }
+  details.opp[open] { box-shadow: var(--shadow); }
+  details.opp summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; -webkit-tap-highlight-color: transparent; }
+  details.opp summary::-webkit-details-marker { display: none; }
+  .opp-name { font-weight: 700; }
+  .opp-school { font-size: 12px; color: var(--muted); margin-right: auto; }
+  details.opp summary::after { content: ""; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(-45deg); transition: transform 0.15s ease; flex-shrink: 0; }
+  details.opp[open] summary::after { transform: rotate(45deg); }
+  .opp-body { padding: 0 14px 14px; font-size: 13px; line-height: 1.75; }
+  .opp-body p { margin: 0 0 8px; }
+  .opp-body .src { font-size: 11.5px; color: var(--muted); }
+  .opp-body .src a { color: var(--accent); }
+  .opp-body .warn-line { color: var(--gold); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -180,10 +217,12 @@
   <input class="tab-radio" type="radio" name="view-tab" id="tab-player" checked>
   <input class="tab-radio" type="radio" name="view-tab" id="tab-coach">
   <input class="tab-radio" type="radio" name="view-tab" id="tab-summary">
+  <input class="tab-radio" type="radio" name="view-tab" id="tab-intel">
   <div class="tab-bar">
     <label for="tab-player">選手版</label>
     <label for="tab-coach">教練版</label>
     <label for="tab-summary">彙整版</label>
+    <label for="tab-intel">對手情報</label>
   </div>
   <main>
     <div id="view-player">
@@ -600,42 +639,6 @@
     </div></div></div></div>
     </details><details class="player">
       <summary>
-        <span class="player-name-inline">張睿宸</span>
-        <span class="player-count">2 場</span>
-      </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card">
-      <div class="card-top">
-        <span class="type-badge type-solo">單打</span>
-        <span class="card-event">六年級男子單打</span>
-      </div>
-      <div class="card-main">
-        <span class="card-time mono">19:30</span>
-        <span class="floor-badge floor-c">場地 4</span>
-      </div>
-      <div class="card-opp">
-        <span class="label">對手</span>林柏寬（日新鳳凰）
-      </div>
-      
-      
-      <div class="card-foot"><span class="mono">#103</span></div>
-    </div></div></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
-      <div class="card-top">
-        <span class="type-badge type-solo">單打</span>
-        <span class="card-event">六年級男子單打</span>
-      </div>
-      <div class="card-main">
-        <span class="card-time mono">19:45</span>
-        <span class="floor-badge floor-c">場地 8</span>
-      </div>
-      <div class="card-opp">
-        <span class="label">對手</span>談沐嘉（台北市民權國小）
-      </div>
-      
-      
-      <div class="card-foot"><span class="mono">#161</span></div>
-    </div></div></div></div>
-    </details><details class="player">
-      <summary>
         <span class="player-name-inline">林芠頡</span>
         <span class="player-count">4 場</span>
       </summary>
@@ -897,6 +900,42 @@
       <div class="card-partner">搭檔：包清之</div>
       
       <div class="card-foot"><span class="mono">#30</span></div>
+    </div></div></div></div>
+    </details><details class="player">
+      <summary>
+        <span class="player-name-inline">蔡睿宸</span>
+        <span class="player-count">2 場</span>
+      </summary>
+      <div class="player-body"><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card">
+      <div class="card-top">
+        <span class="type-badge type-solo">單打</span>
+        <span class="card-event">六年級男子單打</span>
+      </div>
+      <div class="card-main">
+        <span class="card-time mono">19:30</span>
+        <span class="floor-badge floor-c">場地 4</span>
+      </div>
+      <div class="card-opp">
+        <span class="label">對手</span>林柏寬（日新鳳凰）
+      </div>
+      
+      
+      <div class="card-foot"><span class="mono">#103</span></div>
+    </div></div></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="card-top">
+        <span class="type-badge type-solo">單打</span>
+        <span class="card-event">六年級男子單打</span>
+      </div>
+      <div class="card-main">
+        <span class="card-time mono">19:45</span>
+        <span class="floor-badge floor-c">場地 8</span>
+      </div>
+      <div class="card-opp">
+        <span class="label">對手</span>談沐嘉（台北市民權國小）
+      </div>
+      
+      
+      <div class="card-foot"><span class="mono">#161</span></div>
     </div></div></div></div>
     </details><details class="player">
       <summary>
@@ -3544,7 +3583,7 @@
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
-        <span class="coach-player">張睿宸</span>
+        <span class="coach-player">蔡睿宸</span>
         <span class="coach-vs">vs</span>
         <span class="coach-opp">林柏寬（日新鳳凰）</span>
       </div>
@@ -3806,7 +3845,7 @@
               </div>
               <div class="floor-matches"><div class="coach-match">
       <div class="coach-match-top">
-        <span class="coach-player">張睿宸</span>
+        <span class="coach-player">蔡睿宸</span>
         <span class="coach-vs">vs</span>
         <span class="coach-opp">談沐嘉（台北市民權國小）</span>
       </div>
@@ -5771,7 +5810,7 @@
               <summary><span class="grid-count">1</span></summary>
               <div class="grid-detail"><div class="coach-match">
       <div class="coach-match-top">
-        <span class="coach-player">張睿宸</span>
+        <span class="coach-player">蔡睿宸</span>
         <span class="coach-vs">vs</span>
         <span class="coach-opp">林柏寬（日新鳳凰）</span>
       </div>
@@ -5801,7 +5840,7 @@
               <summary><span class="grid-count">1</span></summary>
               <div class="grid-detail"><div class="coach-match">
       <div class="coach-match-top">
-        <span class="coach-player">張睿宸</span>
+        <span class="coach-player">蔡睿宸</span>
         <span class="coach-vs">vs</span>
         <span class="coach-opp">談沐嘉（台北市民權國小）</span>
       </div>
@@ -5824,8 +5863,913 @@
     </div>
   </div>
     </div>
+    <div id="view-intel">
+      <div class="roster-meta"><span>共 125 位對手，已完成情報整理。</span></div>
+      <div class="search-wrap intel-my-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="my-search" type="text" placeholder="輸入選手姓名，找出他的對手…" autocomplete="off" />
+      </div>
+      <div id="my-results"></div>
+      <div id="intel-browse">
+        <div class="intel-notice">
+          <b>請注意：</b>本頁資料由 AI 網路搜尋整理而成，<b>未逐筆人工複核</b>，部分為搜尋引擎摘要，可能有誤。
+          對手多為未成年學生，同名同姓機率高，「查無資料」不代表實力弱，只代表沒查到公開紀錄。僅供賽前準備參考，請自行核實原始來源。
+        </div>
+        <h3 class="intel-h">重點提醒</h3>
+        <div class="intel-highlights"><div class="highlight-item"><b>對手情報 125 筆研究已全部完成</b>：約3成查到明確比賽成績（含名次/比分），約3成確認是活躍選手但無比賽結果（僅報名/校隊名冊），其餘約4成查無公開資料——查無不代表實力弱，尤其是來自強校的選手。</div><div class="highlight-item"><b>台南市文化國小</b>（劉恩碩、姚嘉濬、郭宇倞、廖庭語共4位選手就讀）是全名冊唯一一所115年（2026年5月）全國團體賽男女雙料冠軍的學校，即使這幾位個人查無資料，也是賽前最需要提防的對手校之一。</div><div class="highlight-item"><b>台北市民權國小</b>整體是羽球強校（培育過奧運金牌選手王齊麟），全名冊多位選手（黃柏綸、談沐嘉、陳秉駿、湯泓琦/裴家穎、楊函毓、蔣旻哲、陳若頤/陳姿帆等）與四年級團體冠軍紀錄都指向這所學校戰力堅強，賽前應特別提防；注意勿與同名的高雄市前鎮區民權國小混淆，兩者已核對區分。</div><div class="highlight-item"><b>台中市大鵬國小</b>與<b>新北市秀山國小</b>是另外兩所多次出現查證結果的強校：大鵬六年級組（湯劭均、劉秉元）近期戰績佳；秀山國小則出現「同校有人查到冠軍成績、有人完全查無資料」的落差（王紹帆 vs 謝安妤/劉沐橙），提醒查無資料不代表弱。</div><div class="highlight-item">少數本屆搭檔本身查到「一起出賽」實際紀錄、可信度較高的雙打組合：<b>陳若頤／陳姿帆</b>（民權）、<b>李米樂／王杏芙</b>（金龍）、<b>劉姿聿／曹又晨</b>（頭前，挑戰組女雙亞軍）。多數雙打對手則是「兩人個別活躍，但歷史搭檔是別人」，本屆配對可能是新組合，無法直接套用舊資料評估。</div><div class="highlight-item">最有效的資料來源是<b>2025年臺北市市長盃羽球錦標賽</b>（報名+成績總表，涵蓋台北市多校各年級）與<b>114年全國國小盃羽球錦標賽</b>官方逐場成績表（中華民國羽球協會公告，含比分明細）；之後若要補查台北市選手或團體賽，建議優先查這兩份文件。</div><div class="highlight-item">研究過程中多次出現「姓名相符但學校或年級對不上」的案例（約占全名冊1成），已依規則逐一核對排除、不採信為同一人；也有至少兩筆賽事資料本身互相矛盾（同一人同時登記兩個不同年級），已如實標註矛盾、未強行合理化。AI搜尋摘要也曾出現學校誤植的情況，一律以原始賽事文件核對為準。</div></div>
+        <h3 class="intel-h">總覽表</h3>
+        <div class="intel-table-wrap">
+          <table class="intel-table">
+            <tr><th>對手</th><th>學校／隊名</th><th>可信度</th><th>重點</th></tr>
+            <tr><td>呂秉哲／洪翌宸</td><td>台中市大鵬國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>喻以誠／黃笙迪</td><td>台中市大鵬國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>蔡典均／許迦恩</td><td>台中市忠明國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>吳祤杉／陳嵱橙</td><td>台北市中山國小</td><td><span class="conf conf-mid">中高</span></td><td>確認為本屆搭檔組合，2025年已一起報名雙打</td></tr><tr><td>曾品瑋／陳忠鼎</td><td>台北市中山國小</td><td><span class="conf conf-mid">中高</span></td><td>確認為本屆搭檔組合，2025年已一起報名雙打</td></tr><tr><td>林詠潔／夏可桐</td><td>台北市中山國小</td><td><span class="conf conf-low">低</span></td><td>林詠潔個人戰績佳；夏可桐學校對不上，需留意</td></tr><tr><td>陳建燁／陳奕帆</td><td>台北市中山國小</td><td><span class="conf conf-low">低</span></td><td>陳奕帆確認為活躍選手，但無雙打搭檔紀錄</td></tr><tr><td>黃品羿／陳品硯</td><td>台北市中山國小</td><td><span class="conf conf-mid">中高</span></td><td>黃品羿個人戰績佳；兩人非彼此的雙打搭檔</td></tr><tr><td>黃奕晨／詹紫晴</td><td>台北市中山國小</td><td><span class="conf conf-mid">中高</span></td><td>兩人個別戰績佳(中山國小)，但未查到兩人搭檔紀錄</td></tr><tr><td>施淳薰／陳芊睿</td><td>台北市敦化國小</td><td><span class="conf conf-mid">中高</span></td><td>確認為本屆搭檔組合，2025年已一起報名雙打</td></tr><tr><td>李博霏／郭辰穎</td><td>台北市敦化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>郭士毅／洪稚鈞</td><td>台北市敦化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>林雍哲／李宸濬</td><td>台北市東門國小</td><td><span class="conf conf-none">無資料</span></td><td>李宸濬年級對不上；林雍哲查無資料</td></tr><tr><td>林亞鍹／詹宜儒</td><td>台北市民權國小</td><td><span class="conf conf-none">無資料</span></td><td>兩人查到的紀錄學校皆對不上，判定不予採信</td></tr><tr><td>湯泓琦／裴家穎</td><td>台北市民權國小</td><td><span class="conf conf-high">高</span></td><td>5年級男雙資格賽1勝1負，未晉級</td></tr><tr><td>陳若頤／陳姿帆</td><td>台北市民權國小</td><td><span class="conf conf-high">高</span></td><td>確認為本屆搭檔組合，2025年已一起報名雙打</td></tr><tr><td>楊爵愷／吳禹廷</td><td>台北市民生國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>郭絜儀／陳芯樂</td><td>台北市石牌國小</td><td><span class="conf conf-low">低</span></td><td>兩人皆為石牌國小活躍選手，但非搭檔紀錄</td></tr><tr><td>林昱謙／郭明親</td><td>台北市福德國小</td><td><span class="conf conf-mid">中高</span></td><td>確認為本屆搭檔組合，2025年已一起報名雙打</td></tr><tr><td>程群智／程亦廷</td><td>台北市福德國小</td><td><span class="conf conf-low">低</span></td><td>兩人皆為福德國小活躍選手，但非搭檔紀錄</td></tr><tr><td>王子碩／魏宏展</td><td>台北市雙蓮國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>陳宥榮／王宥捷</td><td>彰化市南郭國小</td><td><span class="conf conf-low">低</span></td><td>陳宥榮確認為活躍選手(南郭國小)，王宥捷查無資料</td></tr><tr><td>許鎧恩／李紹安</td><td>新北市文德國小</td><td><span class="conf conf-low">低</span></td><td>確認為文德國小校隊正式成員，無個別賽事結果</td></tr><tr><td>陳妍儒／周忻妤</td><td>新北市文德國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>郭於晴／蔡若緁</td><td>新北市江翠國小</td><td><span class="conf conf-low">低</span></td><td>郭於晴為活躍選手；蔡若緁紀錄年級不符，需留意</td></tr><tr><td>黃允謙／吳瑞恩</td><td>新北市義學國小</td><td><span class="conf conf-low">低</span></td><td>黃允謙確認活躍(義學)，吳瑞恩學校不符不予採信</td></tr><tr><td>李米樂／王杏芙</td><td>新北市金龍國小</td><td><span class="conf conf-high">高</span></td><td>確認為本屆搭檔組合，兩份文件皆顯示同隊</td></tr><tr><td>劉姿聿／曹又晨</td><td>新北市頭前國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃挑戰組五年級女雙亞軍，確認為同一搭檔組合</td></tr><tr><td>陳佑鈞／丁冠華</td><td>新北市麗林國小</td><td><span class="conf conf-none">無資料</span></td><td>查無「陳佑鈞／丁冠華」個人比賽紀錄</td></tr><tr><td>林邑達／郭友錡</td><td>新竹縣松林國小</td><td><span class="conf conf-low">低</span></td><td>僅查到2024年10月團體賽亞軍紀錄，近一年無資料</td></tr><tr><td>陳禹衡／楊超捷</td><td>日新鳳凰</td><td><span class="conf conf-low">低</span></td><td>兩人皆為日新國小活躍選手，但非搭檔紀錄</td></tr><tr><td>陳建均／吳予丞</td><td>桃園市建德國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>劉恩碩／姚嘉濬</td><td>飛迅南市文化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無個人紀錄，但文化國小是頂尖強校需高度留意</td></tr><tr><td>劉秉元</td><td>台中市大鵬國小</td><td><span class="conf conf-high">高</span></td><td>114年台中市長盃五年級男單第九名(並列)</td></tr><tr><td>湯劭均</td><td>台中市大鵬國小</td><td><span class="conf conf-high">高</span></td><td>114年台中市長盃五年級男單季軍，強校選手</td></tr><tr><td>周怡成</td><td>台中市忠明國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>楊孫菀</td><td>台中市東海國小*2</td><td><span class="conf conf-low">低</span></td><td>確認出賽114年全國國小盃個人賽，比分未能可靠判讀</td></tr><tr><td>余定睿</td><td>台北市中山國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄(國小二年級甲組男單)，無比賽結果</td></tr><tr><td>吳祤杉</td><td>台北市中山國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄(國小三年級甲組女單)，無比賽結果</td></tr><tr><td>孫立欣</td><td>台北市中山國小</td><td><span class="conf conf-none">無資料</span></td><td>同名不同校，查無台北市中山國小的孫立欣紀錄</td></tr><tr><td>方在寅</td><td>台北市中山國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>林彥妤</td><td>台北市中山國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃四年級女單亞軍+女雙冠軍，中山國小主力</td></tr><tr><td>陳奕帆</td><td>台北市中山國小</td><td><span class="conf conf-low">低</span></td><td>查到報名紀錄但無比賽結果，實力未知</td></tr><tr><td>陳忠鼎</td><td>台北市中山國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄，無比賽結果</td></tr><tr><td>詹礎綾</td><td>台北市幸安國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃五年級女雙季軍(並列)</td></tr><tr><td>幸芯</td><td>台北市敦化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>張大帥</td><td>台北市敦化國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃四年級男雙亞軍(敦化國小)</td></tr><tr><td>蕭宇佑</td><td>台北市敦化國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃五年級男雙季軍(並列)</td></tr><tr><td>曾宸碩</td><td>台北市民權國小</td><td><span class="conf conf-none">無資料</span></td><td>查無曾宸碩的公開比賽紀錄</td></tr><tr><td>李沐澄</td><td>台北市民權國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>楊函毓</td><td>台北市民權國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃四年級女雙亞軍(民權國小)</td></tr><tr><td>蔣旻哲</td><td>台北市民權國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄，無比賽結果</td></tr><tr><td>談沐嘉</td><td>台北市民權國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃五年級男單第五名(並列)，民權國小</td></tr><tr><td>陳秉駿</td><td>台北市民權國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃五年級男單第五名+男雙季軍，民權強校</td></tr><tr><td>陳若頤</td><td>台北市民權國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃三年級女單季軍(並列)，民權國小</td></tr><tr><td>黃柏綸</td><td>台北市民權國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃五年級男雙季軍(民權)，單打成績查無</td></tr><tr><td>黃立宇</td><td>台北市民權國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>倪鹿元</td><td>台北市民生國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄(國小二年級乙組男單)，無比賽結果</td></tr><tr><td>童資涵</td><td>台北市民生國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>陳譽</td><td>台北市民生國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>周立勛</td><td>台北市濱江國小</td><td><span class="conf conf-low">低</span></td><td>查無公開比賽紀錄</td></tr><tr><td>張泳樂</td><td>台北市濱江國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>林楷軒</td><td>台北市石牌國小</td><td><span class="conf conf-none">無資料</span></td><td>查無可信比賽紀錄，另有同名不同校選手需排除</td></tr><tr><td>賴威宇</td><td>台北市石牌國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃五年級男單季軍(並列)，石牌國小</td></tr><tr><td>陳宇萱</td><td>台北市石牌國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>郭明親</td><td>台北市福德國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄，無比賽結果</td></tr><tr><td>蔡亞恩</td><td>台北市雙蓮國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄(國小二年級乙組男單)，無比賽結果</td></tr><tr><td>張辰愷</td><td>台南市崇學國小</td><td><span class="conf conf-high">高</span></td><td>【更正】114年全國國小盃五男團出賽，單打1不敵雙永</td></tr><tr><td>吳昱鋐</td><td>宜蘭縣成功國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>林仁傑</td><td>屏東縣忠孝國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>夏志洋</td><td>彰化市南郭國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>謝宗翰</td><td>彰化市南郭國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>詹凱桀</td><td>彰化縣田中國小</td><td><span class="conf conf-none">無資料</span></td><td>AI搜尋摘要指出學校不符，判定不予採信</td></tr><tr><td>詹寓程</td><td>彰化縣田中國小</td><td><span class="conf conf-low">低</span></td><td>AI搜尋摘要疑似有紀錄，但無法核實不予採信</td></tr><tr><td>康羽昕</td><td>新北市中正國小</td><td><span class="conf conf-none">無資料</span></td><td>查到疑似同名資料但活動性質不同，不予採信</td></tr><tr><td>孫孝謙</td><td>新北市太平國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>曾李品希</td><td>新北市文德國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>張語晉</td><td>新北市昌平國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃挑戰組三年級男單亞軍(昌平)，惟另有矛盾紀錄</td></tr><tr><td>楊田丞</td><td>新北市昌平國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>連橙睿</td><td>新北市昌平國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>黃翊宸</td><td>新北市昌平國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄(挑戰國小二年級組男單)，無比賽結果</td></tr><tr><td>葉峖霆</td><td>新北市樹林國小</td><td><span class="conf conf-low">低</span></td><td>確認為樹林國小校隊正式成員，無個別賽事結果</td></tr><tr><td>劉沐橙</td><td>新北市秀山國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃挑戰組三年級女單冠軍，新北秀山強校</td></tr><tr><td>王紹帆</td><td>新北市秀山國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄，秀山為強校</td></tr><tr><td>謝安妤</td><td>新北市秀山國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃挑戰組五年級女單季軍(並列)</td></tr><tr><td>陳虹亦</td><td>新北市秀山國小</td><td><span class="conf conf-low">低</span></td><td>查有報名紀錄(挑戰國小二年級組男單)，無比賽結果</td></tr><tr><td>吳若琳</td><td>新北市秀朗國小</td><td><span class="conf conf-low">低</span></td><td>【更正】確認為秀朗國小女子羽球隊隊長</td></tr><tr><td>黃宥菲</td><td>新北市秀朗國小</td><td><span class="conf conf-low">低</span></td><td>確認為秀朗國小校隊正式成員，無個別賽事結果</td></tr><tr><td>鄭可妤</td><td>新北市重陽國小</td><td><span class="conf conf-low">低</span></td><td>確認為重陽國小校隊正式成員，無個別賽事結果</td></tr><tr><td>夏毅豐</td><td>新北市金龍國小</td><td><span class="conf conf-low">低</span></td><td>確認為金龍國小校隊正式成員，無個別賽事結果</td></tr><tr><td>鄭程元</td><td>新北市金龍國小</td><td><span class="conf conf-high">高</span></td><td>2025市長盃挑戰組二年級男單冠軍，新北金龍</td></tr><tr><td>何丹力</td><td>新北市金龍國小*5/8</td><td><span class="conf conf-mid">中高</span></td><td>近一年多場全國賽男單/男雙,名次未確認</td></tr><tr><td>劉謹賢</td><td>新北市頭前國小</td><td><span class="conf conf-low">低</span></td><td>確認出賽新北市小學運動會男生組雙打，搭檔朱品寯</td></tr><tr><td>曹又晨</td><td>新北市頭前國小*5/8</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃挑戰組五年級女雙亞軍</td></tr><tr><td>洪宇熙</td><td>新北市麗林國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>陳佑鈞</td><td>新北市麗林國小</td><td><span class="conf conf-high">高</span></td><td>近期(2026/1)國內賽戰績佳，晉會內32強</td></tr><tr><td>黃秀穎</td><td>新北市麗林國小</td><td><span class="conf conf-mid">中高</span></td><td>2025市長盃挑戰組五年級女雙季軍(並列)</td></tr><tr><td>蔡昱萱</td><td>新竹市龍山國小</td><td><span class="conf conf-low">低</span></td><td>確認近期有出賽(2025山城盃)，但名次判讀不可靠</td></tr><tr><td>黃亭瀚</td><td>新竹市龍山國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>江俋頡</td><td>新竹縣新社國小</td><td><span class="conf conf-low">低</span></td><td>確認出賽114年全國國小盃個人賽，比分未能可靠判讀</td></tr><tr><td>陳語</td><td>新竹縣新社國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>林昕璇</td><td>新竹縣松林國小</td><td><span class="conf conf-low">低</span></td><td>查到疑似同名資料但年級推算不符，僅供參考</td></tr><tr><td>林柏寬</td><td>日新鳳凰</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>黃可贊</td><td>日新鳳凰*3/4</td><td><span class="conf conf-mid">中高</span></td><td>日新黃可贊：雙打屢有佳績，男單成績未查得</td></tr><tr><td>陳以芊</td><td>林口康橋國際學校</td><td><span class="conf conf-low">低</span></td><td>查到親子表演賽冠軍，非常規競技成績</td></tr><tr><td>陳韵宜</td><td>林口康橋國際學校</td><td><span class="conf conf-low">低</span></td><td>確認出賽新北市小學運動會女生組雙打，搭檔陳語晨</td></tr><tr><td>林佑晨</td><td>桃園市文山國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>胡尋</td><td>桃園市文山國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>鍾妘苡</td><td>桃園市文山國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>呂宥橙</td><td>桃園市錦興國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>高湛寬</td><td>豐盈中市大勇</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>陳幸妍</td><td>雲林縣僑真國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>劉恩碩</td><td>飛迅南市文化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無個人紀錄，但文化國小是頂尖強校需高度留意</td></tr><tr><td>廖庭語</td><td>飛迅南市文化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無個人紀錄，但南市文化國小是頂尖強校需高度留意</td></tr><tr><td>郭宇倞</td><td>飛迅南市文化國小</td><td><span class="conf conf-none">無資料</span></td><td>查無個人紀錄，但文化國小是頂尖強校需高度留意</td></tr><tr><td>莊子昂</td><td>高雄市新光國小</td><td><span class="conf conf-none">無資料</span></td><td>查無公開比賽紀錄</td></tr><tr><td>台中市大鵬國小</td><td>台中市大鵬國小</td><td><span class="conf conf-high">高</span></td><td>114年全國國小盃六男團戰績：2勝1敗</td></tr><tr><td>台北市幸安國小</td><td>台北市幸安國小</td><td><span class="conf conf-none">無資料</span></td><td>查無114年全國國小盃團體賽紀錄</td></tr><tr><td>台北市民權國小</td><td>台北市民權國小</td><td><span class="conf conf-high">高</span></td><td>近期奪四年級男女團雙料冠軍，強校慎防</td></tr><tr><td>台北市民權國小B</td><td>台北市民權國小B</td><td><span class="conf conf-mid">中高</span></td><td>114年全國國小盃六男團戰績：0勝1敗(2:3落敗)，逐場比分明確</td></tr><tr><td>台北市民生國小</td><td>台北市民生國小</td><td><span class="conf conf-none">無資料</span></td><td>查無114年全國國小盃團體賽紀錄</td></tr><tr><td>台北市濱江國小</td><td>台北市濱江國小</td><td><span class="conf conf-none">無資料</span></td><td>查無114年全國國小盃團體賽紀錄</td></tr><tr><td>日新鳳凰</td><td>日新鳳凰</td><td><span class="conf conf-mid">中高</span></td><td>114年全國國小盃四男團戰績：查到一場敗仗(1:4)</td></tr><tr><td>臺北市雙永國小</td><td>臺北市雙永國小</td><td><span class="conf conf-high">高</span></td><td>114年全國國小盃：六女團2連敗、五男團1敗，逐場比分明確</td></tr><tr><td>雲林縣僑真國小*3</td><td>雲林縣僑真國小*3</td><td><span class="conf conf-high">高</span></td><td>【更正】114年全國國小盃六女團戰績：完封雙永3:0</td></tr>
+          </table>
+        </div>
+        <h3 class="intel-h">詳細資料</h3>
+        <div id="intel-cards"><details class="opp" data-names="呂秉哲|洪翌宸">
+      <summary>
+        <span class="opp-name">呂秉哲／洪翌宸</span>
+        <span class="opp-school">台中市大鵬國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「呂秉哲／洪翌宸」搭配「台中市大鵬國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="喻以誠|黃笙迪">
+      <summary>
+        <span class="opp-name">喻以誠／黃笙迪</span>
+        <span class="opp-school">台中市大鵬國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「喻以誠／黃笙迪」搭配「台中市大鵬國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="蔡典均|許迦恩">
+      <summary>
+        <span class="opp-name">蔡典均／許迦恩</span>
+        <span class="opp-school">台中市忠明國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「蔡典均／許迦恩」搭配「台中市忠明國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="吳祤杉|陳嵱橙">
+      <summary>
+        <span class="opp-name">吳祤杉／陳嵱橙</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，直接查到「北市中山國小」的陳嵱橙與吳祤杉<b>一起報名</b><b>國小三年級甲組女雙</b>，是明確的搭檔組合，與本屆對手名冊完全吻合。學校與年級銜接（三年級→本屆四年級）皆正確，可信度高。吳祤杉本人另有個人單打報名紀錄（同組別）。惟成績總表中未見她們的名次。</p><p class="warn-line">只確認到報名紀錄，未查到比賽結果或名次。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="曾品瑋|陳忠鼎">
+      <summary>
+        <span class="opp-name">曾品瑋／陳忠鼎</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，直接查到「北市中山國小」的曾品瑋與陳忠鼎<b>一起報名</b><b>國小四年級甲組男雙</b>，是明確的搭檔組合，與本屆對手名冊完全吻合。學校與年級銜接（四年級→本屆五年級）皆正確，可信度高（少數本屆搭檔本身就有歷史配對紀錄的組合）。惟成績總表中未見他們的名次，顯示未晉級到公告名次的輪次，無法評估實際戰力高低。</p><p class="warn-line">只確認到報名紀錄，未查到比賽結果或名次，實力無從評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="林詠潔|夏可桐">
+      <summary>
+        <span class="opp-name">林詠潔／夏可桐</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>「林詠潔」在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中查到明確紀錄：<b>國小四年級甲組女單第三名（並列，北市中山國小）</b>，學校吻合、年級銜接（四年級→本屆五年級）正確，可信度高。但「夏可桐」查到的紀錄（同一份成績表：<b>國小四年級乙組女單第三名，學校卻是「台北市東門國小」</b>，並非本次對手名冊登記的「台北市中山國小」）——姓名相符但學校不符，依規則<b>不能直接採信為同一人</b>；也查無兩人以「林詠潔／夏可桐」搭檔雙打的公開紀錄。</p><p class="warn-line">查到的「夏可桐」學校是台北市東門國小，與本次對手名冊登記的台北市中山國小不符——可能是轉學、可能是不同人，無法確定，資料引用時務必註明此不確定性，不可直接當作同一人的戰績；林詠潔本人（中山國小）戰績可信度高，但也查無她與夏可桐搭檔的紀錄。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳建燁|陳奕帆">
+      <summary>
+        <span class="opp-name">陳建燁／陳奕帆</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市中山國小」的陳奕帆同時報名<b>國小五年級甲組男單</b>與<b>挑戰國小五年級組男單</b>兩個單打項目（皆為個人賽，非雙打），學校與姓名吻合，年級銜接（五年級→本屆六年級）正確；但成績總表中未見他的名次，顯示未晉級到公告名次的輪次。「陳建燁」則多次搜尋均<b>查無任何公開比賽紀錄</b>。兩人以「陳建燁／陳奕帆」搭檔男雙的紀錄，目前查無任何來源可以佐證——查到的陳奕帆報名紀錄都是「單打」項目，並未查到他跟陳建燁（或任何人）搭檔雙打的公開資料。</p><p class="warn-line">確認到的陳奕帆資料都是「單打」項目報名紀錄且無比賽結果；「陳建燁」完全查無資料；兩人作為本屆「六年級男雙」搭檔的實際戰力無從得知，僅能確認陳奕帆本人是中山國小活躍參賽選手。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="黃品羿|陳品硯">
+      <summary>
+        <span class="opp-name">黃品羿／陳品硯</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中查到「北市中山國小」黃品羿：<b>國小三年級甲組男單第二名（亞軍）</b>，學校與年級銜接（三年級→本屆四年級）正確，可信度高，顯示他是中山國小該年齡層的強力選手。惟報名資料顯示他的雙打搭檔是<b>洪晨勛</b>，而「陳品硯」的雙打搭檔是<b>黃御銨</b>——兩人並非彼此的搭檔，查無「黃品羿／陳品硯」這個特定組合出賽的紀錄。陳品硯本人的單打/雙打成績總表中皆未見名次。</p><p class="warn-line">黃品羿是中山國小三年級甲組男單亞軍，個人實力不弱；但他2025年的雙打搭檔是洪晨勛、陳品硯的搭檔是黃御銨，並非彼此，本屆「黃品羿／陳品硯」配對可能是新組合，無法直接套用舊資料評估這組雙打的實力。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表／報名結果</a></p></div>
+    </details><details class="opp" data-names="黃奕晨|詹紫晴">
+      <summary>
+        <span class="opp-name">黃奕晨／詹紫晴</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>「詹紫晴」與「黃奕晨」皆為<b>台北市中山國小</b>女子羽球隊活躍選手，各自在<b>2025年臺北市市長盃羽球錦標賽</b>查到明確個人成績：詹紫晴在<b>國小五年級甲組女單</b>拿下<b>第一名（冠軍）</b>，在「挑戰國小五年級組女單」也拿下第三名(並列)；黃奕晨則在<b>挑戰國小五年級組女雙</b>與劉珞伊搭檔拿下<b>第一名（冠軍）</b>。兩人學校、年級銜接（五年級→本屆六年級）都吻合，個人戰力可信度高。但<b>沒有查到「黃奕晨／詹紫晴」兩人搭檔雙打的公開比賽紀錄</b>——查到的黃奕晨雙打搭檔是劉珞伊，並非詹紫晴。</p><p class="warn-line">兩人皆是中山國小的強力單打/雙打選手（詹紫晴甚至是五年級甲組女單冠軍），個人實力不可小覷；但兩人以「黃奕晨／詹紫晴」這個特定雙打組合的搭檔戰績目前查無資料，黃奕晨查到的雙打搭檔其實是劉珞伊，非詹紫晴，請勿混淆。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="施淳薰|陳芊睿">
+      <summary>
+        <span class="opp-name">施淳薰／陳芊睿</span>
+        <span class="opp-school">台北市敦化國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，直接查到「北市敦化」的陳芊睿與施淳薰<b>一起報名</b><b>國小四年級乙組女雙</b>，是明確的搭檔組合，與本屆對手名冊完全吻合。學校與年級銜接（四年級→本屆五年級）皆正確，可信度高。惟成績總表中未見她們的名次，顯示未晉級到公告名次的輪次。</p><p class="warn-line">只確認到報名紀錄，未查到比賽結果或名次，實力無從評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="李博霏|郭辰穎">
+      <summary>
+        <span class="opp-name">李博霏／郭辰穎</span>
+        <span class="opp-school">台北市敦化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「李博霏／郭辰穎」搭配「台北市敦化國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="郭士毅|洪稚鈞">
+      <summary>
+        <span class="opp-name">郭士毅／洪稚鈞</span>
+        <span class="opp-school">台北市敦化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>「洪稚鈞」多次搜尋（搭配「敦化」「敦化國小」「羽球」等關鍵字）均<b>查無公開比賽紀錄</b>。「郭士毅」則在搜尋中發現一份「113年全國國小盃羽球錦標賽_種子序」文件（scribd平台）疑似列有此姓名，但該文件在線上僅能看到截斷後的部分內容，無法確認他的學校、年級、種子序等細節是否與本次對手（台北市敦化國小）吻合，故不予採信。</p><p class="warn-line">「郭士毅」在scribd上的113年全國國小盃種子序文件中疑似有同名紀錄，但因文件內容截斷無法核對學校與細節，不可直接採信為同一人；「洪稚鈞」完全查無資料。</p></div>
+    </details><details class="opp" data-names="林雍哲|李宸濬">
+      <summary>
+        <span class="opp-name">林雍哲／李宸濬</span>
+        <span class="opp-school">台北市東門國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>「李宸濬」在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中查到「台北市中正區東門國民小學」的李宸濬報名<b>國小三年級乙組男單</b>——若2025年8月是三年級，到2026年本屆賽事應升上四年級，而非本次對手名冊登記的五年級，<b>年級銜接對不上</b>，很可能是同名的學弟，不宜直接採信為同一人。「林雍哲」則多次搜尋均<b>查無公開比賽紀錄</b>。</p><p class="warn-line">查到的「李宸濬」是2025年三年級的報名紀錄，年級推算到本屆應為四年級而非五年級，與名冊登記不符，很可能是同名學弟，不可直接當作同一人採信；林雍哲完全查無資料。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="林亞鍹|詹宜儒">
+      <summary>
+        <span class="opp-name">林亞鍹／詹宜儒</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>「林亞鍹」查到一筆代表<b>「長春國小」</b>報名2025年市長盃挑戰組女單的紀錄；「詹宜儒」則在<b>「115年新北市小學運動會」</b>羽球秩序冊中查到列名於<b>秀朗國小</b>女子隊名冊。兩筆紀錄的學校（長春國小、秀朗國小）都與本次對手名冊登記的「台北市民權國小」<b>不符</b>，依規則判定為同名不同人，皆不予採信。</p><p class="warn-line">林亞鍹查到的學校是長春國小、詹宜儒查到的學校是秀朗國小，皆與本次對手學校（台北市民權國小）不符，已排除、不可誤用為同一人的資料。</p></div>
+    </details><details class="opp" data-names="湯泓琦|裴家穎">
+      <summary>
+        <span class="opp-name">湯泓琦／裴家穎</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>「湯泓琦／裴家穎」（台北市民權國小）這對組合，在<b>2025年8月21日「第五屆一線入魂全國羽球錦標賽」國小五年級組男雙</b>（當時就讀五年級，時程上正好對應到2026年升六年級，符合本屆賽事年級）的資格賽 D 組出賽：<b>以21-19擊敗洪士軒／洪士哲（南郭國小）</b>，但<b>以8-21不敵黃宥杰／何國楨（北市雙永）</b>，小組戰績1勝1負，未能以組冠軍身分晉級（該組最終由北市雙永以2勝0負出線）。姓名與學校皆與本次對手資料完全吻合，可信度高。另外，民權國小是台灣知名的羽球傳統強校（培育過奧運金牌選手王齊麟），近年也多次拿下全國國小盃團體賽冠軍，其團隊整體實力建議留意。除此之外未查到這對組合近一年其他公開賽事的完整成績。</p><p class="src">來源：<a href="https://goforone.mylivescore.link/2025%E7%AC%AC%E4%BA%94%E5%B1%86%E4%B8%80%E7%B7%9A%E5%85%A5%E9%AD%82%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E7%B4%80%E9%8C%84.pdf" target="_blank" rel="noopener">2025第五屆一線入魂全國羽球錦標賽 總成績紀錄（國小五年級組男雙）</a></p></div>
+    </details><details class="opp" data-names="陳若頤|陳姿帆">
+      <summary>
+        <span class="opp-name">陳若頤／陳姿帆</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，直接查到「北市民權」的陳姿帆與陳若頤<b>一起報名</b><b>國小三年級甲組女雙</b>，是明確的搭檔組合，與本屆對手名冊完全吻合。學校與年級銜接（三年級→本屆四年級）皆正確，可信度高。陳若頤本人另在<b>單打</b>項目查到<b>第三名（並列季軍）</b>的成績（詳見solo-22），顯示這組搭檔中至少一人單打實力不弱。</p><p class="warn-line">雙打本身未查到比賽結果名次，季軍成績是陳若頤的個人單打項目，非這組雙打的成績。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)／成績總表</a></p></div>
+    </details><details class="opp" data-names="楊爵愷|吳禹廷">
+      <summary>
+        <span class="opp-name">楊爵愷／吳禹廷</span>
+        <span class="opp-school">台北市民生國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「楊爵愷／吳禹廷」搭配「台北市民生國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="郭絜儀|陳芯樂">
+      <summary>
+        <span class="opp-name">郭絜儀／陳芯樂</span>
+        <span class="opp-school">台北市石牌國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「石牌國小」的郭絜儀與陳芯樂皆有報名<b>國小五年級乙組女單</b>與<b>女雙</b>項目：郭絜儀的雙打搭檔登記為<b>黃書郁</b>，陳芯樂的雙打搭檔登記為<b>張少熏</b>——兩人是同校同年級隊友，但<b>並非彼此的雙打搭檔</b>。成績總表中兩人均未列出名次（乙組屬人數較多的分組，未進最終名次）。學校與年級銜接（五年級→本屆六年級）皆吻合。</p><p class="warn-line">兩人在2025年市長盃時的雙打搭檔分別是黃書郁、張少熏，並非彼此；查無兩人以「郭絜儀／陳芯樂」這個組合搭檔出賽的公開紀錄，也查無任一人的比賽結果名次（僅有報名紀錄）。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="林昱謙|郭明親">
+      <summary>
+        <span class="opp-name">林昱謙／郭明親</span>
+        <span class="opp-school">台北市福德國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，直接查到「北市福德」的林昱謙與郭明親<b>一起報名</b><b>國小四年級甲組男雙</b>，是明確的搭檔組合，與本屆對手名冊完全吻合（郭明親同時也是本名冊solo-33，個人也有報名男單）。學校與年級銜接（四年級→本屆五年級）皆正確，可信度高。惟成績總表中未見他們的名次。</p><p class="warn-line">只確認到報名紀錄，未查到比賽結果或名次，實力無從評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="程群智|程亦廷">
+      <summary>
+        <span class="opp-name">程群智／程亦廷</span>
+        <span class="opp-school">台北市福德國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市福德」的程群智與程亦廷皆報名<b>國小五年級甲組男單</b>（個人賽）；程亦廷另有報名<b>男雙</b>，搭檔登記為<b>蕭和聖</b>，並非程群智。成績總表中兩人均未列出名次。學校與年級銜接（五年級→本屆六年級）皆吻合，可信度中等。</p><p class="warn-line">程亦廷2025年查到的雙打搭檔是蕭和聖，並非程群智；查無兩人以「程群智／程亦廷」搭檔出賽的紀錄，也查無任一人的比賽結果名次（僅有報名紀錄）。可能兩人是兄弟或同班同學，本屆才首次搭檔，無法從舊資料判斷。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="王子碩|魏宏展">
+      <summary>
+        <span class="opp-name">王子碩／魏宏展</span>
+        <span class="opp-school">台北市雙蓮國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「王子碩／魏宏展」搭配「台北市雙蓮國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="陳宥榮|王宥捷">
+      <summary>
+        <span class="opp-name">陳宥榮／王宥捷</span>
+        <span class="opp-school">彰化市南郭國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>「陳宥榮」（彰化市南郭國小）在<b>2025山城盃全國羽球錦標賽</b>（2025年1月）查到兩筆紀錄：(1) <b>國小三年級組男單</b>會內籤表中，確認有出賽並至少晉級一輪（對戰國立竹科實中選手，籤表比分欄顯示他該輪獲勝）；(2) <b>國小四年級組男雙</b>與黃以撒（同校）搭檔出賽。<b>這兩筆紀錄的年級標示不一致（三年級單打／四年級雙打，同一個月份）</b>，可能是同一賽事系列在不同週次分別辦理、對應到略有出入的分齡標準，也可能其中一筆有誤，無法完全排清；但學校（南郭國小）一致，可信度中等，顯示他是南郭國小活躍且有一定實力的選手。「王宥捷」則多次搜尋均<b>查無公開比賽紀錄</b>，也查無兩人以「陳宥榮／王宥捷」搭檔出賽的紀錄。</p><p class="warn-line">陳宥榮的兩筆紀錄年級標示不一致（三年級單打vs四年級雙打），已如實呈現此矛盾、未強行合理化；原始籤表格式複雜，確切比分與最終名次無法百分之百可靠判讀；查無他與王宥捷搭檔雙打的紀錄，本屆搭檔組合可能是新配對。</p><p class="src">來源：<a href="https://cnba.mylivescore.link/2025%E5%B1%B1%E5%9F%8E%E7%9B%83%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E7%B4%80%E9%8C%84.pdf" target="_blank" rel="noopener">2025山城盃全國羽球錦標賽 總成績紀錄</a></p></div>
+    </details><details class="opp" data-names="許鎧恩|李紹安">
+      <summary>
+        <span class="opp-name">許鎧恩／李紹安</span>
+        <span class="opp-school">新北市文德國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>的文德國小校隊名冊中，同時查到「許鎧恩」（選手編號1075）與「李紹安」（選手編號1076）兩人皆列名於該校正式羽球隊名單，緊鄰的編號顯示兩人很可能是同年級隊友，學校（新北市文德國小）吻合。惟該份文件僅為球隊名冊（隊員編號清單），並未查到兩人實際出賽場次、對戰內容或名次的明細頁面，也查無兩人以「許鎧恩／李紹安」搭檔雙打的其他公開賽事紀錄。</p><p class="warn-line">僅確認兩人是文德國小羽球校隊正式成員（有編號在冊），並非比賽結果或個人戰績；該賽事秩序冊未找到對應的出賽明細或名次頁面，實際實力無法評估。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（文德國小校隊名單）</a></p></div>
+    </details><details class="opp" data-names="陳妍儒|周忻妤">
+      <summary>
+        <span class="opp-name">陳妍儒／周忻妤</span>
+        <span class="opp-school">新北市文德國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「陳妍儒／周忻妤」搭配「新北市文德國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="郭於晴|蔡若緁">
+      <summary>
+        <span class="opp-name">郭於晴／蔡若緁</span>
+        <span class="opp-school">新北市江翠國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>「郭於晴」（新北江翠國小）在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中查到報名<b>挑戰國小五年級組女單</b>（個人賽），年級銜接（五年級→本屆六年級）吻合；另查到一則2025年底「新北市114年小學運動會」的成績，她與林楒琀（非蔡若緁）搭檔女雙拿下<b>第三名</b>，顯示她雙打也有一定實力，但搭檔是林楒琀而非蔡若緁。「蔡若緁」（江翠國小）則在同一份2025年市長盃報名資料中查到報名<b>「挑戰國小四年級組」</b>單打，<b>年級銜接對不上</b>——若她2025年8月是四年級，到2026年本屆賽事應該只升上五年級，而非本次名冊登記的六年級，故這筆資料很可能是另一位同名的學妹（或年級標示有出入），不宜直接採信為同一人。</p><p class="warn-line">查到的「蔡若緁」是2025年「挑戰國小四年級組」的報名紀錄，年級推算到本屆應為五年級而非六年級，與名冊登記的六年級不符，很可能是同名的低年級學妹，不可直接當作同一人的戰績採信；郭於晴的雙打搭檔紀錄（林楒琀）也非蔡若緁，兩人以「郭於晴／蔡若緁」搭檔出賽的紀錄目前查無資料。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)；新北市114年小學運動會 賽程及成績查詢</a></p></div>
+    </details><details class="opp" data-names="黃允謙|吳瑞恩">
+      <summary>
+        <span class="opp-name">黃允謙／吳瑞恩</span>
+        <span class="opp-school">新北市義學國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，查到「新北市義學國小」的黃允謙報名<b>挑戰國小三年級組男單</b>與<b>男雙</b>（搭檔為陳昶佑，非吳瑞恩），學校吻合、年級銜接（三年級→本屆四年級）正確。「吳瑞恩」則查到一筆<b>挑戰國小五年級組男單</b>紀錄，但學校登記為<b>「新北市中正」</b>，與本次對手學校（新北市義學國小）不符，且年級也對不上（五年級無法對應四年級目標），判定為同名不同人，不予採信。</p><p class="warn-line">黃允謙2025年的雙打搭檔是陳昶佑，非吳瑞恩，本屆配對可能是新組合；吳瑞恩查到的紀錄學校（新北市中正）與年級皆對不上，已排除、不可誤用。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="李米樂|王杏芙">
+      <summary>
+        <span class="opp-name">李米樂／王杏芙</span>
+        <span class="opp-school">新北市金龍國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>「李米樂」與「王杏芙」皆為<b>新北市金龍國小</b>選手，兩份獨立文件都顯示她們是隊友／搭檔：(1) <b>2025年臺北市市長盃羽球錦標賽</b>報名資料顯示兩人以同一筆團隊登錄資料（同教練/管理）分別報名<b>挑戰國小三年級組女單</b>；(2) <b>「115年新北市小學運動會」羽球秩序冊</b>的女生組雙打籤表中，明確列出<b>「李米樂＼王杏芙（金龍國小）」</b>是搭檔組合。學校與年級銜接（三年級→本屆四年級）皆正確，兩份來源互相印證，可信度高。惟兩份文件皆未查到確切比賽結果或名次。</p><p class="warn-line">確認是搭檔組合，但兩份來源都只是報名/籤表資料，未查到實際比賽結果或名次。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果；115年新北市小學運動會 羽球秩序冊</a></p></div>
+    </details><details class="opp" data-names="劉姿聿|曹又晨">
+      <summary>
+        <span class="opp-name">劉姿聿／曹又晨</span>
+        <span class="opp-school">新北市頭前國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「新北頭前國小」的劉姿聿／曹又晨這對搭檔：於<b>「挑戰國小五年級組」女雙</b>取得<b>第二名（亞軍）</b>。這是少數<b>本屆搭檔組合本身</b>就查到明確對戰成績的雙打對手，學校（新北市頭前國小）與姓名皆完全吻合，年級銜接（五年級→本屆六年級）正確，可信度高，賽前應特別留意這組雙打實力。</p><p class="warn-line">此為「挑戰組」（另一並行分組）女雙亞軍，非正規甲/乙組成績，但仍代表兩人已有實際搭檔對戰經驗且成績不錯。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳佑鈞|丁冠華">
+      <summary>
+        <span class="opp-name">陳佑鈞／丁冠華</span>
+        <span class="opp-school">新北市麗林國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>已用多組關鍵字（姓名＋學校、姓名組合、site 限定 mylivescore.link／ef-info.com／tcbatw.org 等羽球賽事成績網站）交叉搜尋近一年（2025/08～2026/08）公開賽事成績，<b>查無「陳佑鈞」「丁冠華」這兩人的可驗證比賽成績或籤表紀錄</b>；「丁冠華」在所有搜尋中完全沒有出現在任何羽球相關頁面。搜尋過程中曾出現一則指稱「陳佑鈞／新北麗林」參加 2023 年 DEFI 羽球錦標賽（國小低年級組單打）的摘要，但該連結網域（gym.ef-info.com）目前已無法連線（DNS 查無此網域），且原始搜尋片段裡其實並未真的出現「陳佑鈞」三字，判斷是搜尋摘要誤植，故未採信、不列為可信資料。另外已確認<b>麗林國小（新北市林口區）</b>本身是有在正式參賽的活躍羽球校隊（歷年曾在市長盃、一線入魂盃等賽事有選手獲得名次），但這兩位選手個人的近一年戰績仍是查無資料，建議賽前以現場觀察或臨場資訊為主，不宜預設對戰經驗。</p><p class="warn-line">搜尋中曾出現一則將「陳佑鈞」與2023年DEFI賽事連結的摘要，但來源連結已失效（DNS查無此網域）且原始搜尋片段未實際包含此姓名，判斷為搜尋引擎摘要誤植，未採信；請勿誤用此片段資訊。</p></div>
+    </details><details class="opp" data-names="林邑達|郭友錡">
+      <summary>
+        <span class="opp-name">林邑達／郭友錡</span>
+        <span class="opp-school">新竹縣松林國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>兩人皆為<b>新竹縣松林國小</b>羽球隊選手，姓名與學校可明確對應（松林國小校網公告）。查到的唯一具體成績來自<b>113年（2024年）10月25-26日新竹縣縣長盃羽球錦標賽</b：四年級男生團體，林邑達（404）、郭友錡（405）與406劉茂霖、408鍾鼎烽同隊，<b>榮獲亞軍</b>。惟此筆資料日期為2024年10月，落在題目要求的「近一年」（2025/08~2026/08）之外，且該場是「團體賽」而非本次的「六年級男雙」項目，僅能作為背景參考（顯示兩人確實同校、同隊、有一定球齡）。多次以「林邑達」「郭友錡」「松林」「六年級」「男雙」「2025」「2026」交叉查詢 mylivescore、群岳盃、山城盃等常見成績PDF與學校官網，均未找到近一年內的公開比賽成績或名次紀錄，也未查到兩人以雙打組合出賽的紀錄。松林國小為新竹在地羽球傳統校隊（校方定期參賽並有專屬YouTube頻道紀錄選手成長），整體實力不可輕忽，建議賽前仍留意觀察熱身表現。</p><p class="warn-line">找到的成績（113年10月松林國小四年級男生團體亞軍）雖確認姓名與學校吻合，但比賽日期落在「近一年」（2025/08~2026/08）要求範圍之外，且項目是團體賽而非六年級男雙，不能直接視為對這組雙打近期戰力的評估依據；近一年內查無兩人的任何公開比賽成績或雙打搭檔紀錄。</p><p class="src">來源：<a href="https://clps.hcc.edu.tw/p/406-1119-461582,r3.php?Lang=zh-tw" target="_blank" rel="noopener">恭喜本校羽球隊參加113年新竹縣縣長盃羽球錦標賽 榮獲佳績（松林國小官網）</a></p></div>
+    </details><details class="opp" data-names="陳禹衡|楊超捷">
+      <summary>
+        <span class="opp-name">陳禹衡／楊超捷</span>
+        <span class="opp-school">日新鳳凰</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「日新國小」的陳禹衡與楊超捷皆報名<b>國小五年級甲組男單</b>（個人賽）；楊超捷另有報名<b>男雙</b>，搭檔登記為<b>呂翔安</b>，並非陳禹衡。成績總表中兩人均未列出名次。學校與年級銜接（五年級→本屆六年級）皆吻合，日新國小是鳳凰旅遊基金會贊助的知名羽球強校（2024年全國國小盃團體賽曾拿下亞軍）。</p><p class="warn-line">楊超捷2025年查到的雙打搭檔是呂翔安，並非陳禹衡；查無兩人以「陳禹衡／楊超捷」搭檔出賽的紀錄，也查無任一人的比賽結果名次（僅有報名紀錄）。日新國小是強校（同名冊已有solo-71黃可贊、solo-70林柏寬等多位選手），賽前不可輕忽。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="陳建均|吳予丞">
+      <summary>
+        <span class="opp-name">陳建均／吳予丞</span>
+        <span class="opp-school">桃園市建德國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「陳建均／吳予丞」搭配「桃園市建德國小」「羽球」「雙打」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無這組搭檔的公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="劉恩碩|姚嘉濬">
+      <summary>
+        <span class="opp-name">劉恩碩／姚嘉濬</span>
+        <span class="opp-school">飛迅南市文化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「劉恩碩」「姚嘉濬」搭配「文化國小」「台南市文化國小」「羽球」「雙打」等關鍵字交叉搜尋，均<b>查無這組搭檔的公開比賽紀錄</b>。惟已確認<b>台南市文化國小（歸仁區）</b>羽球隊實力極為頂尖：於115年（2026年5月）全國羽球團體錦標賽，同時拿下國小男子團體與女子團體<b>雙料冠軍</b>。兩人雖查無個別成績，但代表這所強校出賽，賽前應高度提防。</p><p class="warn-line">文化國小是115年全國羽球團體錦標賽國小男女團體雙料冠軍的頂尖強校，即使兩人個人查無資料，也絕對不可輕敵；劉恩碩同時也是solo-80（本人單打項目）。</p><p class="src">來源：<a href="https://udn.com/news/story/7326/9492163" target="_blank" rel="noopener">台南之光！文化國小勇奪全國羽球賽男子、女子雙料冠軍（聯合新聞網）</a></p></div>
+    </details><details class="opp" data-names="劉秉元">
+      <summary>
+        <span class="opp-name">劉秉元</span>
+        <span class="opp-school">台中市大鵬國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年臺中市長盃全國羽球錦標賽</b>（114年11月11日至17日，朝馬國民運動中心）成績總表中，直接核對到「臺中市西屯區大鵬國民小學」的劉秉元：於<b>國小五年級男單</b>項目取得<b>第九名（並列，共8人並列第九）</b>。學校（台中市大鵬國小）與姓名完全吻合，比賽時間為2025年11月（五年級），到2026年摩亞盃時（升六年級）年級銜接吻合，可信度高。大鵬國小是全國知名的羽球傳統強校，連續多年拿下全國國小盃團體賽冠軍，個人賽戰績同樣不可小覷，即使並列第九也代表其單打實力位居該分齡賽前段班（該項目共八強戰名單，第九名即為32強止步或八強賽落敗）。</p><p class="warn-line">「第九名」在此份成績表中是八個人並列（籤表32強/16強階段落敗者統一列為並列第九），並非唯一第九名，僅代表晉級到一定輪次，實際對戰輪次與比分未列出。</p><p class="src">來源：<a href="https://tcbatw.org/newsuploads/114%E5%B9%B4%E8%87%BA%E4%B8%AD%E5%B8%82%E9%95%B7%E7%9B%83%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E6%88%90%E7%B8%BE%E8%A1%A81115.pdf" target="_blank" rel="noopener">114年臺中市長盃全國羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="湯劭均">
+      <summary>
+        <span class="opp-name">湯劭均</span>
+        <span class="opp-school">台中市大鵬國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年臺中市長盃全國羽球錦標賽</b>（114年11月11日至17日，朝馬國民運動中心）成績總表中，直接核對到「臺中市西屯區大鵬國民小學」的湯劭均：於<b>國小五年級男單</b>項目取得<b>第三名（季軍）</b>。同一份成績表另查到他在<b>五年級男雙</b>項目與賴安詰（同校）搭檔，取得<b>第九名（並列）</b>。學校與姓名皆完全吻合，比賽時間2025年11月（五年級）到本屆摩亞盃（升六年級）年級銜接正確，可信度高。大鵬國小為全國羽球傳統強校（連續多年全國國小盃團體賽冠軍），湯劭均本人單打拿下市長盃季軍，屬於該校主力選手等級，賽前應特別留意。</p><p class="warn-line">團隊隊友「劉秉元」（本名冊 solo-1）同校同屆亦有查到五年級男單第九名紀錄，兩人皆為大鵬國小主力選手，賽前不應輕忽。</p><p class="src">來源：<a href="https://tcbatw.org/newsuploads/114%E5%B9%B4%E8%87%BA%E4%B8%AD%E5%B8%82%E9%95%B7%E7%9B%83%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E6%88%90%E7%B8%BE%E8%A1%A81115.pdf" target="_blank" rel="noopener">114年臺中市長盃全國羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="周怡成">
+      <summary>
+        <span class="opp-name">周怡成</span>
+        <span class="opp-school">台中市忠明國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「周怡成」搭配「忠明國小」「台中市忠明國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。搜尋中發現一位「周怡嫺」（同校台中市忠明國小）有參賽紀錄，但姓名不同（怡嫺≠怡成），已核對排除、不可誤用為同一人。</p><p class="warn-line">搜尋到同校（台中市忠明國小）另一位姓名相近的選手「周怡嫺」，經核對姓名不同已排除，不可誤用其戰績；周怡成本人查無公開比賽紀錄。</p></div>
+    </details><details class="opp" data-names="楊孫菀">
+      <summary>
+        <span class="opp-name">楊孫菀</span>
+        <span class="opp-school">台中市東海國小*2</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）五年級女子單打的官方賽事資料中，查到「Allin中市東海」（台中市東海國小）的楊孫菀（籤位246號）確實有出賽紀錄，學校與姓名吻合，年級銜接（五年級→本屆六年級）正確。惟該份原始資料為大型單淘汰籤表格式，本次無法可靠還原每輪對戰對象與確切比分，只能確認「有出賽」，無法確認晉級輪次或最終戰績。</p><p class="warn-line">原始籤表為複雜的大型淘汰賽格式，欄位對應關係在自動化擷取後不可靠，僅確認「有出賽」，請勿引用任何具體比分或名次；學校標記為「Allin中市東海」，Allin可能是贊助商/球館名稱前綴，已核對主體學校為台中市東海國小。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_成績紀錄（五女單資格籤表）</a></p></div>
+    </details><details class="opp" data-names="余定睿">
+      <summary>
+        <span class="opp-name">余定睿</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市中山國小」的余定睿報名<b>國小二年級甲組男單</b>。學校吻合、年級銜接（二年級→本屆三年級）正確。惟成績總表中未見他的名次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="吳祤杉">
+      <summary>
+        <span class="opp-name">吳祤杉</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市中山國小」的吳祤杉報名<b>國小三年級甲組女單</b>（同時也報名女雙，與陳嵱橙搭檔，詳見duo-4）。學校吻合、年級銜接（三年級→本屆四年級）正確。惟成績總表中未見她的單打名次。</p><p class="warn-line">僅確認報名，單打無比賽結果可供評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="孫立欣">
+      <summary>
+        <span class="opp-name">孫立欣</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>搜尋「孫立欣」時，找到一筆<b>2025年第五屆一線入魂全國羽球錦標賽</b>報名結果，國小五年級組女單／女雙均有「孫立欣」出賽，但學校登記為<b>「桃市錦興」（桃園市錦興國小）</b>，與本次對手資料的學校（台北市中山國小）<b>不吻合</b>，依規則判定為同名不同人，不予採信。另外多次以「孫立欣」＋「台北市中山國小」「北市中山」等關鍵字交叉搜尋，均查無台北市中山國小這位孫立欣本人的公開比賽紀錄。</p><p class="warn-line">搜尋到的「孫立欣」比賽紀錄（桃市錦興國小）學校對不上，已依規則排除、不可誤用為同一人的戰績；台北市中山國小的孫立欣本人查無公開資料。</p></div>
+    </details><details class="opp" data-names="方在寅">
+      <summary>
+        <span class="opp-name">方在寅</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「方在寅」搭配「台北市中山國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="林彥妤">
+      <summary>
+        <span class="opp-name">林彥妤</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「北市中山國小」的林彥妤：<b>國小四年級甲組女單第二名（亞軍）</b>，以及<b>國小四年級甲組女雙</b>與劉芷伊搭檔取得<b>第一名（冠軍）</b>。學校（台北市中山國小）與姓名完全吻合，比賽時間2025年8月（四年級）到本屆摩亞盃（升五年級）年級銜接正確，可信度高。單打亞軍加雙打冠軍的成績顯示她是中山國小該年齡層的絕對主力，賽前應高度留意。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳奕帆">
+      <summary>
+        <span class="opp-name">陳奕帆</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年第五屆一線入魂全國羽球錦標賽</b>（114年8月20日至24日，臺北體育館7樓）的<b>報名結果</b>名單中，查到「陳奕帆」代表「北市中山國小」報名<b>國小五年級組男單</b>。學校與姓名吻合、年級銜接（五年級→本屆六年級）也對得上。但比對同一場賽事的<b>成績總表</b>（僅列前幾輪／前幾名），並未出現「陳奕帆」，代表他當屆並未晉級到成績表會列出的輪次（多半是資格賽或前段籤位落敗），無法得知確切戰績或對戰內容。</p><p class="warn-line">僅確認「有報名參賽」，未查到任何比賽結果或名次，無法判斷實力強弱，建議賽前以現場觀察為主。</p><p class="src">來源：<a href="https://goforone.mylivescore.link/2025%E7%AC%AC%E4%BA%94%E5%B1%86%E4%B8%80%E7%B7%9A%E5%85%A5%E9%AD%82%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0711V3.pdf" target="_blank" rel="noopener">2025第五屆一線入魂全國羽球錦標賽 報名結果(含種子序)；成績總表</a></p></div>
+    </details><details class="opp" data-names="陳忠鼎">
+      <summary>
+        <span class="opp-name">陳忠鼎</span>
+        <span class="opp-school">台北市中山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市中山國小」的陳忠鼎報名<b>國小四年級甲組男單</b>與<b>男雙</b>（雙打搭檔為曾品瑋）。學校吻合、年級銜接（四年級→本屆五年級）正確。惟成績總表中未見他的名次，顯示未晉級到公告名次的輪次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估實力。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="詹礎綾">
+      <summary>
+        <span class="opp-name">詹礎綾</span>
+        <span class="opp-school">台北市幸安國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日，臺北體育館7樓）成績總表中，直接核對到「幸安國小」的詹礎綾：於<b>國小五年級乙組女雙</b>項目與賴筠晴搭檔，取得<b>第三名（並列季軍）</b>。學校（台北市幸安國小）與姓名完全吻合，比賽時間2025年8月（五年級）到本屆摩亞盃（升六年級）年級銜接正確，可信度高。惟這是雙打成績，未查到她在女子單打項目的公開成績記錄。</p><p class="warn-line">此筆為女子雙打成績（與賴筠晴搭檔），非本次比賽的女子單打項目，查無她本人在單打項目的公開成績，僅能作為間接參考。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="幸芯">
+      <summary>
+        <span class="opp-name">幸芯</span>
+        <span class="opp-school">台北市敦化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「幸芯」搭配「台北市敦化國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="張大帥">
+      <summary>
+        <span class="opp-name">張大帥</span>
+        <span class="opp-school">台北市敦化國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「敦化國小」的張大帥：於<b>國小四年級乙組男雙</b>與陳均赫搭檔，取得<b>第二名（亞軍）</b>。學校（台北市敦化國小）與姓名完全吻合，年級銜接（四年級→本屆五年級）正確，可信度高。惟這是雙打成績，未查到他在男子單打項目的公開成績。</p><p class="warn-line">此為男子雙打成績（與陳均赫搭檔），非男子單打項目；他本人單打成績查無資料。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="蕭宇佑">
+      <summary>
+        <span class="opp-name">蕭宇佑</span>
+        <span class="opp-school">台北市敦化國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日，臺北體育館7樓）成績總表中，直接核對到「敦化國小」的蕭宇佑：於<b>國小五年級乙組男雙</b>項目與邱鉦介搭檔，取得<b>第三名（並列季軍）</b>。學校（台北市敦化國小）與姓名完全吻合，比賽時間2025年8月（五年級）到本屆摩亞盃（升六年級）年級銜接正確，可信度高。惟這是雙打成績，未查到他在男子單打項目的公開成績記錄。</p><p class="warn-line">此筆為男子雙打成績（與邱鉦介搭檔），非本次比賽的男子單打項目，查無他本人在單打項目的公開成績，僅能作為間接參考。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="曾宸碩">
+      <summary>
+        <span class="opp-name">曾宸碩</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次搜尋「曾宸碩」（含搭配「民權國小」「羽球」「市長盃」等關鍵字）皆<b>查無任何公開比賽紀錄</b>，包括各縣市市長盃/長春盃成績表、全國性賽事秩序冊或成績冊、新聞報導，都沒有出現這個姓名。台北市民權國小羽球隊本身是知名強校（校隊規模約60人、屢有選手在市長盃等賽事奪牌），但沒有查到「曾宸碩」這位選手的個人參賽或成績資料，也不排除是報名資料未公開或尚未累積公開賽事紀錄。</p><p class="warn-line">民權國小是羽球強校，建議賽前仍留意此對手，但目前查無個人戰績可供參考，不可代入其他同校選手（如黃詠婕等）的成績。</p></div>
+    </details><details class="opp" data-names="李沐澄">
+      <summary>
+        <span class="opp-name">李沐澄</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「李沐澄」搭配「台北市民權國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="楊函毓">
+      <summary>
+        <span class="opp-name">楊函毓</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「北市民權」的楊函毓：於<b>國小四年級甲組女雙</b>與徐晨熙搭檔，取得<b>第二名（亞軍）</b>。學校（台北市民權國小）與姓名完全吻合，年級銜接（四年級→本屆五年級）正確，可信度高。惟這是雙打成績，未查到她在女子單打項目的公開成績。</p><p class="warn-line">此為女子雙打成績（與徐晨熙搭檔），非女子單打項目；她本人單打成績查無資料。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="蔣旻哲">
+      <summary>
+        <span class="opp-name">蔣旻哲</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市民權」的蔣旻哲報名<b>國小四年級甲組男單</b>。學校吻合、年級銜接（四年級→本屆五年級）正確。惟成績總表中未見他的名次，顯示未晉級到公告名次的輪次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估實力。民權國小是台北市羽球傳統強校，即使無個人成績也不宜輕忽。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="談沐嘉">
+      <summary>
+        <span class="opp-name">談沐嘉</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「北市民權」的談沐嘉：於<b>國小五年級甲組男單</b>項目取得<b>第五名（並列，共四人並列第五）</b>。學校（台北市民權國小）與姓名完全吻合，年級銜接（五年級→本屆六年級）正確，可信度高。民權國小是台北市知名羽球強校（培育過奧運金牌選手王齊麟），賽前應留意其單打實力。</p><p class="warn-line">「第五名」為並列（4人並列，8強賽落敗統一列為並列第五），非唯一第五名。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳秉駿">
+      <summary>
+        <span class="opp-name">陳秉駿</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「北市民權」的陳秉駿，同時查到兩筆成績：(1) <b>國小五年級甲組男單</b>取得<b>第五名（並列）</b>；(2) <b>國小五年級甲組男雙</b>與黃翊倫搭檔，取得<b>第三名（並列季軍）</b>。學校（台北市民權國小）與姓名皆完全吻合，年級銜接正確，可信度高（同一份文件兩筆成績互相印證為同一人）。民權國小是台北市傳統羽球強校，陳秉駿單打、雙打皆有前段班成績，賽前應特別留意。</p><p class="warn-line">「第五名」為並列（非唯一），男雙「第三名」亦為並列季軍。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳若頤">
+      <summary>
+        <span class="opp-name">陳若頤</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中，直接核對到「北市民權」的陳若頤：於<b>國小三年級甲組女單</b>取得<b>第三名（並列季軍）</b>。學校（台北市民權國小）與姓名完全吻合，年級銜接（三年級→本屆四年級）正確，可信度高。她也與同校陳姿帆搭檔報名女雙（詳見duo-16）。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="黃柏綸">
+      <summary>
+        <span class="opp-name">黃柏綸</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至8月9日，臺北體育館7樓）成績總表中，直接核對到「北市民權」的黃柏綸：在「國小五年級甲組男雙」項目與隊友吳㑊諾搭檔，獲得<b>第三名（並列季軍）</b>。因比賽時間是2025年8月（五年級），到2026年摩亞盃時間點（8/31~9/5）他會升上六年級，年級銜接吻合，學校也完全對上（北市民權＝台北市民權國小）。不過這筆是<b>雙打</b>成績，並未查到他在男子<b>單打</b>項目的公開成績記錄；另外，民權國小在該次市長盃多個年級組別皆有選手拿下前三名（甚至包辦六年級甲組男單冠亞軍等），是台北市有名的羽球強校，建議賽前多留意其單打實力可能不弱於雙打紀錄所顯示的水準。</p><p class="warn-line">此筆為男子雙打成績（與吳㑊諾搭檔），非您方比賽的男子單打項目；查無他本人在單打項目的公開比賽成績，僅能作為「具備一定實力、來自羽球強校」的參考，不能直接推估單打戰力。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="黃立宇">
+      <summary>
+        <span class="opp-name">黃立宇</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「黃立宇」搭配「民權國小」「台北市民權國小」「羽球」「男單」等關鍵字交叉搜尋，也查過2025年臺北市市長盃報名與成績資料，均<b>查無黃立宇的紀錄</b>。民權國小是台北市知名羽球強校，本名冊已有多位該校選手（黃柏綸、談沐嘉、陳秉駿、湯泓琦/裴家穎、楊函毓、蔣旻哲等）查到明確參賽或比賽紀錄，但黃立宇本人未查得。</p><p class="warn-line">民權國小是全國知名羽球強校，同校已有多位選手查到公開賽成績，黃立宇本人雖查無資料，仍建議賽前不可輕敵。</p></div>
+    </details><details class="opp" data-names="倪鹿元">
+      <summary>
+        <span class="opp-name">倪鹿元</span>
+        <span class="opp-school">台北市民生國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「台北市民生國小」的倪鹿元報名<b>國小二年級乙組男單</b>。學校吻合、年級銜接（二年級→本屆三年級）正確。惟成績總表中未見他的名次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="童資涵">
+      <summary>
+        <span class="opp-name">童資涵</span>
+        <span class="opp-school">台北市民生國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「童資涵」搭配「民生國小」「台北市民生國小」「羽球」「女單」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>，2025年臺北市市長盃報名與成績資料中也未見此姓名。民生國小羽球隊規模不小（招生簡章顯示歷年約50-60名隊員），顯示球隊仍在活躍經營，但童資涵本人的公開賽事資料未查得。</p><p class="warn-line">民生國小羽球隊規模不小，不宜輕忽，惟童資涵本人查無任何公開比賽紀錄。</p></div>
+    </details><details class="opp" data-names="陳譽">
+      <summary>
+        <span class="opp-name">陳譽</span>
+        <span class="opp-school">台北市民生國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「陳譽」搭配「民生國小」「台北市民生國小」「羽球」「男單」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>，2025年臺北市市長盃報名與成績資料中也未見此姓名。</p><p class="warn-line">民生國小羽球隊規模不小（約50-60人），不宜輕忽，惟陳譽本人查無任何公開比賽紀錄。</p></div>
+    </details><details class="opp" data-names="周立勛">
+      <summary>
+        <span class="opp-name">周立勛</span>
+        <span class="opp-school">台北市濱江國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>多次以「周立勛」搭配「濱江國小」「台北市濱江國小」「羽球」「男單」等關鍵字交叉搜尋，均查無明確比賽結果；惟在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，查到「北市濱江國小」的周立勛報名<b>國小四年級乙組男單</b>，學校與姓名吻合，年級銜接（四年級→本屆五年級）正確，但成績總表中未見他的名次，顯示未晉級到公告名次的輪次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估實力。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="張泳樂">
+      <summary>
+        <span class="opp-name">張泳樂</span>
+        <span class="opp-school">台北市濱江國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「張泳樂」搭配「台北市濱江國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="林楷軒">
+      <summary>
+        <span class="opp-name">林楷軒</span>
+        <span class="opp-school">台北市石牌國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>搜尋「林楷軒」時，找到多筆比賽/影片紀錄，但學校均為<b>「大庄國小」</b>（非本次對手的台北市石牌國小），研判是同名不同人，已排除不採信。多次以「林楷軒」搭配「石牌國小」「台北市石牌國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名資料，均<b>查無台北市石牌國小林楷軒的公開比賽紀錄</b>。</p><p class="warn-line">搜尋到的「林楷軒」比賽/影片紀錄學校為「大庄國小」，與本次對手學校（台北市石牌國小）不符，已排除、不可誤用為同一人的戰績。</p></div>
+    </details><details class="opp" data-names="賴威宇">
+      <summary>
+        <span class="opp-name">賴威宇</span>
+        <span class="opp-school">台北市石牌國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「台北市石牌國小」的賴威宇：於<b>國小五年級甲組男單</b>項目取得<b>第三名（並列季軍）</b>。另在同一賽事的<b>「挑戰國小五年級組」男單</b>（另一個分組，可能是非種子/資格較淺的並行組別）也查到「賴威宇」（台北市石牌國小）取得<b>第五名（並列）</b>——兩筆學校姓名皆吻合，研判為同一人分別在甲組跟挑戰組留下的紀錄。年級銜接（五年級→本屆六年級）正確，可信度高。</p><p class="warn-line">「甲組第三名」與「挑戰組第五名」是同一份成績表中的兩個不同分組項目，皆列有台北市石牌國小的賴威宇，研判為同一人重複參賽（甲組正賽+挑戰組），但無法100%排除是不同賽制下的偶然同名同校，僅供參考。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳宇萱">
+      <summary>
+        <span class="opp-name">陳宇萱</span>
+        <span class="opp-school">台北市石牌國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「陳宇萱」搭配「台北市石牌國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="郭明親">
+      <summary>
+        <span class="opp-name">郭明親</span>
+        <span class="opp-school">台北市福德國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市福德」的郭明親報名<b>國小四年級甲組男單</b>與<b>男雙</b>（雙打搭檔為林昱謙）。學校吻合、年級銜接（四年級→本屆五年級）正確。惟成績總表中未見他的名次，顯示未晉級到公告名次的輪次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估實力。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="蔡亞恩">
+      <summary>
+        <span class="opp-name">蔡亞恩</span>
+        <span class="opp-school">台北市雙蓮國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「北市雙蓮國小」的蔡亞恩報名<b>國小二年級乙組男單</b>。學校吻合、年級銜接（二年級→本屆三年級）正確。惟成績總表中未見他的名次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="張辰愷">
+      <summary>
+        <span class="opp-name">張辰愷</span>
+        <span class="opp-school">台南市崇學國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p><b>更正先前紀錄</b>：先前搜尋（一般關鍵字）查無張辰愷代表台南市崇學國小的比賽紀錄，後續在中華民國羽球協會官方公告的<b>114年全國國小盃羽球錦標賽</b>（2025年12月4日，屏東）五年級男子團體逐場成績表中，查到張辰愷代表<b>台南市崇學國小</b>出賽<b>對北市雙永</b>團體賽單打1位置，<b>以17-21、15-21直落二敗給黃宥杰</b>（雙永）；不過崇學國小團隊整體以3:1擊敗雙永晉級（其餘單打2、雙打3、雙打4皆由崇學獲勝）。學校（台南市崇學國小）與姓名完全吻合，比賽時間2025年12月（五年級）到本屆摩亞盃（升六年級）年級銜接正確，可信度高。</p><p class="warn-line">此筆為團體賽單打1位置的個人戰績（敗場），且是本屆5個月前（2025年12月）的資料；他在單打1位置出賽顯示教練對他有一定信心（通常排最強者於單打1），但這場實際比分是落敗，並非常勝。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_results for team_五年級（中華民國羽球協會CTBA官方公告）</a></p></div>
+    </details><details class="opp" data-names="吳昱鋐">
+      <summary>
+        <span class="opp-name">吳昱鋐</span>
+        <span class="opp-school">宜蘭縣成功國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「吳昱鋐」搭配「成功國小」「宜蘭縣成功國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。宜蘭縣成功國小（羅東鎮）本身查無球隊活躍度的其他佐證資料。</p></div>
+    </details><details class="opp" data-names="林仁傑">
+      <summary>
+        <span class="opp-name">林仁傑</span>
+        <span class="opp-school">屏東縣忠孝國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多方搜尋（縣長盃、議長盃、屏東縣中小學聯合運動會、全國國小盃等賽事成績網頁及新聞）均<b>查無「林仁傑」代表屏東縣忠孝國小的羽球比賽紀錄</b>。搜尋結果中同名度較高的是現役國手「林俊易」，但其學經歷、年齡與這位國小選手明顯不符，已排除誤植風險。忠孝國小（屏東）與忠孝國小（台中西區、彰化、基隆等同名校）也已核對排除混淆。建議賽前若有餘裕，可直接向對方教練或家長詢問近期戰績，或留意現場觀察其球風。</p><p class="warn-line">全台有多所同名「忠孝國小」（台中西區、彰化、基隆等），搜尋時已刻意核對地區為屏東縣，避免誤用其他縣市同名學校資料；另有知名國手「林俊易」姓名相近但非同一人，已排除。</p></div>
+    </details><details class="opp" data-names="夏志洋">
+      <summary>
+        <span class="opp-name">夏志洋</span>
+        <span class="opp-school">彰化市南郭國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「夏志洋」搭配「彰化市南郭國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="謝宗翰">
+      <summary>
+        <span class="opp-name">謝宗翰</span>
+        <span class="opp-school">彰化市南郭國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「謝宗翰」搭配「南郭國小」「彰化市南郭國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。彰化縣本身有教育盃羽球錦標賽等地方賽事紀錄可查，但未見此姓名。</p></div>
+    </details><details class="opp" data-names="詹凱桀">
+      <summary>
+        <span class="opp-name">詹凱桀</span>
+        <span class="opp-school">彰化縣田中國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>搜尋「詹凱桀」時，AI搜尋摘要指稱他代表「新北市樹林國小」參加2025山城盃全國羽球錦標賽三年級男單，但這與本次對手學校（彰化縣田中國小）<b>不符</b>，且未能在原始資料中直接核對到這筆紀錄的完整上下文，判定為同名不同人或搜尋摘要誤植，不予採信。多次搭配「田中國小」「彰化縣田中國小」「羽球」關鍵字搜尋，均查無田中國小詹凱桀本人的公開比賽紀錄。</p><p class="warn-line">AI搜尋摘要曾指稱他代表「新北市樹林國小」出賽，與對手學校（彰化縣田中國小）不符，已判定不採信；請勿引用此摘要中的具體賽事名稱或名次。</p></div>
+    </details><details class="opp" data-names="詹寓程">
+      <summary>
+        <span class="opp-name">詹寓程</span>
+        <span class="opp-school">彰化縣田中國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>搜尋「詹寓程」時，AI搜尋摘要指稱他是「田中國小」選手，曾參加2024YONEX群岳盃全國羽球分齡錦標賽，學校與本次對手（彰化縣田中國小）相符，但因搜尋摘要在其他姓名（如詹凱桀）已出現過學校誤植的情況，本筆也<b>未能直接核對到原始賽事資料的完整上下文</b>（賽事組別、名次、比分等細節皆缺），為求嚴謹暫不採信為確定戰績，僅供背景參考。</p><p class="warn-line">此筆資訊僅來自AI搜尋摘要、未能核對原始賽事資料驗證細節，且同一批搜尋中已發現另一位選手（詹凱桀）的摘要學校誤植，故本筆也降低採信度，僅供參考、不宜引用具體賽事名稱或名次。</p></div>
+    </details><details class="opp" data-names="康羽昕">
+      <summary>
+        <span class="opp-name">康羽昕</span>
+        <span class="opp-school">新北市中正國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>搜尋「康羽昕」時，在2025年市長盃報名資料中查到一筆「康羽昕」參加<b>「國小中年級組父女雙打」</b>（與康傳易搭檔），登記隊名為「羽妳同在」（球隊/俱樂部名稱，非本次對手學校新北市中正國小）。父女雙打是親子同樂性質的表演賽/趣味賽項目，與本次的常規年齡分組單打性質不同，且隊名對不上，故不採信為可比較的競技戰績參考。多次搭配「中正國小」「新北市中正國小」關鍵字搜尋，均查無其他公開比賽紀錄。</p><p class="warn-line">查到的「康羽昕」紀錄是父女親子雙打（趣味/表演性質項目），登記隊名「羽妳同在」與本次對手學校（新北市中正國小）不符，且賽制性質不同，不具參考價值，已不採信。</p></div>
+    </details><details class="opp" data-names="孫孝謙">
+      <summary>
+        <span class="opp-name">孫孝謙</span>
+        <span class="opp-school">新北市太平國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「孫孝謙」搭配「太平國小」「新北市太平國小」「羽球」「市長盃」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。搜尋過程中出現多筆「太平國小」相關結果，但多為台中市太平區的太平國小（棒球隊等其他運動項目），已核對排除非新北市太平國小；新北市太平國小本身的羽球隊活動或這位選手的個人賽事紀錄均未查得。</p><p class="warn-line">搜尋結果中多次出現「台中市太平國小」（同名不同校，棒球隊為主），已核對地區排除，避免誤用；新北市太平國小本身及此選手均查無羽球相關公開資料。</p></div>
+    </details><details class="opp" data-names="曾李品希">
+      <summary>
+        <span class="opp-name">曾李品希</span>
+        <span class="opp-school">新北市文德國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「曾李品希」搭配「新北市文德國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="張語晉">
+      <summary>
+        <span class="opp-name">張語晉</span>
+        <span class="opp-school">新北市昌平國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中，直接核對到「新北昌平」的張語晉：於<b>「挑戰國小三年級組」男單</b>取得<b>第二名（亞軍）</b>。學校（新北市昌平國小）與姓名吻合，年級銜接（三年級→本屆四年級）正確，可信度中高。惟同一份報名資料中<b>另外查到一筆「張語晉／新北昌平」報名「挑戰國小四年級組男單」的紀錄</b>——同一屆賽事不應同時是三年級與四年級，兩筆紀錄的年級標示互相矛盾，如實呈現、未強行合理化，可能是同名同校的另一人，或賽會資料重複/誤植。</p><p class="warn-line">同一場2025年市長盃報名資料中「張語晉／新北昌平」同時出現在「挑戰三年級組」與「挑戰四年級組」男單，年級標示矛盾，無法確認亞軍成績是否屬於本屆對手本人，也可能是同校同名的另一位學生（如兄弟），請勿完全採信、賽前仍應現場觀察為準。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表／報名結果</a></p></div>
+    </details><details class="opp" data-names="楊田丞">
+      <summary>
+        <span class="opp-name">楊田丞</span>
+        <span class="opp-school">新北市昌平國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「楊田丞」搭配「昌平國小」「新北市昌平國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。搜尋結果中查到昌平國小其他學生（如陳品叡）有參與2025群岳盃等賽事，但未查到「楊田丞」本人的報名或成績資料。</p><p class="warn-line">昌平國小本身有其他學生參賽紀錄，顯示該校有一定羽球活動，但楊田丞本人查無資料，不代表實力較弱，賽前仍應留意。</p></div>
+    </details><details class="opp" data-names="連橙睿">
+      <summary>
+        <span class="opp-name">連橙睿</span>
+        <span class="opp-school">新北市昌平國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「連橙睿」搭配「昌平國小」「新北市昌平國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="黃翊宸">
+      <summary>
+        <span class="opp-name">黃翊宸</span>
+        <span class="opp-school">新北市昌平國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「昌平國小」的黃翊宸報名<b>「挑戰國小二年級組」男單</b>。學校吻合、年級銜接（二年級→本屆三年級）正確。惟成績總表中未見他的名次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="葉峖霆">
+      <summary>
+        <span class="opp-name">葉峖霆</span>
+        <span class="opp-school">新北市樹林國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>的樹林國小校隊名冊中，查到「葉峖霆」（選手編號1145）列名於該校正式羽球隊名單，學校（新北市樹林國小）吻合。惟該份文件僅為球隊名冊，並未查到他實際出賽場次、對戰內容或名次的明細頁面。</p><p class="warn-line">僅確認是樹林國小羽球校隊正式成員（有編號在冊），並非比賽結果或個人戰績。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（樹林國小校隊名單）</a></p></div>
+    </details><details class="opp" data-names="劉沐橙">
+      <summary>
+        <span class="opp-name">劉沐橙</span>
+        <span class="opp-school">新北市秀山國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中，直接核對到「新北秀山」的劉沐橙：於<b>「挑戰國小三年級組」女單</b>取得<b>第一名（冠軍）</b>。學校（新北市秀山國小）與姓名吻合，年級銜接（三年級→本屆四年級）正確，可信度高。秀山國小是本名冊中多次出現的羽球強校（另有solo-51王紹帆、solo-52謝安妤、solo-61曹又晨等），賽前應高度留意。</p><p class="warn-line">此為「挑戰組」（另一並行分組）冠軍，非正規甲/乙組，但仍代表確實的優勝戰績。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="王紹帆">
+      <summary>
+        <span class="opp-name">王紹帆</span>
+        <span class="opp-school">新北市秀山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「王紹帆」搭配「秀山國小」「新北市秀山國小」「羽球」「男單」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。新北市秀山國小是知名的羽球傳統強校（本名冊中另有謝安妤、曹又晨等多位秀山國小選手查到明確賽事成績），但「王紹帆」本人並未在任何查得到的成績表中出現。</p><p class="warn-line">秀山國小是全國知名的羽球強校，同校已有多位選手（謝安妤、曹又晨等）查到公開賽成績，王紹帆本人雖查無資料，仍建議賽前不可輕敵。</p></div>
+    </details><details class="opp" data-names="謝安妤">
+      <summary>
+        <span class="opp-name">謝安妤</span>
+        <span class="opp-school">新北市秀山國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「新北秀山」的謝安妤：於<b>「挑戰國小五年級組」女單</b>（與甲/乙組並行的另一分組）取得<b>第三名（並列）</b>。學校（新北市秀山國小）與姓名完全吻合，年級銜接（五年級→本屆六年級）正確，可信度中高。</p><p class="warn-line">此為「挑戰組」（另一分組，可能是非種子選手的並行賽制）成績，並非正規甲/乙組，強度可能與甲組略有落差，但仍代表有實際出賽並晉級到前段名次。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="陳虹亦">
+      <summary>
+        <span class="opp-name">陳虹亦</span>
+        <span class="opp-school">新北市秀山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>報名結果中，確認「新北秀山」的陳虹亦報名<b>「挑戰國小二年級組」男單</b>。學校吻合、年級銜接（二年級→本屆三年級）正確。惟成績總表中未見他的名次。</p><p class="warn-line">僅確認報名，無比賽結果可供評估；秀山國小是羽球強校，不宜輕忽。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E5%A0%B1%E5%90%8D%E7%B5%90%E6%9E%9C(%E5%90%AB%E7%A8%AE%E5%AD%90%E5%BA%8F)_0717.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 報名結果(含種子序)</a></p></div>
+    </details><details class="opp" data-names="吳若琳">
+      <summary>
+        <span class="opp-name">吳若琳</span>
+        <span class="opp-school">新北市秀朗國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p><b>更正先前紀錄</b>：先前搜尋未查到吳若琳的資料，後續在<b>「115年新北市小學運動會」羽球秩序冊</b>中查到她列名於秀朗國小女子羽球隊名冊（選手編號2113），且明確標示為<b>隊長</b>。學校（新北市秀朗國小）吻合，隊長身分顯示她在校隊中具一定地位與資歷。惟該份文件僅為球隊名冊，未查到她個別出賽場次或名次的明細頁面。</p><p class="warn-line">「隊長」身分是校隊內部角色，不直接等同比賽戰績，但通常隊長會是資深或實力較穩定的隊員，賽前應留意；個別比賽結果仍查無資料。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（秀朗國小女子隊名冊）</a></p></div>
+    </details><details class="opp" data-names="黃宥菲">
+      <summary>
+        <span class="opp-name">黃宥菲</span>
+        <span class="opp-school">新北市秀朗國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>的秀朗國小女子校隊名冊中，查到「黃宥菲」（選手編號2120）列名於該校正式羽球隊名單，學校（新北市秀朗國小）吻合。惟該份文件僅為球隊名冊，未查到她的雙打搭檔或個別出賽明細；隊長為同校的吳若琳（本名冊solo-54）。</p><p class="warn-line">僅確認是秀朗國小羽球校隊正式成員（有編號在冊），並非比賽結果或個人戰績。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（秀朗國小校隊名單）</a></p></div>
+    </details><details class="opp" data-names="鄭可妤">
+      <summary>
+        <span class="opp-name">鄭可妤</span>
+        <span class="opp-school">新北市重陽國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>的重陽國小女子校隊名冊中，查到「鄭可妤」（選手編號2140）列名於該校正式羽球隊名單，學校（新北市重陽國小）吻合。惟該份文件僅為球隊名冊，並未查到她實際出賽場次、對戰內容或名次的明細頁面。</p><p class="warn-line">僅確認是重陽國小羽球校隊正式成員（有編號在冊），並非比賽結果或個人戰績。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（重陽國小校隊名單）</a></p></div>
+    </details><details class="opp" data-names="夏毅豐">
+      <summary>
+        <span class="opp-name">夏毅豐</span>
+        <span class="opp-school">新北市金龍國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>的金龍國小校隊名冊中，查到「夏毅豐」（選手編號1243）列名於該校正式羽球隊名單，學校（新北市金龍國小）吻合。惟該份文件僅為球隊名冊，並未查到他實際出賽場次、對戰內容或名次的明細頁面。</p><p class="warn-line">僅確認是金龍國小羽球校隊正式成員（有編號在冊），並非比賽結果或個人戰績。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（金龍國小校隊名單）</a></p></div>
+    </details><details class="opp" data-names="鄭程元">
+      <summary>
+        <span class="opp-name">鄭程元</span>
+        <span class="opp-school">新北市金龍國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中，直接核對到「新北金龍國小」的鄭程元：於<b>「挑戰國小二年級組」男單</b>取得<b>第一名（冠軍）</b>。學校與姓名吻合，年級銜接（二年級→本屆三年級）正確，可信度高。金龍國小是本名冊另一位選手夏毅豐（solo-57）就讀的學校，同校已有兩位選手查到活躍紀錄。</p><p class="warn-line">此為「挑戰組」（另一並行分組）冠軍，非正規甲/乙組。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="何丹力">
+      <summary>
+        <span class="opp-name">何丹力</span>
+        <span class="opp-school">新北市金龍國小*5/8</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>已找到多筆確定為同一人的參賽紀錄，學校（新北市金龍國小）與姓名完全吻合。近一年他持續以「五年級男子組」身分征戰全國性積分巡迴賽：<b>2025年8月20日「第五屆一線入魂全國羽球錦標賽」</b>（男單籤表列為 AB1 種子位、男雙與同校隊友何丹佐搭檔），以及<b>2026年2月5日「山城盃全國羽球錦標賽」</b>（男單籤表 I2 位、男雙同樣與何丹佐配對，該場男雙籤表為取4名的較小規模賽）；此外在2025年底新北市「小學運動會」團體賽金龍國小隊伍名單中也列為隊員（隊長正是何丹佐）。往前追溯，他四年級時（2024年7月「葛瑪蘭全國羽球錦標賽」，已超出近一年範圍）即已是 *5 種子選手，顯示長期穩定在全國賽事有一定排名。<b>受限於原始PDF籤表以圖形化分數欄位呈現（非純文字表格），本次搜尋能確認他「有出賽、且晉級籤表位置」，但未能可靠判讀出每輪確切比分與最終名次</b>，建議教練若需精確戰績，可直接調閱上述PDF原始籤表圖檔人工核對。整體而言，此對手是穩定活躍於全國積分賽的選手，賽前應留意。</p><p class="warn-line">另有一份2025年「第五屆一線入魂全國羽球錦標賽_總成績紀錄」（goforone.mylivescore.link）與2024年「葛瑪蘭全國羽球錦標賽秩序冊」（kml.mylivescore.link）也查到同姓名同校紀錄，但2024年那筆已超出近一年查詢範圍，僅供背景參考。籤表中確切勝負比分與最終名次因PDF為圖形化排版、文字擷取工具無法可靠還原表格對應關係，未能百分之百確認，僅能確認「有出賽」與「籤表位置」。他常與同校「何丹佐」搭檔男雙、且對方擔任隊長，兩人應為隊友（可能為兄弟），非同名誤植。</p><p class="src">來源：<a href="https://cnba.mylivescore.link/2026%E5%B1%B1%E5%9F%8E%E7%9B%83%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E7%B4%80%E9%8C%84.pdf" target="_blank" rel="noopener">2026山城盃全國羽球錦標賽_總成績紀錄</a></p></div>
+    </details><details class="opp" data-names="劉謹賢">
+      <summary>
+        <span class="opp-name">劉謹賢</span>
+        <span class="opp-school">新北市頭前國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>中，查到「劉謹賢」（選手編號1266，頭前國小）於<b>男生組雙打賽</b>（共24組籤表）與同校朱品寯搭檔出賽，位列籤表第11位。學校（新北市頭前國小）與姓名吻合。惟這是<b>雙打</b>項目，非本次對戰的男子單打；且原始籤表為複雜的淘汰賽格式，本次無法可靠還原對戰結果與名次，僅能確認「有出賽」。</p><p class="warn-line">查到的是雙打項目（與朱品寯搭檔），非本次對戰的男子單打項目；籤表格式複雜，比分與名次無法可靠判讀，僅確認「有出賽」。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（男生組雙打籤表）</a></p></div>
+    </details><details class="opp" data-names="曹又晨">
+      <summary>
+        <span class="opp-name">曹又晨</span>
+        <span class="opp-school">新北市頭前國小*5/8</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「新北頭前國小」的曹又晨：於<b>「挑戰國小五年級組」女雙</b>與劉姿聿搭檔，取得<b>第二名（亞軍）</b>。學校（新北市頭前國小）與姓名完全吻合，年級銜接（五年級→本屆六年級）正確，可信度中高，亞軍成績顯示雙打實力不弱。惟這是雙打成績，未查到她在女子單打項目的公開成績。</p><p class="warn-line">此為「挑戰組」（另一分組，並行於甲/乙組）女雙亞軍，非女子單打成績；她本人在單打項目的公開成績查無資料，僅能作為「具備一定雙打實力」的間接參考。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="洪宇熙">
+      <summary>
+        <span class="opp-name">洪宇熙</span>
+        <span class="opp-school">新北市麗林國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「洪宇熙」搭配「新北市麗林國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="陳佑鈞">
+      <summary>
+        <span class="opp-name">陳佑鈞</span>
+        <span class="opp-school">新北市麗林國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在「2026台羽盃全國分齡羽球錦標賽」（2026/1/31～2/1，全國性分齡賽事）找到明確吻合的紀錄：<b>U13組男子單打，K組，陳佑鈞（新北麗林）</b>，學校名稱與目標選手（新北市麗林國小）完全一致，可信度高。
+
+賽果：資格賽循環小組中，陳佑鈞先後以 <b>25:13 擊敗曾子軒（東興國小）</b>、<b>25:16 擊敗陳清毅（國立清華附小TOS校區）</b>，以小組不敗戰績出線進入32籤會內賽。會內賽首輪輪空後，於32強戰（相當於16強）遭遇後來奪冠的鍾秉翰（桃市中原），以 <b>21:25 落敗</b>，鍾秉翰其後一路奪得該項目冠軍。整體看來陳佑鈞在U13男單屬於能穩定拿下小組賽、可打進會內賽中段的水準，非泛泛之輩，值得列入需認真應對的對手名單。
+
+補充：U13組年齡分級與六年級大致相當，比賽時間為2026年1月底，落在近一年範圍內，可視為賽前參考戰績；惟這是另一場賽事（2026台羽盃），非本次摩亞盃本身的資料，僅供近況參考。</p><p class="warn-line">此為2026年1月底另一場賽事（台羽盃）的成績，非本屆摩亞盃資料；U13組別年齡對應是否與六年級完全一致未經賽會規則逐字核對，僅作近況參考。</p><p class="src">來源：<a href="https://exic.mylivescore.link/2026%E5%8F%B0%E7%BE%BD%E7%9B%83%E5%85%A8%E5%9C%8B%E5%88%86%E9%BD%A1%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E7%B4%80%E9%8C%84.pdf" target="_blank" rel="noopener">2026台羽盃全國分齡羽球錦標賽 總成績紀錄（U13組男子單打）</a></p></div>
+    </details><details class="opp" data-names="黃秀穎">
+      <summary>
+        <span class="opp-name">黃秀穎</span>
+        <span class="opp-school">新北市麗林國小</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>（114年8月2日至9日）成績總表中，直接核對到「新北麗林」的黃秀穎：於<b>「挑戰國小五年級組」女雙</b>與黃湘耘搭檔，取得<b>第三名（並列）</b>。學校（新北市麗林國小）與姓名完全吻合，年級銜接（五年級→本屆六年級）正確，可信度中高。惟這是雙打成績，未查到她在女子單打項目的公開成績。</p><p class="warn-line">此為「挑戰組」女雙成績（並列季軍），非女子單打成績；她本人單打項目的公開成績查無資料。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表</a></p></div>
+    </details><details class="opp" data-names="蔡昱萱">
+      <summary>
+        <span class="opp-name">蔡昱萱</span>
+        <span class="opp-school">新竹市龍山國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025山城盃全國羽球錦標賽</b>（賽事日期為2025年1月23日等場次，賽會資訊系統mylivescore）的原始籤表中，查到「竹市龍山國小」的蔡昱萱同時出現在<b>國小四年級組女單</b>與<b>女雂</b>籤表中，學校與姓名吻合。惟該籤表為圖形化淘汰賽/循環賽版面（分數、輪空bye、多層括號賽次編號交錯排列），文字擷取工具無法可靠還原「誰打贏誰、最終名次」的完整對應關係，只能確認「她本人確實有出賽、且晉級到主要籤表階段」，無法可靠判讀出實際比分或最終名次。另查到112年（2023年）她曾以二年級女生團隊成員身分（與卓宥妘、蔡向晴、吳宣霓）拿下新竹市市長盃團體第一名，但已超出「近一年」範圍，僅供背景參考。</p><p class="warn-line">籤表為圖形化排版，文字擷取結果各欄位對應關係不可靠，僅能確認「有出賽並晉級」，無法確認具體比分或最終名次，請勿引用本紀錄中任何具體名次數字；112年團體賽冠軍資料已超出近一年範圍，僅供背景參考。</p><p class="src">來源：<a href="https://cnba.mylivescore.link/2025%E5%B1%B1%E5%9F%8E%E7%9B%83%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E7%B4%80%E9%8C%84.pdf" target="_blank" rel="noopener">2025山城盃全國羽球錦標賽 總成績紀錄（國小四年級組女單/女雙籤表）</a></p></div>
+    </details><details class="opp" data-names="黃亭瀚">
+      <summary>
+        <span class="opp-name">黃亭瀚</span>
+        <span class="opp-school">新竹市龍山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「黃亭瀚」搭配「新竹市龍山國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="江俋頡">
+      <summary>
+        <span class="opp-name">江俋頡</span>
+        <span class="opp-school">新竹縣新社國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）五年級男子單打的官方賽事資料中，查到「竹縣新社國小」的江俋頡（籤位103號）確實有出賽紀錄，學校與姓名吻合，年級銜接（五年級→本屆六年級）正確。惟該份原始資料為大型單淘汰籤表格式（128籤以上），欄位為機器解析後的表格，本次無法可靠還原每輪對戰對象與確切比分，只能確認「有出賽」，無法確認晉級輪次或最終戰績。</p><p class="warn-line">原始籤表為複雜的大型淘汰賽格式，欄位對應關係在自動化擷取後不可靠，僅確認「有出賽」，請勿引用任何具體比分或名次；如需精確戰績建議人工調閱原始籤表圖檔。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_成績紀錄（五男單資格籤表）</a></p></div>
+    </details><details class="opp" data-names="陳語">
+      <summary>
+        <span class="opp-name">陳語</span>
+        <span class="opp-school">新竹縣新社國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「陳語」搭配「新竹縣新社國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="林昕璇">
+      <summary>
+        <span class="opp-name">林昕璇</span>
+        <span class="opp-school">新竹縣松林國小</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>查到「林昕璇」代表<b>新竹縣松林國小</b>參加<b>113年（2024年）新竹縣縣長盃羽球錦標賽</b>三年級女生團體賽，與洪笠嫙、賴明熹、吳依靜、黃歆甯組隊，獲得<b>亞軍</b>。學校吻合，但<b>年級推算對不上</b>：若2024年是三年級，到2026年本屆賽事應升上五年級，而非本次對手名冊登記的四年級，時間差了一個年級，可能是賽事日期在學期初/末的認定差異，也可能是同名學姐/學妹，無法百分之百確定是同一人。</p><p class="warn-line">年級推算與本次對手名冊登記（四年級）差了一屆，可能是認定時間點不同（例如比賽在學期初、當時剛升上該年級）導致的誤差，也可能是不同人，資料引用時應註明此不確定性；此外這是「團體賽」成績，非個人單打戰績，僅供背景參考。</p><p class="src">來源：<a href="https://clps.hcc.edu.tw/p/406-1119-461582,r3.php?Lang=zh-tw" target="_blank" rel="noopener">113年新竹縣縣長盃羽球錦標賽（松林國小官網）</a></p></div>
+    </details><details class="opp" data-names="林柏寬">
+      <summary>
+        <span class="opp-name">林柏寬</span>
+        <span class="opp-school">日新鳳凰</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「林柏寬」搭配「日新鳳凰」「日新國小」「羽球」「男單」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。日新國小（鳳凰旅遊基金會贊助）是知名羽球強校，本名冊中另有黃可贊（solo-71）查到明確雙打成績，但「林柏寬」本人並未在任何查得到的成績表中出現。</p><p class="warn-line">日新鳳凰是全國知名羽球強校（2024年全國國小盃團體賽曾拿下亞軍），同校已有選手（黃可贊）查到公開賽成績，林柏寬本人雖查無資料，仍建議賽前不可輕敵，勿與黃可贊等同校選手戰績混用。</p></div>
+    </details><details class="opp" data-names="黃可贊">
+      <summary>
+        <span class="opp-name">黃可贊</span>
+        <span class="opp-school">日新鳳凰*3/4</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>查到兩筆與「日新鳳凰」學校吻合的黃可贊比賽紀錄，皆為<b>雙打</b>成績（未查到男單個人賽紀錄）：(1) 2025年8月「臺北市市長盃羽球錦標賽」國小五年級甲組男雙，黃可贊／鄭力盛（日新國小）獲<b>第二名</b>；(2) 2024年12月「第四屆一線入魂全國羽球錦標賽」國小四年級組男雙，黃可贊／朱泓睿（鳳凰日新）獲<b>第三名</b>。兩筆資料的學校名稱（日新國小／鳳凰日新）與年級遞進（四年級→五年級）都與目標選手（日新鳳凰*3/4，本屆六年級）吻合，可信度高為同一人，顯示該生在雙打項目上有穩定的進四強／準決賽以上實力；但未能找到他本人男單項目的公開成績或籤表，六年級男單的實際單打實力仍待現場觀察。日新國小為鳳凰旅遊基金會贊助的知名羽球強校（2024年全國國小盃團體賽曾拿下亞軍），建議賽前仍留意。</p><p class="warn-line">兩筆比對到的成績都是「男雙」項目，並非我方對上的「六年級男單」項目本身的成績；黃可贊個人男單的公開賽成績目前查無資料，僅能作為間接參考其整體實力。另外搜尋過程中曾出現「代表北市民權隊」等AI摘要誤植，已直接讀取原始PDF核對排除，確認正確學校為日新國小/鳳凰日新。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf ; https://goforone.mylivescore.link/2024%E5%B9%B4%E7%AC%AC%E5%9B%9B%E5%B1%86%E4%B8%80%E7%B7%9A%E5%85%A5%E9%AD%82%E5%85%A8%E5%9C%8B%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表（國小五年級甲組男雙，第二名：日新國小 黃可贊/鄭力盛）；2024年第四屆一線入魂全國羽球錦標賽 成績總表（國小四年級組男雙，第三名：鳳凰日新 黃可贊/朱泓睿）</a></p></div>
+    </details><details class="opp" data-names="陳以芊">
+      <summary>
+        <span class="opp-name">陳以芊</span>
+        <span class="opp-school">林口康橋國際學校</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>2025年臺北市市長盃羽球錦標賽</b>成績總表中查到「林口康橋」的陳以芊：於<b>「國小低年級組父女雙打」</b>與陳仕旻（父親）搭檔，取得<b>第一名（冠軍）</b>。惟這是親子同樂性質的表演賽/趣味賽項目，並非常規的同齡選手對戰，不具評估她本人在同齡層單打實力的參考價值。另查到她也有報名<b>「挑戰國小二年級組」女單</b>（常規個人賽），但成績總表中未見名次。</p><p class="warn-line">父女雙打冠軍是親子表演賽性質，非常規同齡競技成績，不能直接當作她個人單打實力的參考；常規個人賽（挑戰二年級組女單）部分查無名次。</p><p class="src">來源：<a href="https://tsf.mylivescore.link/2025%E5%B9%B4%E8%87%BA%E5%8C%97%E5%B8%82%E5%B8%82%E9%95%B7%E7%9B%83%E7%BE%BD%E7%90%83%E9%8C%A6%E6%A8%99%E8%B3%BD_%E7%B8%BD%E6%88%90%E7%B8%BE%E8%A1%A8.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 成績總表／報名結果</a></p></div>
+    </details><details class="opp" data-names="陳韵宜">
+      <summary>
+        <span class="opp-name">陳韵宜</span>
+        <span class="opp-school">林口康橋國際學校</span>
+        <span class="conf conf-low">低</span>
+      </summary>
+      <div class="opp-body"><p>在<b>「115年新北市小學運動會」羽球秩序冊</b>中，查到「陳韵宜」（林口康橋高中/國際學校）於<b>女生組雙打賽</b>（共21組）與陳語晨搭檔出賽。學校（林口康橋國際學校）與姓名吻合。惟未能確認確切年級與比賽結果，原始籤表格式複雜，本次僅能確認「有出賽並搭檔陳語晨」，無法可靠還原比分或名次。</p><p class="warn-line">查到的是雙打項目（與陳語晨搭檔），且該賽事文件未明確標示年級分組，無法百分之百確認與本次五年級對手為同一年齡層；比分與名次亦無法可靠判讀。</p><p class="src">來源：<a href="https://nas.spnet.tw/twps/20251210/115%E5%B0%8F%E9%81%8B%E7%BE%BD%E7%90%83%E7%A7%A9%E5%BA%8F%E5%86%8A.pdf" target="_blank" rel="noopener">115年新北市小學運動會 羽球秩序冊（女生組雙打籤表）</a></p></div>
+    </details><details class="opp" data-names="林佑晨">
+      <summary>
+        <span class="opp-name">林佑晨</span>
+        <span class="opp-school">桃園市文山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「林佑晨」搭配「文山國小」「桃園市文山國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。搜尋結果顯示桃園市文山國小確實設有羽球社團／球隊活動，但未查到這位選手的具體比賽資料或報名紀錄。</p><p class="warn-line">全台有多所「文山國小」（桃園、台中南屯等），搜尋時已核對鎖定桃園市文山國小，避免誤用其他縣市同名學校資料；該生本人仍查無公開比賽紀錄。</p></div>
+    </details><details class="opp" data-names="胡尋">
+      <summary>
+        <span class="opp-name">胡尋</span>
+        <span class="opp-school">桃園市文山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「胡尋」搭配「桃園市文山國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="鍾妘苡">
+      <summary>
+        <span class="opp-name">鍾妘苡</span>
+        <span class="opp-school">桃園市文山國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「鍾妘苡」搭配「文山國小」「桃園市文山國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。桃園市文山國小本身有籃球、羽球等社團活動，但這位選手個人資料未查得。</p><p class="warn-line">全台有多所「文山國小」（桃園、台中南屯、高雄等），搜尋時已核對鎖定桃園市文山國小，避免誤用其他縣市同名學校資料。</p></div>
+    </details><details class="opp" data-names="呂宥橙">
+      <summary>
+        <span class="opp-name">呂宥橙</span>
+        <span class="opp-school">桃園市錦興國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「呂宥橙」搭配「錦興國小」「桃園市錦興國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。查到錦興國小本身有羽球隊、由教練林冠樺與洪錦義指導，顯示球隊有一定基礎，但呂宥橙本人的公開賽事資料未查得。</p><p class="warn-line">錦興國小本身有教練指導的羽球隊，不宜輕忽，惟呂宥橙本人查無公開比賽紀錄。</p></div>
+    </details><details class="opp" data-names="高湛寬">
+      <summary>
+        <span class="opp-name">高湛寬</span>
+        <span class="opp-school">豐盈中市大勇</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「高湛寬」搭配「大勇國小」「台中市大勇國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。已核對「豐盈中市大勇」對應台中市西區大勇國小（非桃園市大勇國小），該校本身有其他學生參與台中地區羽球賽事的紀錄，但高湛寬本人未查得。</p><p class="warn-line">全台有「台中市西區大勇國小」與「桃園市大勇國小」兩所同名學校，已核對本次對手學校標記「豐盈中市大勇」對應台中市，避免誤用桃園同名學校資料；高湛寬本人查無公開比賽紀錄。</p></div>
+    </details><details class="opp" data-names="陳幸妍">
+      <summary>
+        <span class="opp-name">陳幸妍</span>
+        <span class="opp-school">雲林縣僑真國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「陳幸妍」搭配「僑真國小」「雲林縣僑真國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。搜尋過程中查到僑真國小自民國93年起設有羽球隊、校方描述「常在大小比賽獲得不錯成績」（與本名冊 team-9 僑真國小六年級團體的既有研究結論一致），但「陳幸妍」本人的個人賽事資料未查得。</p><p class="warn-line">僑真國小是雲林在地有羽球傳統的學校（見本名冊 team-9 的既有研究），但陳幸妍本人查無個人賽事紀錄，賽前仍應留意該校整體實力。</p></div>
+    </details><details class="opp" data-names="劉恩碩">
+      <summary>
+        <span class="opp-name">劉恩碩</span>
+        <span class="opp-school">飛迅南市文化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「劉恩碩」搭配「文化國小」「台南市文化國小」「羽球」「男單」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。惟已確認<b>台南市文化國小（歸仁區）</b>羽球隊實力極為頂尖：於115年（2026年5月）全國羽球團體錦標賽，同時拿下國小男子團體與女子團體<b>雙料冠軍</b>（詳見solo-81既有紀錄）。劉恩碩本人雖查無個別成績，但代表這所強校出賽，賽前應高度提防。</p><p class="warn-line">文化國小是115年全國羽球團體錦標賽國小男女團體雙料冠軍的頂尖強校，即使劉恩碩個人查無資料，也絕對不可輕敵；本名冊solo-81廖庭語也是同校選手。</p><p class="src">來源：<a href="https://udn.com/news/story/7326/9492163" target="_blank" rel="noopener">台南之光！文化國小勇奪全國羽球賽男子、女子雙料冠軍（聯合新聞網）</a></p></div>
+    </details><details class="opp" data-names="廖庭語">
+      <summary>
+        <span class="opp-name">廖庭語</span>
+        <span class="opp-school">飛迅南市文化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「廖庭語」搭配「文化國小」「台南市文化國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。惟查到<b>台南市文化國小（歸仁區）羽球隊實力極為頂尖</b>：於115年（2026年）5月全國羽球團體錦標賽，同時拿下國小男子團體與女子團體<b>雙料冠軍</b>，是目前所查到本名冊中戰力最強的學校之一。廖庭語本人雖查無個別成績，但代表這所強校出賽，賽前應高度提防。</p><p class="warn-line">文化國小是115年（2026年5月）全國羽球團體錦標賽國小男女團體雙料冠軍的頂尖強校，即使廖庭語個人查無資料，也絕對不可輕敵；本名冊另有solo-39南郭國小等，並非同校，勿混淆。</p><p class="src">來源：<a href="https://zh.wikipedia.org/zh-tw/%E8%87%BA%E5%8D%97%E5%B8%82%E6%AD%B8%E4%BB%81%E5%8D%80%E6%96%87%E5%8C%96%E5%9C%8B%E6%B0%91%E5%B0%8F%E5%AD%B8" target="_blank" rel="noopener">臺南市歸仁區文化國民小學（維基百科）</a></p></div>
+    </details><details class="opp" data-names="郭宇倞">
+      <summary>
+        <span class="opp-name">郭宇倞</span>
+        <span class="opp-school">飛迅南市文化國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「郭宇倞」搭配「文化國小」「台南市文化國小」「羽球」等關鍵字交叉搜尋，均<b>查無公開比賽紀錄</b>。惟已確認台南市文化國小羽球隊實力極為頂尖（115年全國羽球團體錦標賽國小男女團體雙料冠軍），賽前應高度提防。</p><p class="warn-line">文化國小是115年全國羽球團體錦標賽國小男女團體雙料冠軍的頂尖強校，即使郭宇倞個人查無資料，也絕對不可輕敵。</p><p class="src">來源：<a href="https://udn.com/news/story/7326/9492163" target="_blank" rel="noopener">台南之光！文化國小勇奪全國羽球賽男子、女子雙料冠軍（聯合新聞網）</a></p></div>
+    </details><details class="opp" data-names="莊子昂">
+      <summary>
+        <span class="opp-name">莊子昂</span>
+        <span class="opp-school">高雄市新光國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>多次以「莊子昂」搭配「高雄市新光國小」「羽球」等關鍵字交叉搜尋，也查閱2025年臺北市市長盃報名/成績資料及其他常見全國性賽事成績表，均<b>查無公開比賽紀錄</b>。</p></div>
+    </details><details class="opp" data-names="台中市大鵬國小">
+      <summary>
+        <span class="opp-name">台中市大鵬國小</span>
+        <span class="opp-school">台中市大鵬國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在中華民國羽球協會官方公告的<b>114年全國國小盃羽球錦標賽</b>（2025年12月4日～8日，屏東）逐場成績表中，查到台中市大鵬國小六年級男子團體<b>三場對戰紀錄</b>：(1) 12/5對台南市崇學國小，<b>大鵬勝</b>（單打楊秉翊、程若谷皆2-0獲勝，雙打何玄竣/王俊獻2-0獲勝，已提前拿下3勝拿下團體勝利）；(2) 12/6對北市中山國小，<b>大鵬勝</b>（楊秉翊3局苦戰21-19/10-21/23-21獲勝，呂秉宸2-0獲勝，何玄竣/王俊獻雙打2-0獲勝）；(3) 12/6對飛迅南市文化國小，<b>大鵬敗（1:3）</b>——僅程若谷單打獲勝，其餘單打（楊秉翊）與兩場雙打（何玄竣/王俊獻、呂彥寬/歐政閔）均落敗。整體來看大鵬六年級男團戰力不弱（單打楊秉翊、程若谷，雙打何玄竣/王俊獻是主力），但近期對戰紀錄顯示並非不可擊敗，敗給了南市文化國小。</p><p class="warn-line">此為114年12月（賽事開學初期，六年級）逐場團體賽成績，屬於近一年內的最新團體戰績，可信度高；惟無法確認本屆摩亞盃出賽陣容是否與此完全相同（選手可能有變動）。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_results for team_六年級（中華民國羽球協會CTBA官方公告）</a></p></div>
+    </details><details class="opp" data-names="台北市幸安國小">
+      <summary>
+        <span class="opp-name">台北市幸安國小</span>
+        <span class="opp-school">台北市幸安國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>查閱中華民國羽球協會官方公告的<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）五年級男子團體逐場成績表，<b>未發現「幸安國小」的參賽紀錄</b>，研判該校五年級男團當屆並未報名或參加這項全國性賽事。另查到幸安國小在<b>2025年臺北市市長盃羽球錦標賽</b>有多位個人賽選手參賽（如已知的詹礎綾/賴筠晴女雙季軍，另有施羽芊、蕭詠珆、黃晨睿等人參賽），顯示該校羽球隊仍有一定活動量，但團體賽本身查無近一年的具體戰績或名次。</p><p class="warn-line">已查過本屆全國性團體賽（114年全國國小盃）確認未列名，並非漏查；幸安國小個人賽選手仍有一定活躍度，團體整體戰力無從評估。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽 團體賽成績表（未見幸安國小）；2025年臺北市市長盃羽球錦標賽</a></p></div>
+    </details><details class="opp" data-names="台北市民權國小">
+      <summary>
+        <span class="opp-name">台北市民權國小</span>
+        <span class="opp-school">台北市民權國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>查到<b>台北市民權國小（松山區）</b>在最近一屆「114年全國國小盃羽球錦標賽」（2025年12月6日～8日，屏東）四年級團體項目的官方成績紀錄：男子四年級團體與女子四年級團體<b>雙雙奪冠</b>——男團決賽以3:1擊敗南市文化國小，女團決賽以3:2擊敗臺中市大鵬國小，且一路晉級過程幾乎未失一場（男團僅在準決賽被追至3:1，其餘場次多是3:0橫掃）。該校本身是台北市傳統羽球強校（20多年校隊歷史，社團常態約60人，不少家長為此轉學就讀），近年在市長盃、全國國小盃等賽事的個人賽（單打／雙打）也常有名次入榜。<b>提醒：</b>需與同名的「高雄市前鎮區民權國小」區分——後者是另一所羽球傳統強校，戰績不可混用；本筆資料已核對學校全名為「北市民權」（台北市），非高雄前鎮民權。</p><p class="warn-line">此為114年（2025年12月）賽事戰績，是「校隊整體實力」的參考，並非115年（本屆）出賽選手的個人逐一核對資料——因賽事在學年初舉行，114年的四年級團體冠軍隊伍成員，到115年8月本屆賽事時已升上五年級，本屆「四年級團體」出賽名單很可能是不同屆的學弟妹（部分選手仍有機會延續在校隊中），僅供判斷該校四年級團體項目的整體強度，不代表本屆對戰選手個人戰績。另外，全國性賽事亦有「高雄市前鎮區民權國小」同樣使用「民權」校名且同為羽球強校，資料引用時已核對為台北市（北市民權），未與高雄前鎮民權混淆。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽 成績紀錄與四年級組團體賽明細（中華民國羽球協會 CTBA 官方公告）</a></p></div>
+    </details><details class="opp" data-names="台北市民權國小B">
+      <summary>
+        <span class="opp-name">台北市民權國小B</span>
+        <span class="opp-school">台北市民權國小B</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）官方逐場成績表中，查到「北市民權」六年級男子團體<b>對新竹市科園國小</b>（12/5）的完整對戰紀錄，<b>民權以2:3惜敗</b>：單打1黃康然勝（2-0）、單打2尤昱威敗（1-2，三局戰）、雙打3龔柏宇/林楚和勝（2-0）、雙打4葉冠君/蔡恩喆敗（0-2）、單打5黃稚翔敗（0-2），最終新竹科園以3勝2敗獲勝。學校吻合（台北市民權國小），惟本屆賽事名冊上場選手是「民權國小B隊」，而這份全國賽紀錄中僅查到一支「北市民權」隊伍，<b>無法確認是否對應到本屆的B隊或A隊</b>。民權國小另有一支<b>「亞柏高雄市前鎮區民權國小」</b>參賽且戰績優異，已確認是不同縣市的另一所同名學校，不可混淆。</p><p class="warn-line">查到的「北市民權」六年級男團只有一支隊伍的紀錄，本屆賽事名冊上對手是「民權國小B隊」，無法確認是否為同一批選手（可能是A隊、也可能該校僅送一隊參加全國賽）；另有「高雄市前鎮區民權國小」為不同學校，已核對排除、不可混淆（詳見team-3既有警示）。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_results for team_六年級（中華民國羽球協會CTBA官方公告）</a></p></div>
+    </details><details class="opp" data-names="台北市民生國小">
+      <summary>
+        <span class="opp-name">台北市民生國小</span>
+        <span class="opp-school">台北市民生國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>查閱中華民國羽球協會官方公告的<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）四年級女子團體逐場成績表，<b>未發現「民生國小」（台北市松山區）的參賽紀錄</b>，研判該校四年級女團當屆並未報名或參加這項全國性賽事。另查到民生國小本身是有一定規模的羽球校隊（招生資料顯示羽球隊員額約50~60人），社群媒體上也有跟其他學校交流練習的紀錄，顯示球隊仍在活躍經營，但團體賽本身查無近一年的具體戰績或名次。</p><p class="warn-line">已查過本屆全國性團體賽（114年全國國小盃）確認未列名，並非漏查；民生國小羽球隊規模不小（約50-60人），團體整體戰力不宜輕忽，僅是這次全國賽查無戰績可參考。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽 團體賽成績表（未見民生國小）</a></p></div>
+    </details><details class="opp" data-names="台北市濱江國小">
+      <summary>
+        <span class="opp-name">台北市濱江國小</span>
+        <span class="opp-school">台北市濱江國小</span>
+        <span class="conf conf-none">無資料</span>
+      </summary>
+      <div class="opp-body"><p>查閱中華民國羽球協會官方公告的<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）六年級男子團體逐場成績表，<b>未發現「濱江國小」的參賽紀錄</b>，研判該校六年級男團當屆並未報名或參加這項全國性賽事。另查到濱江國小有個別選手（如陳貝瑄）參與2025年臺北市市長盃等賽事，顯示球隊仍有活動，但團體賽本身查無近一年的具體戰績或名次。</p><p class="warn-line">已查過本屆全國性團體賽（114年全國國小盃）確認未列名，並非漏查；個別選手仍有參賽紀錄，團體整體戰力無從評估。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽 團體賽成績表（未見濱江國小）</a></p></div>
+    </details><details class="opp" data-names="日新鳳凰">
+      <summary>
+        <span class="opp-name">日新鳳凰</span>
+        <span class="opp-school">日新鳳凰</span>
+        <span class="conf conf-mid">中高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）官方逐場成績表中，查到「日新鳳凰」四年級男子團體<b>對桃市仁和國小</b>（12/6）的對戰紀錄，<b>日新鳳凰落敗</b>：單打1秦稟軒0-2敗、單打2王道森0-2敗、雙打3陳宥家/溫明叡0-2敗，已提前確定敗方（僅查到這一場對戰紀錄，賽事其他輪次未查到該校紀錄，可能首輪即遭淘汰或這是唯一晉級的一輪）。學校吻合（日新國小/鳳凰旅遊基金會贊助隊），惟這場團體賽敗得較徹底，與該校在個人賽（如solo-71黃可贊男雙、solo-70/74等其他選手）展現的一定實力有落差，可能是團體賽當天陣容或狀況問題，建議賽前仍謹慎看待、不宜低估其個人賽實力。</p><p class="warn-line">只查到一場對戰紀錄（對桃市仁和國小，落敗），不確定是否為該校當屆團體賽的唯一一場（例如是資格賽或會內賽首輪），也無法排除是備用/次要陣容出賽；日新鳳凰個人賽選手（黃可贊等）另有查到不錯的雙打戰績，團體賽的單場落敗不代表個人實力弱。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_results for team_四年級（中華民國羽球協會CTBA官方公告）</a></p></div>
+    </details><details class="opp" data-names="臺北市雙永國小">
+      <summary>
+        <span class="opp-name">臺北市雙永國小</span>
+        <span class="opp-school">臺北市雙永國小</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p>在<b>114年全國國小盃羽球錦標賽</b>（2025年12月，屏東）官方逐場成績表中，「北市雙永」查到三場對戰紀錄：<b>六年級女子團體</b>兩連敗——(1) 對台北市敦化國小（12/4上午），以1:3落敗（僅單打1李語忻勝，其餘單打2、雙打3、雙打4皆敗）；(2) 對雲林縣僑真國小（12/4下午），以0:3完敗（連前3場單打、雙打全部落敗，提前確定敗方）。<b>五年級男子團體</b>對台南市崇學國小（12/4），以1:3落敗（僅單打2吳恩宇3局逆轉勝，其餘單打1、雙打3、雙打4皆敗）。三場團體賽全部落敗，顯示雙永國小近期在全國賽層級的團體戰力偏弱，惟仍不排除是當天派出非最強陣容應戰。</p><p class="warn-line">三場皆為落敗紀錄，且是全國賽層級（對手包含強校敦化、僑真、崇學），與本屆較地方性的摩亞盃強度可能有落差，不宜直接斷定雙永在摩亞盃也會表現不佳；仍應賽前現場觀察為準。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_results for team_六年級/五年級（中華民國羽球協會CTBA官方公告）</a></p></div>
+    </details><details class="opp" data-names="雲林縣僑真國小*3">
+      <summary>
+        <span class="opp-name">雲林縣僑真國小*3</span>
+        <span class="opp-school">雲林縣僑真國小*3</span>
+        <span class="conf conf-high">高</span>
+      </summary>
+      <div class="opp-body"><p><b>更正先前紀錄</b>：先前查詢（僅用個人化關鍵字搜尋）誤判僑真國小六年級團體「查無具體成績」，後續在中華民國羽球協會官方公告的<b>114年全國國小盃羽球錦標賽</b>（2025年12月4日，屏東）逐場成績表中，實際查到僑真國小六年級女子團體<b>對北市雙永</b>的完整對戰紀錄：<b>僑真完封雙永3:0</b>——單打1蔡芊芊21-11/21-3勝、單打2李恩瑜21-15/21-15勝、雙打3王恩妤/林以琁21-16/21-9勝，提前3勝拿下團體勝利（後兩場未再出賽）。學校與年級皆吻合，可信度高，顯示僑真國小六年級女團近期戰力紮實，賽前應提高警覺。</p><p class="warn-line">此為官方逐場比分紀錄，可信度高於先前的「查無資料」結論（先前搜尋方式未涵蓋官方逐場成績表，屬於資料來源不足導致的誤判，非該校真的沒有戰績）；仍需留意賽事陣容是否與本屆摩亞盃出賽選手相同。</p><p class="src">來源：<a href="https://www.ctb.org.tw/information.asp?id=226" target="_blank" rel="noopener">114年全國國小盃羽球錦標賽_results for team_六年級（中華民國羽球協會CTBA官方公告）</a></p></div>
+    </details></div>
+      </div>
+      <div id="intel-empty" style="display:none;">找不到這個名字，確認選手版的姓名拼法是否一致</div>
+    </div>
   </main>
-  <footer class="app-foot">資料整理自大會賽程表。對手情報／近一年戰績尚待補充。如有異動請以主辦單位公告為準。</footer>
+  <footer class="app-foot">資料整理自大會賽程表。如有異動請以主辦單位公告為準。</footer>
 </div>
 <script>
 (function () {
@@ -5852,6 +6796,71 @@
     });
     emptyState.style.display = (q && shownTotal === 0) ? 'block' : 'none';
     matchCount.textContent = q ? ('符合 ' + shownTotal + ' 位') : '';
+  });
+})();
+
+(function () {
+  var mySearch = document.getElementById('my-search');
+  var myResults = document.getElementById('my-results');
+  var browse = document.getElementById('intel-browse');
+  var cardsWrap = document.getElementById('intel-cards');
+  var intelEmpty = document.getElementById('intel-empty');
+  if (!mySearch || !cardsWrap) return;
+
+  var playerOpponents = {"黃丞禾": [{"event": "六年級男子單打", "opp": "林仁傑（屏東縣忠孝國小）"}, {"event": "六年級男子單打", "opp": "劉秉元（台中市大鵬國小）"}, {"event": "六年級男子雙打", "opp": "陳建燁／陳奕帆（台北市中山國小）"}, {"event": "六年級男子雙打", "opp": "湯泓琦／裴家穎（台北市民權國小）"}], "張喬椉": [{"event": "六年級男子單打", "opp": "蕭宇佑（台北市敦化國小）"}, {"event": "六年級男子單打", "opp": "楊田丞（新北市昌平國小）"}, {"event": "六年級男子雙打", "opp": "陳禹衡／楊超捷（日新鳳凰）"}, {"event": "六年級男子雙打", "opp": "程群智／程亦廷（台北市福德國小）"}], "廖思維": [{"event": "六年級男子單打", "opp": "黃可贊（日新鳳凰*3/4）"}, {"event": "六年級男子單打", "opp": "孫孝謙（新北市太平國小）"}, {"event": "六年級男子雙打", "opp": "林邑達／郭友錡（新竹縣松林國小）"}, {"event": "六年級男子雙打", "opp": "郭士毅／洪稚鈞（台北市敦化國小）"}], "詹堉禾": [{"event": "六年級男子單打", "opp": "何丹力（新北市金龍國小*5/8）"}, {"event": "六年級男子單打", "opp": "林佑晨（桃園市文山國小）"}, {"event": "六年級男子雙打", "opp": "陳禹衡／楊超捷（日新鳳凰）"}, {"event": "六年級男子雙打", "opp": "程群智／程亦廷（台北市福德國小）"}], "陳彥森": [{"event": "六年級男子單打", "opp": "湯劭均（台中市大鵬國小）"}, {"event": "六年級男子單打", "opp": "曾宸碩（台北市民權國小）"}, {"event": "六年級男子單打", "opp": "張辰愷（台南市崇學國小）"}, {"event": "六年級男子雙打", "opp": "陳建燁／陳奕帆（台北市中山國小）"}, {"event": "六年級男子雙打", "opp": "湯泓琦／裴家穎（台北市民權國小）"}], "林芠頡": [{"event": "六年級男子單打", "opp": "陳奕帆（台北市中山國小）"}, {"event": "六年級男子單打", "opp": "王紹帆（新北市秀山國小）"}, {"event": "六年級男子雙打", "opp": "許鎧恩／李紹安（新北市文德國小）"}, {"event": "六年級男子雙打", "opp": "陳佑鈞／丁冠華（新北市麗林國小）"}], "王宥程": [{"event": "六年級男子單打", "opp": "賴威宇（台北市石牌國小）"}, {"event": "六年級男子單打", "opp": "黃柏綸（台北市民權國小）"}, {"event": "六年級男子雙打", "opp": "許鎧恩／李紹安（新北市文德國小）"}, {"event": "六年級男子雙打", "opp": "陳佑鈞／丁冠華（新北市麗林國小）"}], "蔡睿宸": [{"event": "六年級男子單打", "opp": "談沐嘉（台北市民權國小）"}, {"event": "六年級男子單打", "opp": "林柏寬（日新鳳凰）"}], "鄭韋綸": [{"event": "六年級男子單打", "opp": "陳佑鈞（新北市麗林國小）"}, {"event": "六年級男子單打", "opp": "陳秉駿（台北市民權國小）"}, {"event": "六年級男子雙打", "opp": "林邑達／郭友錡（新竹縣松林國小）"}, {"event": "六年級男子雙打", "opp": "郭士毅／洪稚鈞（台北市敦化國小）"}], "田馥菲": [{"event": "六年級女子單打", "opp": "吳若琳（新北市秀朗國小）"}, {"event": "六年級女子單打", "opp": "謝安妤（新北市秀山國小）"}, {"event": "六年級女子雙打", "opp": "黃奕晨／詹紫晴（台北市中山國小）"}, {"event": "六年級女子雙打", "opp": "郭絜儀／陳芯樂（台北市石牌國小）"}], "陳昱璇": [{"event": "六年級女子單打", "opp": "曹又晨（新北市頭前國小*5/8）"}, {"event": "六年級女子單打", "opp": "陳幸妍（雲林縣僑真國小）"}, {"event": "六年級女子雙打", "opp": "黃奕晨／詹紫晴（台北市中山國小）"}, {"event": "六年級女子雙打", "opp": "郭絜儀／陳芯樂（台北市石牌國小）"}], "包清之": [{"event": "六年級女子單打", "opp": "黃秀穎（新北市麗林國小）"}, {"event": "六年級女子單打", "opp": "詹礎綾（台北市幸安國小）"}, {"event": "六年級女子雙打", "opp": "郭於晴／蔡若緁（新北市江翠國小）"}, {"event": "六年級女子雙打", "opp": "劉姿聿／曹又晨（新北市頭前國小）"}], "羅翊嫙": [{"event": "六年級女子單打", "opp": "孫立欣（台北市中山國小）"}, {"event": "六年級女子單打", "opp": "蔡昱萱（新竹市龍山國小）"}, {"event": "六年級女子雙打", "opp": "郭於晴／蔡若緁（新北市江翠國小）"}, {"event": "六年級女子雙打", "opp": "劉姿聿／曹又晨（新北市頭前國小）"}], "呂循崴": [{"event": "五年級男子單打", "opp": "蔣旻哲（台北市民權國小）"}, {"event": "五年級男子單打", "opp": "周立勛（台北市濱江國小）"}, {"event": "五年級男子雙打", "opp": "楊爵愷／吳禹廷（台北市民生國小）"}, {"event": "五年級男子雙打", "opp": "呂秉哲／洪翌宸（台中市大鵬國小）"}], "蔡皓宇": [{"event": "五年級男子單打", "opp": "葉峖霆（新北市樹林國小）"}, {"event": "五年級男子單打", "opp": "詹凱桀（彰化縣田中國小）"}, {"event": "五年級男子雙打", "opp": "林雍哲／李宸濬（台北市東門國小）"}, {"event": "五年級男子雙打", "opp": "喻以誠／黃笙迪（台中市大鵬國小）"}], "顏弘寔": [{"event": "五年級男子單打", "opp": "張大帥（台北市敦化國小）"}, {"event": "五年級男子單打", "opp": "劉謹賢（新北市頭前國小）"}, {"event": "五年級男子雙打", "opp": "陳宥榮／王宥捷（彰化市南郭國小）"}, {"event": "五年級男子雙打", "opp": "王子碩／魏宏展（台北市雙蓮國小）"}], "吳梣安": [{"event": "五年級男子單打", "opp": "連橙睿（新北市昌平國小）"}, {"event": "五年級男子單打", "opp": "陳忠鼎（台北市中山國小）"}, {"event": "五年級男子雙打", "opp": "曾品瑋／陳忠鼎（台北市中山國小）"}, {"event": "五年級男子雙打", "opp": "林昱謙／郭明親（台北市福德國小）"}], "吳敏岳": [{"event": "五年級男子單打", "opp": "林楷軒（台北市石牌國小）"}, {"event": "五年級男子單打", "opp": "周怡成（台中市忠明國小）"}, {"event": "五年級男子雙打", "opp": "陳宥榮／王宥捷（彰化市南郭國小）"}, {"event": "五年級男子雙打", "opp": "王子碩／魏宏展（台北市雙蓮國小）"}], "李融載": [{"event": "五年級男子單打", "opp": "呂宥橙（桃園市錦興國小）"}, {"event": "五年級男子單打", "opp": "郭明親（台北市福德國小）"}, {"event": "五年級男子雙打", "opp": "林雍哲／李宸濬（台北市東門國小）"}, {"event": "五年級男子雙打", "opp": "喻以誠／黃笙迪（台中市大鵬國小）"}], "陳奕辰": [{"event": "五年級男子單打", "opp": "詹寓程（彰化縣田中國小）"}, {"event": "五年級男子單打", "opp": "江俋頡（新竹縣新社國小）"}, {"event": "五年級男子雙打", "opp": "曾品瑋／陳忠鼎（台北市中山國小）"}, {"event": "五年級男子雙打", "opp": "林昱謙／郭明親（台北市福德國小）"}], "黃梓家": [{"event": "五年級男子單打", "opp": "吳昱鋐（宜蘭縣成功國小）"}, {"event": "五年級男子單打", "opp": "夏毅豐（新北市金龍國小）"}, {"event": "五年級男子雙打", "opp": "楊爵愷／吳禹廷（台北市民生國小）"}, {"event": "五年級男子雙打", "opp": "呂秉哲／洪翌宸（台中市大鵬國小）"}], "楊富凱": [{"event": "五年級男子單打", "opp": "謝宗翰（彰化市南郭國小）"}, {"event": "五年級男子單打", "opp": "黃立宇（台北市民權國小）"}, {"event": "五年級男子雙打", "opp": "蔡典均／許迦恩（台中市忠明國小）"}, {"event": "五年級男子雙打", "opp": "陳建均／吳予丞（桃園市建德國小）"}], "林祐慬": [{"event": "五年級男子單打", "opp": "陳譽（台北市民生國小）"}, {"event": "五年級男子單打", "opp": "高湛寬（豐盈中市大勇）"}, {"event": "五年級男子雙打", "opp": "蔡典均／許迦恩（台中市忠明國小）"}, {"event": "五年級男子雙打", "opp": "陳建均／吳予丞（桃園市建德國小）"}], "于衍恩": [{"event": "五年級女子單打", "opp": "林彥妤（台北市中山國小）"}, {"event": "五年級女子單打", "opp": "鍾妘苡（桃園市文山國小）"}, {"event": "五年級女子雙打", "opp": "陳妍儒／周忻妤（新北市文德國小）"}, {"event": "五年級女子雙打", "opp": "施淳薰／陳芊睿（台北市敦化國小）"}], "林妍妡": [{"event": "五年級女子單打", "opp": "童資涵（台北市民生國小）"}, {"event": "五年級女子單打", "opp": "陳韵宜（林口康橋國際學校）"}, {"event": "五年級女子雙打", "opp": "林詠潔／夏可桐（台北市中山國小）"}, {"event": "五年級女子雙打", "opp": "林亞鍹／詹宜儒（台北市民權國小）"}], "安在芸": [{"event": "五年級女子單打", "opp": "楊函毓（台北市民權國小）"}, {"event": "五年級女子單打", "opp": "廖庭語（飛迅南市文化國小）"}, {"event": "五年級女子雙打", "opp": "陳妍儒／周忻妤（新北市文德國小）"}, {"event": "五年級女子雙打", "opp": "施淳薰／陳芊睿（台北市敦化國小）"}], "程禾亘": [{"event": "五年級女子單打", "opp": "楊孫菀（台中市東海國小*2）"}, {"event": "五年級女子單打", "opp": "黃宥菲（新北市秀朗國小）"}, {"event": "五年級女子雙打", "opp": "林詠潔／夏可桐（台北市中山國小）"}, {"event": "五年級女子雙打", "opp": "林亞鍹／詹宜儒（台北市民權國小）"}], "洪永宸": [{"event": "四年級男子單打", "opp": "夏志洋（彰化市南郭國小）"}, {"event": "四年級男子單打", "opp": "張語晉（新北市昌平國小）"}, {"event": "四年級男子雙打", "opp": "劉恩碩／姚嘉濬（飛迅南市文化國小）"}, {"event": "四年級男子雙打", "opp": "黃允謙／吳瑞恩（新北市義學國小）"}, {"event": "四年級男子雙打", "opp": "黃品羿／陳品硯（台北市中山國小）"}], "謝宇森": [{"event": "四年級男子單打", "opp": "胡尋（桃園市文山國小）"}, {"event": "四年級男子單打", "opp": "劉恩碩（飛迅南市文化國小）"}], "黃致堯": [{"event": "四年級男子單打", "opp": "方在寅（台北市中山國小）"}, {"event": "四年級男子單打", "opp": "莊子昂（高雄市新光國小）"}, {"event": "四年級男子雙打", "opp": "劉恩碩／姚嘉濬（飛迅南市文化國小）"}, {"event": "四年級男子雙打", "opp": "黃允謙／吳瑞恩（新北市義學國小）"}, {"event": "四年級男子雙打", "opp": "黃品羿／陳品硯（台北市中山國小）"}], "謝佳玲": [{"event": "四年級女子單打", "opp": "吳祤杉（台北市中山國小）"}, {"event": "四年級女子單打", "opp": "曾李品希（新北市文德國小）"}, {"event": "四年級女子雙打", "opp": "李米樂／王杏芙（新北市金龍國小）"}, {"event": "四年級女子雙打", "opp": "陳若頤／陳姿帆（台北市民權國小）"}], "林芸安": [{"event": "四年級女子單打", "opp": "幸芯（台北市敦化國小）"}, {"event": "四年級女子單打", "opp": "陳語（新竹縣新社國小）"}, {"event": "四年級女子雙打", "opp": "吳祤杉／陳嵱橙（台北市中山國小）"}, {"event": "四年級女子雙打", "opp": "李博霏／郭辰穎（台北市敦化國小）"}], "彭怡臻": [{"event": "四年級女子單打", "opp": "林昕璇（新竹縣松林國小）"}, {"event": "四年級女子單打", "opp": "康羽昕（新北市中正國小）"}, {"event": "四年級女子雙打", "opp": "吳祤杉／陳嵱橙（台北市中山國小）"}, {"event": "四年級女子雙打", "opp": "李博霏／郭辰穎（台北市敦化國小）"}], "黃祤芯": [{"event": "四年級女子單打", "opp": "劉沐橙（新北市秀山國小）"}, {"event": "四年級女子單打", "opp": "陳若頤（台北市民權國小）"}, {"event": "四年級女子雙打", "opp": "李米樂／王杏芙（新北市金龍國小）"}, {"event": "四年級女子雙打", "opp": "陳若頤／陳姿帆（台北市民權國小）"}], "蔡書亞": [{"event": "三年級男子單打", "opp": "洪宇熙（新北市麗林國小）"}, {"event": "三年級男子單打", "opp": "陳虹亦（新北市秀山國小）"}], "陳俞儒": [{"event": "三年級男子單打", "opp": "黃翊宸（新北市昌平國小）"}, {"event": "三年級男子單打", "opp": "倪鹿元（台北市民生國小）"}], "蔡澤亞": [{"event": "三年級男子單打", "opp": "郭宇倞（飛迅南市文化國小）"}, {"event": "三年級男子單打", "opp": "蔡亞恩（台北市雙蓮國小）"}], "張時曦": [{"event": "三年級男子單打", "opp": "張泳樂（台北市濱江國小）"}, {"event": "三年級男子單打", "opp": "鄭程元（新北市金龍國小）"}], "程祺恩": [{"event": "三年級男子單打", "opp": "余定睿（台北市中山國小）"}, {"event": "三年級男子單打", "opp": "黃亭瀚（新竹市龍山國小）"}], "黃筠雅": [{"event": "三年級女子單打", "opp": "李沐澄（台北市民權國小）"}, {"event": "三年級女子單打", "opp": "陳以芊（林口康橋國際學校）"}], "包清尹": [{"event": "三年級女子單打", "opp": "鄭可妤（新北市重陽國小）"}, {"event": "三年級女子單打", "opp": "陳宇萱（台北市石牌國小）"}]};
+  var cards = Array.prototype.slice.call(cardsWrap.querySelectorAll('details.opp'));
+
+  function escHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function namesFromOpp(s) {
+    return s.replace(/（[^）]*）$/, '').split(/[／/]/).map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+
+  mySearch.addEventListener('input', function () {
+    var q = mySearch.value.trim();
+
+    if (!q) {
+      browse.style.display = '';
+      myResults.innerHTML = '';
+      intelEmpty.style.display = 'none';
+      cards.forEach(function (c) { c.style.display = ''; c.open = false; });
+      return;
+    }
+
+    browse.style.display = 'none';
+
+    var matchedPlayers = Object.keys(playerOpponents).filter(function (name) {
+      return name.indexOf(q) !== -1;
+    });
+
+    if (!matchedPlayers.length) {
+      myResults.innerHTML = '';
+      cards.forEach(function (c) { c.style.display = 'none'; });
+      intelEmpty.style.display = 'block';
+      return;
+    }
+
+    var targetNames = {};
+    var resultHtml = '';
+    matchedPlayers.forEach(function (name) {
+      var opps = playerOpponents[name];
+      var lines = opps.map(function (o) {
+        namesFromOpp(o.opp).forEach(function (n) { targetNames[n] = true; });
+        return '<div class="my-opp-line"><b>' + escHtml(o.opp) + '</b><span class="ev"> · ' + escHtml(o.event) + '</span></div>';
+      }).join('');
+      resultHtml += '<div class="my-result-block"><div class="my-name">' + escHtml(name) + ' 的對手（' + opps.length + '）</div>' + lines + '</div>';
+    });
+    myResults.innerHTML = resultHtml;
+
+    var shown = 0;
+    cards.forEach(function (c) {
+      var names = (c.getAttribute('data-names') || '').split('|');
+      var match = names.some(function (n) { return targetNames[n]; });
+      c.style.display = match ? '' : 'none';
+      if (match) { shown++; c.open = true; }
+    });
+    intelEmpty.style.display = shown === 0 ? 'block' : 'none';
   });
 })();
 </script>

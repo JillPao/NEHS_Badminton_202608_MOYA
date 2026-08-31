@@ -291,6 +291,16 @@
   .nb-desc .grid-count, .nb-desc .grid-maybe { margin: 0 3px; vertical-align: middle; }
   .note-card.note-results { background: var(--gold-soft); }
   .note-card.note-results .nb-title { color: var(--gold); }
+
+  /* ---- finished days, parked at the bottom of 教練版 --------------------- */
+  .coach-done-head { display: flex; align-items: center; gap: 10px; margin: 18px 2px 4px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+  .coach-done-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  details.coach-day.is-finished { background: transparent; }
+  details.coach-day.is-finished > summary { color: var(--muted); font-weight: 600; }
+  details.coach-day.is-finished .day-name { color: var(--muted); }
+  .day-done { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    background: var(--line); color: var(--muted); flex-shrink: 0; }
   @media (max-width: 400px) {
     .nb-row { flex-direction: column; gap: 2px; }
     .nb-term { flex: none; }
@@ -4971,203 +4981,8 @@
       <div id="coach-view-body">
 <details class="coach-day">
           <summary>
-            <span class="day-name">8/31（一）</span>
-            <span class="day-count">10 個時段 · 確定 13 場</span>
-          </summary>
-          <div class="coach-day-body"><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">08:00</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-win">
-      <div class="coach-match-top">
-        <span class="coach-player">五男團</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">台北市幸安國小</span>
-        <span class="res-badge res-win">勝 3:0</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地9 · #9</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">11:00</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">六男團</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">台中市大鵬國小</span>
-        <span class="res-badge res-lose">敗 0:3</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #7</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">13:45</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">四男團</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">台北市民權國小</span>
-        <span class="res-badge res-lose">敗 0:3</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級男子團體 · 場地10 · #18</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">14:40</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-win">
-      <div class="coach-match-top">
-        <span class="coach-player">四女團</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">台北市民生國小</span>
-        <span class="res-badge res-win">勝 3:0</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地3 · #4</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">15:35</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-win">
-      <div class="coach-match-top">
-        <span class="coach-player">六男團</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">台北市濱江國小</span>
-        <span class="res-badge res-win">勝 3:0</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地1 · #18</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">16:30</span>
-                <span class="sev-badge sev-ok">確定 2 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-win">
-      <div class="coach-match-top">
-        <span class="coach-player">六女團</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">臺北市雙永國小</span>
-        <span class="res-badge res-win">勝 3:2</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級女子團體 · 場地3 · #13</div>
-      
-      
-    </div><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">黃丞禾</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">林仁傑（屏東縣忠孝國小）</span>
-        <span class="res-badge res-lose">敗 21:25</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #6</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">17:00</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-win">
-      <div class="coach-match-top">
-        <span class="coach-player">張喬椉</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">蕭宇佑（台北市敦化國小）</span>
-        <span class="res-badge res-win">勝 25:23</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #7</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">17:20</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">詹堉禾</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">何丹力（新北市金龍國小*5/8）</span>
-        <span class="res-badge res-lose">敗 10:25</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #22</div>
-      
-      
-    </div></div>
-            </div><div class="slot sev-yellow">
-              <div class="slot-head">
-                <span class="slot-time mono">17:40</span>
-                <span class="sev-badge sev-yellow">確定 3 組・教練缺口 1 位</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">陳彥森</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">湯劭均（台中市大鵬國小）</span>
-        <span class="res-badge res-lose">敗 10:25</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #27</div>
-      
-      
-    </div><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">林芠頡</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">陳奕帆（台北市中山國小）</span>
-        <span class="res-badge res-lose">敗 22:25</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地3 · #29</div>
-      
-      
-    </div><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">王宥程</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">賴威宇（台北市石牌國小）</span>
-        <span class="res-badge res-lose">敗 17:25</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #31</div>
-      
-      
-    </div></div>
-            </div><div class="slot">
-              <div class="slot-head">
-                <span class="slot-time mono">18:40</span>
-                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
-              </div>
-              <div class="floor-matches"><div class="coach-match is-done is-lose">
-      <div class="coach-match-top">
-        <span class="coach-player">鄭韋綸</span>
-        <span class="coach-vs">vs</span>
-        <span class="coach-opp">陳佑鈞（新北市麗林國小）</span>
-        <span class="res-badge res-lose">敗 10:25</span>
-      </div>
-      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #57</div>
-      
-      
-    </div></div>
-            </div></div>
-        </details><details class="coach-day">
-          <summary>
             <span class="day-name">9/1（二）</span>
+            
             <span class="day-count">26 個時段 · 確定 39 場</span>
           </summary>
           <div class="coach-day-body"><div class="slot">
@@ -5720,6 +5535,7 @@
         </details><details class="coach-day">
           <summary>
             <span class="day-name">9/2（三）</span>
+            
             <span class="day-count">26 個時段 · 確定 18 場 · 可能 35 場</span>
           </summary>
           <div class="coach-day-body"><div class="slot">
@@ -6412,6 +6228,7 @@
         </details><details class="coach-day">
           <summary>
             <span class="day-name">9/3（四）</span>
+            
             <span class="day-count">31 個時段 · 確定 22 場 · 可能 47 場</span>
           </summary>
           <div class="coach-day-body"><div class="slot">
@@ -7294,6 +7111,7 @@
         </details><details class="coach-day">
           <summary>
             <span class="day-name">9/4（五）</span>
+            
             <span class="day-count">34 個時段 · 確定 31 場 · 可能 38 場</span>
           </summary>
           <div class="coach-day-body"><div class="slot">
@@ -8194,6 +8012,7 @@
         </details><details class="coach-day">
           <summary>
             <span class="day-name">9/5（六）</span>
+            
             <span class="day-count">19 個時段 · 確定 0 場 · 可能 80 場</span>
           </summary>
           <div class="coach-day-body"><div class="slot">
@@ -9108,6 +8927,203 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地2 · #215</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 5 場</span><span class="cond-from">C組第1名 · 第一、二名</span></div>
+      
+    </div></div>
+            </div></div>
+        </details><div class="coach-done-head">已結束的日期</div><details class="coach-day is-finished">
+          <summary>
+            <span class="day-name">8/31（一）</span>
+            <span class="day-done">已結束</span>
+            <span class="day-count">已打完 13 場 · 5 勝 8 敗</span>
+          </summary>
+          <div class="coach-day-body"><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">08:00</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-win">
+      <div class="coach-match-top">
+        <span class="coach-player">五男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市幸安國小</span>
+        <span class="res-badge res-win">勝 3:0</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地9 · #9</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">11:00</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">六男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台中市大鵬國小</span>
+        <span class="res-badge res-lose">敗 0:3</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #7</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">13:45</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">四男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市民權國小</span>
+        <span class="res-badge res-lose">敗 0:3</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級男子團體 · 場地10 · #18</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">14:40</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-win">
+      <div class="coach-match-top">
+        <span class="coach-player">四女團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市民生國小</span>
+        <span class="res-badge res-win">勝 3:0</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地3 · #4</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">15:35</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-win">
+      <div class="coach-match-top">
+        <span class="coach-player">六男團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">台北市濱江國小</span>
+        <span class="res-badge res-win">勝 3:0</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地1 · #18</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">16:30</span>
+                <span class="sev-badge sev-ok">確定 2 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-win">
+      <div class="coach-match-top">
+        <span class="coach-player">六女團</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">臺北市雙永國小</span>
+        <span class="res-badge res-win">勝 3:2</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級女子團體 · 場地3 · #13</div>
+      
+      
+    </div><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">黃丞禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">林仁傑（屏東縣忠孝國小）</span>
+        <span class="res-badge res-lose">敗 21:25</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #6</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">17:00</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-win">
+      <div class="coach-match-top">
+        <span class="coach-player">張喬椉</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">蕭宇佑（台北市敦化國小）</span>
+        <span class="res-badge res-win">勝 25:23</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #7</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">17:20</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">詹堉禾</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">何丹力（新北市金龍國小*5/8）</span>
+        <span class="res-badge res-lose">敗 10:25</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #22</div>
+      
+      
+    </div></div>
+            </div><div class="slot sev-yellow">
+              <div class="slot-head">
+                <span class="slot-time mono">17:40</span>
+                <span class="sev-badge sev-yellow">確定 3 組・教練缺口 1 位</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">陳彥森</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">湯劭均（台中市大鵬國小）</span>
+        <span class="res-badge res-lose">敗 10:25</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #27</div>
+      
+      
+    </div><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">林芠頡</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳奕帆（台北市中山國小）</span>
+        <span class="res-badge res-lose">敗 22:25</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地3 · #29</div>
+      
+      
+    </div><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">王宥程</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">賴威宇（台北市石牌國小）</span>
+        <span class="res-badge res-lose">敗 17:25</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #31</div>
+      
+      
+    </div></div>
+            </div><div class="slot">
+              <div class="slot-head">
+                <span class="slot-time mono">18:40</span>
+                <span class="sev-badge sev-ok">確定 1 組・教練足夠</span>
+              </div>
+              <div class="floor-matches"><div class="coach-match is-done is-lose">
+      <div class="coach-match-top">
+        <span class="coach-player">鄭韋綸</span>
+        <span class="coach-vs">vs</span>
+        <span class="coach-opp">陳佑鈞（新北市麗林國小）</span>
+        <span class="res-badge res-lose">敗 10:25</span>
+      </div>
+      <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #57</div>
+      
       
     </div></div>
             </div></div>

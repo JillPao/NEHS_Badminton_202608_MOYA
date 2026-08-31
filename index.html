@@ -292,6 +292,22 @@
   .note-card.note-results { background: var(--gold-soft); }
   .note-card.note-results .nb-title { color: var(--gold); }
 
+  /* collapsible variant -- title stays visible, the rest folds away */
+  details.note-card { padding: 0; }
+  details.note-card > summary { list-style: none; cursor: pointer; padding: 11px 14px;
+    display: flex; align-items: center; gap: 9px; -webkit-tap-highlight-color: transparent; }
+  details.note-card > summary::-webkit-details-marker { display: none; }
+  details.note-card > summary::after { content: ""; width: 8px; height: 8px;
+    border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+    transform: rotate(-45deg); transition: transform 0.15s ease;
+    margin-left: 4px; flex-shrink: 0; }
+  details.note-card[open] > summary::after { transform: rotate(45deg); }
+  details.note-card .nb-title { margin-bottom: 0; }
+  .nb-hint { font-size: 11px; font-weight: 500; color: var(--muted); margin-left: auto; }
+  details.note-card[open] > summary .nb-hint { display: none; }  /* "點開看…" only makes sense while closed */
+  details.note-card .nb-body { padding: 0 14px 4px; }
+  details.note-card .nb-intro { padding: 2px 0 9px; }
+
   /* ---- finished days, parked at the bottom of 教練版 --------------------- */
   .coach-done-head { display: flex; align-items: center; gap: 10px; margin: 18px 2px 4px;
     font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
@@ -326,8 +342,8 @@
   </div>
   <main>
     <div id="view-player">
-      <section class="note-card "><div class="nb-title">這一頁怎麼看</div><div class="nb-intro">比賽地點：<b>台北體育館七樓</b>（共 10 面場地）　·　日期：<b>115 年 8/31（一）～9/5（六）</b></div><div class="nb-row"><span class="nb-term">確定場次</span><span class="nb-desc"><b>資格賽（循環小組賽）</b>。每位選手的全部小組場次，對手是大會賽程表已排定的真人名單。</span></div><div class="nb-row"><span class="nb-term">可能場次</span><span class="nb-desc">卡片下方「<b>若晉級會內賽可能的賽程</b>」。時間、場地、場次編號都是大會已排定的，但<b>對手要等資格賽全部打完才知道</b>（原始賽程表只寫籤位代號），所以只標示「哪一組的出線者」。</span></div><div class="nb-row"><span class="nb-term">找選手</span><span class="nb-desc">上面的搜尋框輸入姓名，可以直接篩出那位選手的卡片。</span></div></section>
-      <section class="note-card note-results"><div class="nb-title">成績已更新至 8/31</div><div class="nb-row"><span class="nb-term">已打完</span><span class="nb-desc">卡片右上角標示勝敗與比分：<span class="res-badge res-win">勝 25:23</span><span class="res-badge res-lose">敗 21:25</span></span></div><div class="nb-row"><span class="nb-term">小組狀態</span><span class="nb-desc">選手姓名下方會出現該項目的小組出線狀態：<span class="st-badge st-open">小組賽進行中</span><span class="st-badge st-adv">已晉級會內賽</span><span class="st-badge st-out">已無法晉級</span>還沒打完、或要比小分才分得出勝負的小組，一律維持「進行中」。</span></div><div class="nb-row"><span class="nb-term">無法晉級</span><span class="nb-desc">該項目的「若晉級會內賽可能的賽程」會<b>整塊移除</b>；但<b>剩下的資格賽場次仍要出賽</b>，所以照常留在頁面上。</span></div></section>
+      <details class="note-card "><summary><span class="nb-title">這一頁怎麼看</span><span class="nb-hint">點開看說明</span></summary><div class="nb-body"><div class="nb-intro">比賽地點：<b>台北體育館七樓</b>（共 10 面場地）　·　日期：<b>115 年 8/31（一）～9/5（六）</b></div><div class="nb-row"><span class="nb-term">確定場次</span><span class="nb-desc"><b>資格賽（循環小組賽）</b>。每位選手的全部小組場次，對手是大會賽程表已排定的真人名單。</span></div><div class="nb-row"><span class="nb-term">可能場次</span><span class="nb-desc">卡片下方「<b>若晉級會內賽可能的賽程</b>」。時間、場地、場次編號都是大會已排定的，但<b>對手要等資格賽全部打完才知道</b>（原始賽程表只寫籤位代號），所以只標示「哪一組的出線者」。</span></div><div class="nb-row"><span class="nb-term">找選手</span><span class="nb-desc">上面的搜尋框輸入姓名，可以直接篩出那位選手的卡片。</span></div></div></details>
+      <details class="note-card note-results"><summary><span class="nb-title">成績已更新至 8/31</span><span class="nb-hint">點開看成績標示說明</span></summary><div class="nb-body"><div class="nb-row"><span class="nb-term">已打完</span><span class="nb-desc">卡片右上角標示勝敗與比分：<span class="res-badge res-win">勝 25:23</span><span class="res-badge res-lose">敗 21:25</span></span></div><div class="nb-row"><span class="nb-term">小組狀態</span><span class="nb-desc">選手姓名下方會出現該項目的小組出線狀態：<span class="st-badge st-open">小組賽進行中</span><span class="st-badge st-adv">已晉級會內賽</span><span class="st-badge st-out">已無法晉級</span>還沒打完、或要比小分才分得出勝負的小組，一律維持「進行中」。</span></div><div class="nb-row"><span class="nb-term">無法晉級</span><span class="nb-desc">該項目的「若晉級會內賽可能的賽程」會<b>整塊移除</b>；但<b>剩下的資格賽場次仍要出賽</b>，所以照常留在頁面上。</span></div></div></details>
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input id="search" type="text" placeholder="搜尋姓名…" autocomplete="off" />

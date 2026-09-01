@@ -264,12 +264,17 @@
   .st-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700;
     border-radius: 999px; padding: 2px 9px; border: 1px solid transparent; letter-spacing: 0.01em; }
   .st-badge.st-adv { background: var(--win-bg); color: var(--win-fg); }
-  .st-badge.st-out { background: var(--lose-bg); color: var(--lose-fg); }
+  /* st-done = this entry has no main-draw match. NOT the loss colour --
+   it states a schedule fact, not a verdict. */
+  .st-badge.st-done { background: var(--surface-2); color: var(--ink); border-color: var(--line); }
   .st-badge.st-open { background: var(--surface-2); color: var(--muted); border-color: var(--line); }
+  /* Chips shown inside the card instead of on the collapsed summary row. */
+  .st-badges.in-card { flex-basis: auto; margin: 0 0 12px; }
 
-  .out-note { background: var(--lose-bg); color: var(--lose-fg); border-radius: 12px;
-    padding: 10px 12px; font-size: 12.5px; line-height: 1.7; margin: 10px 0 14px; }
-  .out-note b { font-weight: 800; }
+  .done-note { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 12px; padding: 10px 12px; font-size: 12.5px; line-height: 1.7;
+    margin: 10px 0 14px; }
+  .done-note b { font-weight: 800; }
 
   .coach-match .res-badge { margin-left: auto; }
   .coach-match.is-done { opacity: 0.9; }
@@ -343,7 +348,7 @@
   <main>
     <div id="view-player">
       <details class="note-card "><summary><span class="nb-title">這一頁怎麼看</span><span class="nb-hint">點開看說明</span></summary><div class="nb-body"><div class="nb-intro">比賽地點：<b>台北體育館七樓</b>（共 10 面場地）　·　日期：<b>115 年 8/31（一）～9/5（六）</b></div><div class="nb-row"><span class="nb-term">確定場次</span><span class="nb-desc"><b>資格賽（循環小組賽）</b>。每位選手的全部小組場次，對手是大會賽程表已排定的真人名單。</span></div><div class="nb-row"><span class="nb-term">可能場次</span><span class="nb-desc">卡片下方「<b>若晉級會內賽可能的賽程</b>」。時間、場地、場次編號都是大會已排定的，但<b>對手要等資格賽全部打完才知道</b>（原始賽程表只寫籤位代號），所以只標示「哪一組的出線者」。</span></div><div class="nb-row"><span class="nb-term">找選手</span><span class="nb-desc">上面的搜尋框輸入姓名，可以直接篩出那位選手的卡片。</span></div></div></details>
-      <details class="note-card note-results"><summary><span class="nb-title">成績已更新至 9/1</span><span class="nb-hint">點開看成績標示說明</span></summary><div class="nb-body"><div class="nb-row"><span class="nb-term">已打完</span><span class="nb-desc">卡片右上角標示勝敗與比分：<span class="res-badge res-win">勝 25:23</span><span class="res-badge res-lose">敗 21:25</span></span></div><div class="nb-row"><span class="nb-term">小組狀態</span><span class="nb-desc">選手姓名下方會出現該項目的小組出線狀態：<span class="st-badge st-open">小組賽進行中</span><span class="st-badge st-adv">已晉級會內賽</span><span class="st-badge st-out">已無法晉級</span>還沒打完、或要比小分才分得出勝負的小組，一律維持「進行中」。</span></div><div class="nb-row"><span class="nb-term">無法晉級</span><span class="nb-desc">該項目的「若晉級會內賽可能的賽程」會<b>整塊移除</b>；但<b>剩下的資格賽場次仍要出賽</b>，所以照常留在頁面上。</span></div></div></details>
+      <details class="note-card note-results"><summary><span class="nb-title">成績已更新至 9/1</span><span class="nb-hint">點開看成績標示說明</span></summary><div class="nb-body"><div class="nb-row"><span class="nb-term">已打完</span><span class="nb-desc">卡片右上角標示勝敗與比分：<span class="res-badge res-win">勝 25:23</span><span class="res-badge res-lose">敗 21:25</span></span></div><div class="nb-row"><span class="nb-term">小組狀態</span><span class="nb-desc"><b>點開自己的卡片</b>，最上面會標示每個項目的小組狀態：<span class="st-badge st-open">小組賽進行中</span><span class="st-badge st-adv">已晉級會內賽</span><span class="st-badge st-done">無會內賽場次</span>還沒打完、或要比小分才分得出勝負的小組，一律維持「進行中」。</span></div><div class="nb-row"><span class="nb-term">無會內賽</span><span class="nb-desc">確定不會進會內賽的項目，那一塊「若晉級會內賽可能的賽程」會<b>整塊移除</b>；卡片裡會改列出<b>接下來還要出賽的場次</b>——那些還是要照常到場。</span></div></div></details>
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input id="search" type="text" placeholder="搜尋姓名…" autocomplete="off" />
@@ -443,9 +448,9 @@
       <summary>
         <span class="player-name-inline">六年級女子團體</span>
         <span class="player-count">2 場</span>
-        <span class="st-badges"><span class="st-badge st-out">1勝1敗・已無法晉級</span></span>
+        <span class="st-badges"><span class="st-badge st-done">1勝1敗・無會內賽場次</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級女子團體：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="done-note">六年級女子團體接下來<b>沒有會內賽場次</b>。<br>本次賽事排定的場次到這裡全部結束，辛苦了。</div><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-duo">團體</span>
         <span class="card-event">六年級女子團體</span>
@@ -546,9 +551,9 @@
       <summary>
         <span class="player-name-inline">四年級男子團體</span>
         <span class="player-count">2 場</span>
-        <span class="st-badges"><span class="st-badge st-out">1勝1敗・已無法晉級</span></span>
+        <span class="st-badges"><span class="st-badge st-done">1勝1敗・無會內賽場次</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">四年級男子團體：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="done-note">四年級男子團體接下來<b>沒有會內賽場次</b>。<br>本次賽事排定的場次到這裡全部結束，辛苦了。</div><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-duo">團體</span>
         <span class="card-event">四年級男子團體</span>
@@ -647,9 +652,8 @@
       <summary>
         <span class="player-name-inline">包清之</span>
         <span class="player-count">4 場 ＋可能 9 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級女子單打</span>
@@ -759,9 +763,8 @@
       <summary>
         <span class="player-name-inline">廖思維</span>
         <span class="player-count">4 場 ＋可能 10 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六男單 1勝0敗・還有 1 場・小組賽進行中</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六男單 1勝0敗・還有 1 場・小組賽進行中</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-duo">雙打</span>
         <span class="card-event">六年級男子雙打</span>
@@ -875,9 +878,8 @@
       <summary>
         <span class="player-name-inline">張喬椉</span>
         <span class="player-count">4 場 ＋可能 6 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六男單 1勝1敗・小組賽進行中</span><span class="st-badge st-out">六男雙 0勝2敗・已無法晉級</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子雙打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六男單 1勝1敗・小組賽進行中</span><span class="st-badge st-done">六男雙 0勝2敗・無會內賽場次</span></div><div class="done-note">六年級男子雙打接下來<b>沒有會內賽場次</b>。<br>本次賽事排定的場次到這裡全部結束，辛苦了。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -975,9 +977,8 @@
       <summary>
         <span class="player-name-inline">林芠頡</span>
         <span class="player-count">4 場</span>
-        <span class="st-badges"><span class="st-badge st-out">六男單 0勝1敗・還有 1 場・已無法晉級</span><span class="st-badge st-out">六男雙 1勝1敗・已無法晉級</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="out-note">六年級男子雙打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">六男單 0勝1敗・還有 1 場・無會內賽場次</span><span class="st-badge st-done">六男雙 1勝1敗・無會內賽場次</span></div><div class="done-note">六年級男子單打、六年級男子雙打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 1 場要出賽，記得到場</b>：9/2（三） 19:30 六年級男子單打</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1046,9 +1047,8 @@
       <summary>
         <span class="player-name-inline">王宥程</span>
         <span class="player-count">4 場 ＋可能 6 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六男單 0勝1敗・還有 1 場・小組賽進行中</span><span class="st-badge st-out">六男雙 1勝1敗・已無法晉級</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子雙打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六男單 0勝1敗・還有 1 場・小組賽進行中</span><span class="st-badge st-done">六男雙 1勝1敗・無會內賽場次</span></div><div class="done-note">六年級男子雙打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 1 場要出賽，記得到場</b>：9/2（三） 19:30 六年級男子單打</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1146,9 +1146,8 @@
       <summary>
         <span class="player-name-inline">田馥菲</span>
         <span class="player-count">4 場 ＋可能 9 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級女子單打</span>
@@ -1258,9 +1257,8 @@
       <summary>
         <span class="player-name-inline">羅翊嫙</span>
         <span class="player-count">4 場 ＋可能 9 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級女子單打</span>
@@ -1370,9 +1368,8 @@
       <summary>
         <span class="player-name-inline">蔡睿宸</span>
         <span class="player-count">2 場</span>
-        <span class="st-badges"><span class="st-badge st-out">六男單 0勝1敗・還有 1 場・已無法晉級</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">六男單 0勝1敗・還有 1 場・無會內賽場次</span></div><div class="done-note">六年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 1 場要出賽，記得到場</b>：9/2（三） 19:45 六年級男子單打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1409,9 +1406,8 @@
       <summary>
         <span class="player-name-inline">詹堉禾</span>
         <span class="player-count">4 場</span>
-        <span class="st-badges"><span class="st-badge st-out">六男單 0勝2敗・已無法晉級</span><span class="st-badge st-out">六男雙 0勝2敗・已無法晉級</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="out-note">六年級男子雙打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">六男單 0勝2敗・無會內賽場次</span><span class="st-badge st-done">六男雙 0勝2敗・無會內賽場次</span></div><div class="done-note">六年級男子單打、六年級男子雙打接下來<b>沒有會內賽場次</b>。<br>本次賽事排定的場次到這裡全部結束，辛苦了。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1480,9 +1476,8 @@
       <summary>
         <span class="player-name-inline">鄭韋綸</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">六男單 0勝1敗・還有 1 場・已無法晉級</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">六男單 0勝1敗・還有 1 場・無會內賽場次</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></div><div class="done-note">六年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 1 場要出賽，記得到場</b>：9/2（三） 20:00 六年級男子單打</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1576,9 +1571,8 @@
       <summary>
         <span class="player-name-inline">陳彥森</span>
         <span class="player-count">5 場 ＋可能 17 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六男單 0勝2敗・還有 1 場・小組賽進行中</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六男單 0勝2敗・還有 1 場・小組賽進行中</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1736,9 +1730,8 @@
       <summary>
         <span class="player-name-inline">陳昱璇</span>
         <span class="player-count">4 場 ＋可能 9 場</span>
-        <span class="st-badges"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">六女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">六女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級女子單打</span>
@@ -1848,9 +1841,8 @@
       <summary>
         <span class="player-name-inline">黃丞禾</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">六男單 0勝2敗・已無法晉級</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">六年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">六男單 0勝2敗・無會內賽場次</span><span class="st-badge st-adv">六男雙 2勝0敗・已晉級會內賽</span></div><div class="done-note">六年級男子單打接下來<b>沒有會內賽場次</b>。<br>本次賽事排定的場次到這裡全部結束，辛苦了。</div><div class="day-block"><div class="day-label">8/31（一）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">六年級男子單打</span>
@@ -1950,9 +1942,8 @@
       <summary>
         <span class="player-name-inline">于衍恩</span>
         <span class="player-count">4 場 ＋可能 8 場</span>
-        <span class="st-badges"><span class="st-badge st-open">五女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">五女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級女子單打</span>
@@ -2058,9 +2049,8 @@
       <summary>
         <span class="player-name-inline">吳敏岳</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 1勝1敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 1勝1敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/4（五） 08:00 五年級男子雙打、9/4（五） 12:00 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -2154,9 +2144,8 @@
       <summary>
         <span class="player-name-inline">吳梣安</span>
         <span class="player-count">4 場 ＋可能 11 場</span>
-        <span class="st-badges"><span class="st-badge st-adv">五男單 2勝0敗・已晉級會內賽</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-adv">五男單 2勝0敗・已晉級會內賽</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -2274,9 +2263,8 @@
       <summary>
         <span class="player-name-inline">呂循崴</span>
         <span class="player-count">4 場 ＋可能 11 場</span>
-        <span class="st-badges"><span class="st-badge st-adv">五男單 2勝0敗・已晉級會內賽</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-adv">五男單 2勝0敗・已晉級會內賽</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -2394,9 +2382,8 @@
       <summary>
         <span class="player-name-inline">安在芸</span>
         <span class="player-count">4 場 ＋可能 7 場</span>
-        <span class="st-badges"><span class="st-badge st-open">五女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">五女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級女子單打</span>
@@ -2498,9 +2485,8 @@
       <summary>
         <span class="player-name-inline">李融載</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 1勝1敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 1勝1敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/3（四） 17:49 五年級男子雙打、9/4（五） 08:00 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -2594,9 +2580,8 @@
       <summary>
         <span class="player-name-inline">林妍妡</span>
         <span class="player-count">4 場 ＋可能 8 場</span>
-        <span class="st-badges"><span class="st-badge st-open">五女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">五女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級女子單打</span>
@@ -2702,9 +2687,8 @@
       <summary>
         <span class="player-name-inline">林祐慬</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 1勝1敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 1勝1敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/4（五） 08:30 五年級男子雙打、9/4（五） 12:36 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -2798,9 +2782,8 @@
       <summary>
         <span class="player-name-inline">楊富凱</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 1勝1敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 1勝1敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/4（五） 08:30 五年級男子雙打、9/4（五） 12:36 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -2894,9 +2877,8 @@
       <summary>
         <span class="player-name-inline">程禾亘</span>
         <span class="player-count">2 場 ＋可能 3 場</span>
-        <span class="st-badges"><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">五女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-duo">雙打</span>
         <span class="card-event">五年級女子雙打</span>
@@ -2950,9 +2932,8 @@
       <summary>
         <span class="player-name-inline">蔡皓宇</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 0勝2敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 0勝2敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/3（四） 17:49 五年級男子雙打、9/4（五） 08:00 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -3046,9 +3027,8 @@
       <summary>
         <span class="player-name-inline">陳奕辰</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 0勝2敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 0勝2敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/4（五） 08:15 五年級男子雙打、9/4（五） 12:36 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -3142,9 +3122,8 @@
       <summary>
         <span class="player-name-inline">顏弘寔</span>
         <span class="player-count">4 場 ＋可能 11 場</span>
-        <span class="st-badges"><span class="st-badge st-adv">五男單 2勝0敗・已晉級會內賽</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-adv">五男單 2勝0敗・已晉級會內賽</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -3262,9 +3241,8 @@
       <summary>
         <span class="player-name-inline">黃梓家</span>
         <span class="player-count">4 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-out">五男單 1勝1敗・已無法晉級</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="out-note">五年級男子單打：小組賽已<b>確定無法晉級會內賽</b>，「若晉級」的賽程已移除。<b>剩下的資格賽場次仍要出賽</b>，請照常到場。</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-done">五男單 1勝1敗・無會內賽場次</span><span class="st-badge st-open">五男雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="done-note">五年級男子單打接下來<b>沒有會內賽場次</b>。<br><b>接下來還有 2 場要出賽，記得到場</b>：9/4（五） 08:15 五年級男子雙打、9/4（五） 12:18 五年級男子雙打</div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">五年級男子單打</span>
@@ -3364,9 +3342,8 @@
       <summary>
         <span class="player-name-inline">彭怡臻</span>
         <span class="player-count">4 場 ＋可能 8 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級女子單打</span>
@@ -3472,9 +3449,8 @@
       <summary>
         <span class="player-name-inline">林芸安</span>
         <span class="player-count">4 場 ＋可能 7 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級女子單打</span>
@@ -3576,9 +3552,8 @@
       <summary>
         <span class="player-name-inline">洪永宸</span>
         <span class="player-count">5 場 ＋可能 15 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四男單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四男雙 0勝0敗・還有 3 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四男單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四男雙 0勝0敗・還有 3 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級男子單打</span>
@@ -3728,9 +3703,8 @@
       <summary>
         <span class="player-name-inline">謝佳玲</span>
         <span class="player-count">4 場 ＋可能 7 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級女子單打</span>
@@ -3832,9 +3806,8 @@
       <summary>
         <span class="player-name-inline">謝宇森</span>
         <span class="player-count">2 場 ＋可能 6 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四男單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四男單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級男子單打</span>
@@ -3900,9 +3873,8 @@
       <summary>
         <span class="player-name-inline">黃祤芯</span>
         <span class="player-count">4 場 ＋可能 7 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四女單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四女雙 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級女子單打</span>
@@ -4004,9 +3976,8 @@
       <summary>
         <span class="player-name-inline">黃致堯</span>
         <span class="player-count">5 場 ＋可能 15 場</span>
-        <span class="st-badges"><span class="st-badge st-open">四男單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四男雙 0勝0敗・還有 3 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">四男單 0勝0敗・還有 2 場・小組賽進行中</span><span class="st-badge st-open">四男雙 0勝0敗・還有 3 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">四年級男子單打</span>
@@ -4162,9 +4133,8 @@
       <summary>
         <span class="player-name-inline">包清尹</span>
         <span class="player-count">2 場 ＋可能 4 場</span>
-        <span class="st-badges"><span class="st-badge st-open">三女單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">三女單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">三年級女子單打</span>
@@ -4222,9 +4192,8 @@
       <summary>
         <span class="player-name-inline">張時曦</span>
         <span class="player-count">2 場 ＋可能 6 場</span>
-        <span class="st-badges"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">三年級男子單打</span>
@@ -4290,9 +4259,8 @@
       <summary>
         <span class="player-name-inline">蔡書亞</span>
         <span class="player-count">2 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">三年級男子單打</span>
@@ -4354,9 +4322,8 @@
       <summary>
         <span class="player-name-inline">蔡澤亞</span>
         <span class="player-count">2 場 ＋可能 5 場</span>
-        <span class="st-badges"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">三年級男子單打</span>
@@ -4418,9 +4385,8 @@
       <summary>
         <span class="player-name-inline">陳俞儒</span>
         <span class="player-count">2 場 ＋可能 6 場</span>
-        <span class="st-badges"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">三男單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">三年級男子單打</span>
@@ -4486,9 +4452,8 @@
       <summary>
         <span class="player-name-inline">黃筠雅</span>
         <span class="player-count">2 場 ＋可能 4 場</span>
-        <span class="st-badges"><span class="st-badge st-open">三女單 0勝0敗・還有 2 場・小組賽進行中</span></span>
       </summary>
-      <div class="player-body"><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card">
+      <div class="player-body"><div class="st-badges in-card"><span class="st-badge st-open">三女單 0勝0敗・還有 2 場・小組賽進行中</span></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card">
       <div class="card-top">
         <span class="type-badge type-solo">單打</span>
         <span class="card-event">三年級女子單打</span>

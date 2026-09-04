@@ -111,6 +111,38 @@
   .card-opp .label { color: var(--muted); margin-right: 4px; }
   .card-partner { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .card-note, .coach-note { font-size: 11.5px; color: var(--gold); background: var(--gold-soft); border-radius: 8px; padding: 6px 9px; margin-top: 6px; line-height: 1.5; }
+  /* --- 對手近況 (render_opponent_recent) ------------------------------------
+     Deliberately neutral: this is scouting, not a verdict on anybody. No
+     win/lose colours -- the one accent is reserved for a line that involves
+     our own school, which is the line a coach actually looks for. */
+  .rc { margin-top: 7px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); overflow: hidden; }
+  .rc > summary { list-style: none; cursor: pointer; padding: 6px 9px; display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+  .rc > summary::-webkit-details-marker { display: none; }
+  .rc > summary::after { content: '▾'; margin-left: auto; color: var(--muted); font-size: 10px; transition: transform .15s; }
+  .rc[open] > summary::after { transform: rotate(180deg); }
+  .rc-tag { flex: none; font-size: 10px; letter-spacing: .04em; padding: 2px 6px; border-radius: 999px;
+            background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  .rc-head { font-size: 11.5px; color: var(--ink); font-weight: 600; }
+  .rc-body { padding: 2px 9px 9px; border-top: 1px solid var(--line); }
+  .rc-list { margin: 7px 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .rc-list li { font-size: 11.5px; line-height: 1.55; color: var(--ink); padding-left: 11px; position: relative; }
+  .rc-list li::before { content: '·'; position: absolute; left: 2px; color: var(--muted); }
+  .rc-list li.rc-vsus { color: var(--accent); font-weight: 600; }
+  .rc-list li.rc-vsus::before { content: '▸'; color: var(--accent); font-size: 9px; top: 1px; }
+  .rc-list li.rc-other, .rc-list li.rc-team { color: var(--muted); }
+  .rc-ext-head-row { margin-top: 9px; padding-top: 7px; border-top: 1px dashed var(--line);
+                     font-size: 10.5px; font-weight: 700; color: var(--muted); letter-spacing: .05em; }
+  .rc-ext { margin-top: 6px; padding: 6px 8px; border-radius: 7px; background: var(--surface); border: 1px solid var(--line); }
+  .rc-ext.is-none { opacity: .72; }
+  .rc-ext-head { font-size: 11.5px; font-weight: 700; color: var(--ink); display: flex; gap: 7px; align-items: baseline; flex-wrap: wrap; }
+  .rc-ext-result { font-weight: 600; color: var(--gold); background: var(--gold-soft); border-radius: 5px; padding: 1px 6px; font-size: 10.5px; }
+  .rc-ext.is-none .rc-ext-result { color: var(--muted); background: var(--surface-2); }
+  .rc-ext-meta { font-size: 10.5px; color: var(--muted); }
+  .rc-ext-detail { font-size: 11.5px; line-height: 1.55; color: var(--ink); margin-top: 3px; }
+  .rc-ext-caveat { font-size: 10.5px; line-height: 1.5; color: var(--muted); margin-top: 4px; padding-left: 9px; border-left: 2px solid var(--line); }
+  .rc-ext-src { display: inline-block; margin-top: 5px; font-size: 10.5px; color: var(--accent); text-decoration: none; }
+  .rc-ext-src::after { content: ' ↗'; }
+  .rc-foot { margin-top: 9px; font-size: 10px; line-height: 1.5; color: var(--muted); }
   .card-foot { display: flex; justify-content: flex-end; margin-top: 7px; font-size: 11px; color: var(--muted); }
   footer.app-foot { text-align: center; color: var(--muted); font-size: 11.5px; padding: 10px 18px 28px; }
 
@@ -381,6 +413,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#7</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -395,6 +428,7 @@
       <div class="card-opp">
         <span class="label">對手</span>台北市濱江國小
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#18</span></div>
@@ -413,6 +447,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#31</span></div>
     </div></div><div class="day-label">9/2（三）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -429,6 +464,7 @@
       </div>
       
       <div class="card-note">會內賽・十六強</div>
+      
       <div class="card-foot"><span class="mono">#39</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -445,6 +481,7 @@
       </div>
       
       <div class="card-note">會內賽・八強</div>
+      
       <div class="card-foot"><span class="mono">#43</span></div>
     </div></div><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -461,6 +498,7 @@
       </div>
       
       <div class="card-note">會內賽・名次賽（F4）</div>
+      
       <div class="card-foot"><span class="mono">#48</span></div>
     </div></div></div>
     </details><details class="player team-entry">
@@ -484,6 +522,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#13</span></div>
     </div></div><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -498,6 +537,7 @@
       <div class="card-opp">
         <span class="label">對手</span>雲林縣僑真國小*3
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#20</span></div>
@@ -523,6 +563,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#9</span></div>
     </div></div><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -537,6 +578,7 @@
       <div class="card-opp">
         <span class="label">對手</span>臺北市雙永國小
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#29</span></div>
@@ -555,6 +597,7 @@
       </div>
       
       <div class="card-note">會內賽・八強</div>
+      
       <div class="card-foot"><span class="mono">#36</span></div>
     </div></div><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -571,6 +614,7 @@
       </div>
       
       <div class="card-note">會內賽・名次賽（F4）</div>
+      
       <div class="card-foot"><span class="mono">#40</span></div>
     </div></div></div>
     </details><details class="player team-entry">
@@ -594,6 +638,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#18</span></div>
     </div></div><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -608,6 +653,7 @@
       <div class="card-opp">
         <span class="label">對手</span>日新鳳凰
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#28</span></div>
@@ -633,6 +679,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#4</span></div>
     </div></div><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -647,6 +694,7 @@
       <div class="card-opp">
         <span class="label">對手</span>台北市民權國小
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#7</span></div>
@@ -665,6 +713,7 @@
       </div>
       
       <div class="card-note">會內賽・準決賽</div>
+      
       <div class="card-foot"><span class="mono">#11</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -681,6 +730,7 @@
       </div>
       
       <div class="card-note">會內賽・名次賽（R34）</div>
+      
       <div class="card-foot"><span class="mono">#12</span></div>
     </div></div></div>
     </details></div>
@@ -709,6 +759,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#19</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -723,6 +774,7 @@
       <div class="card-opp">
         <span class="label">對手</span>詹礎綾（台北市幸安國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#48</span></div>
@@ -741,6 +793,7 @@
       </div>
       <div class="card-partner">搭檔：羅翊嫙</div>
       
+      
       <div class="card-foot"><span class="mono">#16</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -756,6 +809,7 @@
         <span class="label">對手</span>郭於晴／蔡若緁（新北市江翠國小）
       </div>
       <div class="card-partner">搭檔：羅翊嫙</div>
+      
       
       <div class="card-foot"><span class="mono">#30</span></div>
     </div></div></div></div>
@@ -779,6 +833,7 @@
       </div>
       <div class="card-partner">搭檔：鄭韋綸</div>
       
+      
       <div class="card-foot"><span class="mono">#23</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -795,6 +850,7 @@
       </div>
       <div class="card-partner">搭檔：鄭韋綸</div>
       
+      
       <div class="card-foot"><span class="mono">#51</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -809,6 +865,7 @@
       <div class="card-opp">
         <span class="label">對手</span>孫孝謙（新北市太平國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#73</span></div>
@@ -827,6 +884,7 @@
       </div>
       <div class="card-partner">搭檔：鄭韋綸</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#94</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -841,6 +899,7 @@
       <div class="card-opp">
         <span class="label">對手</span>黃可贊（日新鳳凰*3/4）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#131</span></div>
@@ -865,6 +924,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#7</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -880,6 +940,7 @@
         <span class="label">對手</span>陳禹衡／楊超捷（日新鳳凰）
       </div>
       <div class="card-partner">搭檔：詹堉禾</div>
+      
       
       <div class="card-foot"><span class="mono">#26</span></div>
     </div><div class="card card-done card-lose">
@@ -897,6 +958,7 @@
       </div>
       <div class="card-partner">搭檔：詹堉禾</div>
       
+      
       <div class="card-foot"><span class="mono">#54</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -911,6 +973,7 @@
       <div class="card-opp">
         <span class="label">對手</span>楊田丞（新北市昌平國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#65</span></div>
@@ -935,6 +998,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#29</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -950,6 +1014,7 @@
         <span class="label">對手</span>許鎧恩／李紹安（新北市文德國小）
       </div>
       <div class="card-partner">搭檔：王宥程</div>
+      
       
       <div class="card-foot"><span class="mono">#22</span></div>
     </div><div class="card card-done card-lose">
@@ -967,6 +1032,7 @@
       </div>
       <div class="card-partner">搭檔：王宥程</div>
       
+      
       <div class="card-foot"><span class="mono">#78</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -981,6 +1047,7 @@
       <div class="card-opp">
         <span class="label">對手</span>王紹帆（新北市秀山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#145</span></div>
@@ -1005,6 +1072,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#31</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -1020,6 +1088,7 @@
         <span class="label">對手</span>許鎧恩／李紹安（新北市文德國小）
       </div>
       <div class="card-partner">搭檔：林芠頡</div>
+      
       
       <div class="card-foot"><span class="mono">#22</span></div>
     </div><div class="card card-done card-lose">
@@ -1037,6 +1106,7 @@
       </div>
       <div class="card-partner">搭檔：林芠頡</div>
       
+      
       <div class="card-foot"><span class="mono">#78</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -1051,6 +1121,7 @@
       <div class="card-opp">
         <span class="label">對手</span>黃柏綸（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#147</span></div>
@@ -1075,6 +1146,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#39</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -1090,6 +1162,7 @@
         <span class="label">對手</span>黃奕晨／詹紫晴（台北市中山國小）
       </div>
       <div class="card-partner">搭檔：陳昱璇</div>
+      
       
       <div class="card-foot"><span class="mono">#10</span></div>
     </div><div class="card card-done card-win">
@@ -1107,6 +1180,7 @@
       </div>
       <div class="card-partner">搭檔：陳昱璇</div>
       
+      
       <div class="card-foot"><span class="mono">#24</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1121,6 +1195,7 @@
       <div class="card-opp">
         <span class="label">對手</span>吳若琳（新北市秀朗國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#68</span></div>
@@ -1145,6 +1220,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#27</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1159,6 +1235,7 @@
       <div class="card-opp">
         <span class="label">對手</span>蔡昱萱（新竹市龍山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#56</span></div>
@@ -1177,6 +1254,7 @@
       </div>
       <div class="card-partner">搭檔：包清之</div>
       
+      
       <div class="card-foot"><span class="mono">#16</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1192,6 +1270,7 @@
         <span class="label">對手</span>郭於晴／蔡若緁（新北市江翠國小）
       </div>
       <div class="card-partner">搭檔：包清之</div>
+      
       
       <div class="card-foot"><span class="mono">#30</span></div>
     </div></div></div></div>
@@ -1215,6 +1294,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#103</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -1229,6 +1309,7 @@
       <div class="card-opp">
         <span class="label">對手</span>談沐嘉（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#161</span></div>
@@ -1253,6 +1334,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#22</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -1268,6 +1350,7 @@
         <span class="label">對手</span>陳禹衡／楊超捷（日新鳳凰）
       </div>
       <div class="card-partner">搭檔：張喬椉</div>
+      
       
       <div class="card-foot"><span class="mono">#26</span></div>
     </div><div class="card card-done card-lose">
@@ -1285,6 +1368,7 @@
       </div>
       <div class="card-partner">搭檔：張喬椉</div>
       
+      
       <div class="card-foot"><span class="mono">#54</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1299,6 +1383,7 @@
       <div class="card-opp">
         <span class="label">對手</span>林佑晨（桃園市文山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#80</span></div>
@@ -1323,6 +1408,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#57</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -1338,6 +1424,7 @@
         <span class="label">對手</span>林邑達／郭友錡（新竹縣松林國小）
       </div>
       <div class="card-partner">搭檔：廖思維</div>
+      
       
       <div class="card-foot"><span class="mono">#23</span></div>
     </div><div class="card card-done card-win">
@@ -1355,6 +1442,7 @@
       </div>
       <div class="card-partner">搭檔：廖思維</div>
       
+      
       <div class="card-foot"><span class="mono">#51</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/2（三）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -1371,6 +1459,7 @@
       </div>
       <div class="card-partner">搭檔：廖思維</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#94</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1385,6 +1474,7 @@
       <div class="card-opp">
         <span class="label">對手</span>陳秉駿（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#173</span></div>
@@ -1409,6 +1499,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#27</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -1424,6 +1515,7 @@
         <span class="label">對手</span>陳建燁／陳奕帆（台北市中山國小）
       </div>
       <div class="card-partner">搭檔：黃丞禾</div>
+      
       
       <div class="card-foot"><span class="mono">#2</span></div>
     </div><div class="card card-done card-win">
@@ -1441,6 +1533,7 @@
       </div>
       <div class="card-partner">搭檔：黃丞禾</div>
       
+      
       <div class="card-foot"><span class="mono">#58</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1455,6 +1548,7 @@
       <div class="card-opp">
         <span class="label">對手</span>張辰愷（台南市崇學國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#84</span></div>
@@ -1473,6 +1567,7 @@
       </div>
       <div class="card-partner">搭檔：黃丞禾</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#85</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1487,6 +1582,7 @@
       <div class="card-opp">
         <span class="label">對手</span>曾宸碩（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#143</span></div>
@@ -1511,6 +1607,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#18</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1525,6 +1622,7 @@
       <div class="card-opp">
         <span class="label">對手</span>陳幸妍（雲林縣僑真國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#47</span></div>
@@ -1543,6 +1641,7 @@
       </div>
       <div class="card-partner">搭檔：田馥菲</div>
       
+      
       <div class="card-foot"><span class="mono">#10</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1558,6 +1657,7 @@
         <span class="label">對手</span>郭絜儀／陳芯樂（台北市石牌國小）
       </div>
       <div class="card-partner">搭檔：田馥菲</div>
+      
       
       <div class="card-foot"><span class="mono">#24</span></div>
     </div></div></div></div>
@@ -1581,6 +1681,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#6</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/1（二）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -1596,6 +1697,7 @@
         <span class="label">對手</span>陳建燁／陳奕帆（台北市中山國小）
       </div>
       <div class="card-partner">搭檔：陳彥森</div>
+      
       
       <div class="card-foot"><span class="mono">#2</span></div>
     </div><div class="card card-done card-win">
@@ -1613,6 +1715,7 @@
       </div>
       <div class="card-partner">搭檔：陳彥森</div>
       
+      
       <div class="card-foot"><span class="mono">#58</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1627,6 +1730,7 @@
       <div class="card-opp">
         <span class="label">對手</span>劉秉元（台中市大鵬國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#64</span></div>
@@ -1645,6 +1749,7 @@
       </div>
       <div class="card-partner">搭檔：陳彥森</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#85</span></div>
     </div></div></div></div>
     </details></div>
@@ -1673,6 +1778,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#32</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1687,6 +1793,7 @@
       <div class="card-opp">
         <span class="label">對手</span>林彥妤（台北市中山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#56</span></div>
@@ -1705,6 +1812,7 @@
       </div>
       <div class="card-partner">搭檔：安在芸</div>
       
+      
       <div class="card-foot"><span class="mono">#4</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1720,6 +1828,7 @@
         <span class="label">對手</span>施淳薰／陳芊睿（台北市敦化國小）
       </div>
       <div class="card-partner">搭檔：安在芸</div>
+      
       
       <div class="card-foot"><span class="mono">#22</span></div>
     </div></div></div></div>
@@ -1743,6 +1852,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#74</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1757,6 +1867,7 @@
       <div class="card-opp">
         <span class="label">對手</span>林楷軒（台北市石牌國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#130</span></div>
@@ -1775,6 +1886,7 @@
       </div>
       <div class="card-partner">搭檔：顏弘寔</div>
       
+      
       <div class="card-foot"><span class="mono">#35</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1790,6 +1902,7 @@
         <span class="label">對手</span>陳宥榮／王宥捷（彰化市南郭國小）
       </div>
       <div class="card-partner">搭檔：顏弘寔</div>
+      
       
       <div class="card-foot"><span class="mono">#65</span></div>
     </div><div class="card card-done card-win">
@@ -1807,6 +1920,7 @@
       </div>
       <div class="card-partner">搭檔：顏弘寔</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#92</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/5（六）</div><div class="card-list"><div class="card">
       <div class="card-top">
@@ -1823,6 +1937,7 @@
       </div>
       <div class="card-partner">搭檔：顏弘寔</div>
       <div class="card-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 3勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">五男單#165 勝本校 林祐慬 25:16</li><li class="rc-close">最接近的一勝：五男雙#36 25:22 勝 廖進程／尹翊帆（彰化市南郭國小）</li><li class="rc-other">五男單 5勝2敗，止步於32強（敗給 詹承諺（台北市民權國小） 17:25）</li><li class="rc-team">另外代表學校打 六男團，個人該場 0勝2敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">第十七屆臺中市家長會長盃（2025-06-14）<span class="rc-ext-result">小組未出線</span></div><div class="rc-ext-meta">國小中年級組男雙　</div><div class="rc-ext-detail">同一組搭檔（臺中市大勇國小），分在 C 組，未進入取 3 名的決賽階段；同組出線的是南屯國小 王辰方／江和諺。</div><div class="rc-ext-caveat">姓名與學校（臺中市大勇國小）皆吻合，且為同一組搭檔，判定為同一組人。小組三場的個別比分因 PDF 版面排版打散、無法可靠對應到各場，故不列。</div><a class="rc-ext-src" href="https://tcppa.mylivescore.link/第十七屆臺中市家長會長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">第十七屆臺中市家長會長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">2025 端午場（風城站）、港都秋季場、臺北巔峰站三份總成績紀錄裡都沒有這兩個名字。</div><div class="rc-ext-caveat">只查了這三站的成績紀錄，不代表沒參加過其他站。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
       <div class="card-foot"><span class="mono">#106</span></div>
     </div></div></div><div class="md-block">
       <div class="md-head">若晉級會內賽，吳敏岳可能的賽程</div>
@@ -1863,6 +1978,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#16</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1877,6 +1993,7 @@
       <div class="card-opp">
         <span class="label">對手</span>陳忠鼎（台北市中山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#128</span></div>
@@ -1895,6 +2012,7 @@
       </div>
       
       <div class="card-note">會內賽・六十四強</div>
+      
       <div class="card-foot"><span class="mono">#175</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -1910,6 +2028,7 @@
         <span class="label">對手</span>林昱謙／郭明親（台北市福德國小）
       </div>
       <div class="card-partner">搭檔：陳奕辰</div>
+      
       
       <div class="card-foot"><span class="mono">#50</span></div>
     </div><div class="card card-done card-win">
@@ -1927,6 +2046,7 @@
       </div>
       <div class="card-partner">搭檔：陳奕辰</div>
       
+      
       <div class="card-foot"><span class="mono">#80</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -1943,6 +2063,7 @@
       </div>
       <div class="card-partner">搭檔：陳奕辰</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#100</span></div>
     </div></div></div></div>
     </details><details class="player">
@@ -1965,6 +2086,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#58</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -1979,6 +2101,7 @@
       <div class="card-opp">
         <span class="label">對手</span>蔣旻哲（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#114</span></div>
@@ -1997,6 +2120,7 @@
       </div>
       
       <div class="card-note">會內賽・六十四強</div>
+      
       <div class="card-foot"><span class="mono">#169</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -2013,6 +2137,7 @@
       </div>
       <div class="card-partner">搭檔：黃梓家</div>
       
+      
       <div class="card-foot"><span class="mono">#47</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2028,6 +2153,7 @@
         <span class="label">對手</span>楊爵愷／吳禹廷（台北市民生國小）
       </div>
       <div class="card-partner">搭檔：黃梓家</div>
+      
       
       <div class="card-foot"><span class="mono">#77</span></div>
     </div></div></div></div>
@@ -2051,6 +2177,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#45</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2065,6 +2192,7 @@
       <div class="card-opp">
         <span class="label">對手</span>楊函毓（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#69</span></div>
@@ -2083,6 +2211,7 @@
       </div>
       <div class="card-partner">搭檔：于衍恩</div>
       
+      
       <div class="card-foot"><span class="mono">#4</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2098,6 +2227,7 @@
         <span class="label">對手</span>施淳薰／陳芊睿（台北市敦化國小）
       </div>
       <div class="card-partner">搭檔：于衍恩</div>
+      
       
       <div class="card-foot"><span class="mono">#22</span></div>
     </div></div></div></div>
@@ -2121,6 +2251,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#24</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2135,6 +2266,7 @@
       <div class="card-opp">
         <span class="label">對手</span>郭明親（台北市福德國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#136</span></div>
@@ -2153,6 +2285,7 @@
       </div>
       <div class="card-partner">搭檔：蔡皓宇</div>
       
+      
       <div class="card-foot"><span class="mono">#4</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -2168,6 +2301,7 @@
         <span class="label">對手</span>喻以誠／黃笙迪（台中市大鵬國小）
       </div>
       <div class="card-partner">搭檔：蔡皓宇</div>
+      
       
       <div class="card-foot"><span class="mono">#34</span></div>
     </div><div class="card card-done card-lose">
@@ -2185,6 +2319,7 @@
       </div>
       <div class="card-partner">搭檔：蔡皓宇</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#92</span></div>
     </div></div></div></div>
     </details><details class="player">
@@ -2207,6 +2342,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#12</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -2221,6 +2357,7 @@
       <div class="card-opp">
         <span class="label">對手</span>陳韵宜（林口康橋國際學校）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#36</span></div>
@@ -2239,6 +2376,7 @@
       </div>
       <div class="card-partner">搭檔：程禾亘</div>
       
+      
       <div class="card-foot"><span class="mono">#3</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2254,6 +2392,7 @@
         <span class="label">對手</span>林亞鍹／詹宜儒（台北市民權國小）
       </div>
       <div class="card-partner">搭檔：程禾亘</div>
+      
       
       <div class="card-foot"><span class="mono">#21</span></div>
     </div></div></div></div>
@@ -2277,6 +2416,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#53</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2291,6 +2431,7 @@
       <div class="card-opp">
         <span class="label">對手</span>高湛寬（豐盈中市大勇）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#165</span></div>
@@ -2309,6 +2450,7 @@
       </div>
       <div class="card-partner">搭檔：楊富凱</div>
       
+      
       <div class="card-foot"><span class="mono">#56</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2324,6 +2466,7 @@
         <span class="label">對手</span>蔡典均／許迦恩（台中市忠明國小）
       </div>
       <div class="card-partner">搭檔：楊富凱</div>
+      
       
       <div class="card-foot"><span class="mono">#86</span></div>
     </div><div class="card card-done card-lose">
@@ -2341,6 +2484,7 @@
       </div>
       <div class="card-partner">搭檔：楊富凱</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#103</span></div>
     </div></div></div></div>
     </details><details class="player">
@@ -2363,6 +2507,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#46</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2377,6 +2522,7 @@
       <div class="card-opp">
         <span class="label">對手</span>黃立宇（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#102</span></div>
@@ -2395,6 +2541,7 @@
       </div>
       <div class="card-partner">搭檔：林祐慬</div>
       
+      
       <div class="card-foot"><span class="mono">#56</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2410,6 +2557,7 @@
         <span class="label">對手</span>蔡典均／許迦恩（台中市忠明國小）
       </div>
       <div class="card-partner">搭檔：林祐慬</div>
+      
       
       <div class="card-foot"><span class="mono">#86</span></div>
     </div><div class="card card-done card-lose">
@@ -2427,6 +2575,7 @@
       </div>
       <div class="card-partner">搭檔：林祐慬</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#103</span></div>
     </div></div></div></div>
     </details><details class="player">
@@ -2449,6 +2598,7 @@
       </div>
       <div class="card-partner">搭檔：林妍妡</div>
       
+      
       <div class="card-foot"><span class="mono">#3</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2464,6 +2614,7 @@
         <span class="label">對手</span>林亞鍹／詹宜儒（台北市民權國小）
       </div>
       <div class="card-partner">搭檔：林妍妡</div>
+      
       
       <div class="card-foot"><span class="mono">#21</span></div>
     </div></div></div></div>
@@ -2487,6 +2638,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#66</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2501,6 +2653,7 @@
       <div class="card-opp">
         <span class="label">對手</span>葉峖霆（新北市樹林國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#122</span></div>
@@ -2519,6 +2672,7 @@
       </div>
       <div class="card-partner">搭檔：李融載</div>
       
+      
       <div class="card-foot"><span class="mono">#4</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -2534,6 +2688,7 @@
         <span class="label">對手</span>喻以誠／黃笙迪（台中市大鵬國小）
       </div>
       <div class="card-partner">搭檔：李融載</div>
+      
       
       <div class="card-foot"><span class="mono">#34</span></div>
     </div><div class="card card-done card-lose">
@@ -2551,6 +2706,7 @@
       </div>
       <div class="card-partner">搭檔：李融載</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#92</span></div>
     </div></div></div></div>
     </details><details class="player">
@@ -2573,6 +2729,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#94</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2587,6 +2744,7 @@
       <div class="card-opp">
         <span class="label">對手</span>詹寓程（彰化縣田中國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#150</span></div>
@@ -2605,6 +2763,7 @@
       </div>
       <div class="card-partner">搭檔：吳梣安</div>
       
+      
       <div class="card-foot"><span class="mono">#50</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2620,6 +2779,7 @@
         <span class="label">對手</span>曾品瑋／陳忠鼎（台北市中山國小）
       </div>
       <div class="card-partner">搭檔：吳梣安</div>
+      
       
       <div class="card-foot"><span class="mono">#80</span></div>
     </div><div class="card card-done card-lose">
@@ -2637,6 +2797,7 @@
       </div>
       <div class="card-partner">搭檔：吳梣安</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#100</span></div>
     </div></div></div></div>
     </details><details class="player">
@@ -2659,6 +2820,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#11</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2673,6 +2835,7 @@
       <div class="card-opp">
         <span class="label">對手</span>劉謹賢（新北市頭前國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#67</span></div>
@@ -2691,6 +2854,7 @@
       </div>
       
       <div class="card-note">會內賽・六十四強</div>
+      
       <div class="card-foot"><span class="mono">#173</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2707,6 +2871,7 @@
       </div>
       
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#196</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -2723,6 +2888,7 @@
       </div>
       
       <div class="card-note">會內賽・十六強</div>
+      
       <div class="card-foot"><span class="mono">#210</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -2738,6 +2904,7 @@
         <span class="label">對手</span>王子碩／魏宏展（台北市雙蓮國小）
       </div>
       <div class="card-partner">搭檔：吳敏岳</div>
+      
       
       <div class="card-foot"><span class="mono">#35</span></div>
     </div><div class="card card-done card-win">
@@ -2755,6 +2922,7 @@
       </div>
       <div class="card-partner">搭檔：吳敏岳</div>
       
+      
       <div class="card-foot"><span class="mono">#65</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2771,6 +2939,7 @@
       </div>
       <div class="card-partner">搭檔：吳敏岳</div>
       <div class="card-note">會內賽・三十二強</div>
+      
       <div class="card-foot"><span class="mono">#92</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/5（六）</div><div class="card-list"><div class="card">
       <div class="card-top">
@@ -2787,6 +2956,7 @@
       </div>
       <div class="card-partner">搭檔：吳敏岳</div>
       <div class="card-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 3勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">五男單#165 勝本校 林祐慬 25:16</li><li class="rc-close">最接近的一勝：五男雙#36 25:22 勝 廖進程／尹翊帆（彰化市南郭國小）</li><li class="rc-other">五男單 5勝2敗，止步於32強（敗給 詹承諺（台北市民權國小） 17:25）</li><li class="rc-team">另外代表學校打 六男團，個人該場 0勝2敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">第十七屆臺中市家長會長盃（2025-06-14）<span class="rc-ext-result">小組未出線</span></div><div class="rc-ext-meta">國小中年級組男雙　</div><div class="rc-ext-detail">同一組搭檔（臺中市大勇國小），分在 C 組，未進入取 3 名的決賽階段；同組出線的是南屯國小 王辰方／江和諺。</div><div class="rc-ext-caveat">姓名與學校（臺中市大勇國小）皆吻合，且為同一組搭檔，判定為同一組人。小組三場的個別比分因 PDF 版面排版打散、無法可靠對應到各場，故不列。</div><a class="rc-ext-src" href="https://tcppa.mylivescore.link/第十七屆臺中市家長會長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">第十七屆臺中市家長會長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">2025 端午場（風城站）、港都秋季場、臺北巔峰站三份總成績紀錄裡都沒有這兩個名字。</div><div class="rc-ext-caveat">只查了這三站的成績紀錄，不代表沒參加過其他站。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
       <div class="card-foot"><span class="mono">#106</span></div>
     </div></div></div><div class="md-block">
       <div class="md-head">若晉級會內賽，顏弘寔可能的賽程</div>
@@ -2827,6 +2997,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#41</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2841,6 +3012,7 @@
       <div class="card-opp">
         <span class="label">對手</span>夏毅豐（新北市金龍國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#153</span></div>
@@ -2859,6 +3031,7 @@
       </div>
       <div class="card-partner">搭檔：呂循崴</div>
       
+      
       <div class="card-foot"><span class="mono">#47</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -2874,6 +3047,7 @@
         <span class="label">對手</span>楊爵愷／吳禹廷（台北市民生國小）
       </div>
       <div class="card-partner">搭檔：呂循崴</div>
+      
       
       <div class="card-foot"><span class="mono">#77</span></div>
     </div></div></div></div>
@@ -2903,6 +3077,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#8</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -2918,6 +3093,7 @@
         <span class="label">對手</span>吳祤杉／陳嵱橙（台北市中山國小）
       </div>
       <div class="card-partner">搭檔：林芸安</div>
+      
       
       <div class="card-foot"><span class="mono">#2</span></div>
     </div><div class="card card-done card-win">
@@ -2935,6 +3111,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#46</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -2950,6 +3127,7 @@
         <span class="label">對手</span>李博霏／郭辰穎（台北市敦化國小）
       </div>
       <div class="card-partner">搭檔：林芸安</div>
+      
       
       <div class="card-foot"><span class="mono">#22</span></div>
     </div></div></div></div>
@@ -2973,6 +3151,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#22</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -2989,6 +3168,7 @@
       </div>
       <div class="card-partner">搭檔：彭怡臻</div>
       
+      
       <div class="card-foot"><span class="mono">#2</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -3003,6 +3183,7 @@
       <div class="card-opp">
         <span class="label">對手</span>幸芯（台北市敦化國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#41</span></div>
@@ -3021,6 +3202,7 @@
       </div>
       <div class="card-partner">搭檔：彭怡臻</div>
       
+      
       <div class="card-foot"><span class="mono">#22</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/5（六）</div><div class="card-list"><div class="card">
       <div class="card-top">
@@ -3037,6 +3219,7 @@
       </div>
       
       <div class="card-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 2勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">四女雙#10 勝本校 謝佳玲／黃祤芯 25:22</li><li class="rc-game">四女單#23（資格賽）勝 卓詩涵（新北市義學國小） 25:15</li><li class="rc-game">四女單#42（資格賽）勝 郭辰穎（台北市敦化國小） 25:5</li><li class="rc-other">四女雙 2勝0敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">2025年臺北市市長盃（2025-08-05）<span class="rc-ext-result">八強止步（第5～8名）</span></div><div class="rc-ext-meta">挑戰國小三年級組女單（共22籤取4名）　</div><div class="rc-ext-detail">D 組小組出線，進入取 4 名的決賽階段，八強 22:25 惜敗新北秀山 吳媺暄（吳最後拿下該項第二名）。</div><div class="rc-ext-caveat">姓名與學校（新北市金龍國小）皆吻合；名次由決賽籤表直接讀出。小組三場的個別比分因排版打散未列。</div><a class="rc-ext-src" href="https://tsf.mylivescore.link/2025年臺北市市長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">會長盃／群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">臺中市家長會長盃是臺中在地賽事、群岳盃三站的總成績紀錄裡也沒有她。</div><div class="rc-ext-caveat">只查了這幾份公開成績紀錄。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
       <div class="card-foot"><span class="mono">#62</span></div>
     </div></div></div><div class="md-block">
       <div class="md-head">若晉級會內賽，林芸安可能的賽程</div>
@@ -3077,6 +3260,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#57</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -3091,6 +3275,7 @@
       <div class="card-opp">
         <span class="label">對手</span>夏志洋（彰化市南郭國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#111</span></div>
@@ -3109,6 +3294,7 @@
       </div>
       <div class="card-partner">搭檔：黃致堯</div>
       
+      
       <div class="card-foot"><span class="mono">#16</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -3125,6 +3311,7 @@
       </div>
       <div class="card-partner">搭檔：黃致堯</div>
       
+      
       <div class="card-foot"><span class="mono">#36</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3140,6 +3327,7 @@
         <span class="label">對手</span>黃允謙／吳瑞恩（新北市義學國小）
       </div>
       <div class="card-partner">搭檔：黃致堯</div>
+      
       
       <div class="card-foot"><span class="mono">#58</span></div>
     </div></div></div></div>
@@ -3163,6 +3351,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#2</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -3177,6 +3366,7 @@
       <div class="card-opp">
         <span class="label">對手</span>曾李品希（新北市文德國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#21</span></div>
@@ -3195,6 +3385,7 @@
       </div>
       <div class="card-partner">搭檔：黃祤芯</div>
       
+      
       <div class="card-foot"><span class="mono">#10</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3210,6 +3401,7 @@
         <span class="label">對手</span>陳若頤／陳姿帆（台北市民權國小）
       </div>
       <div class="card-partner">搭檔：黃祤芯</div>
+      
       
       <div class="card-foot"><span class="mono">#20</span></div>
     </div></div></div></div>
@@ -3233,6 +3425,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#71</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-win">
       <div class="card-top">
@@ -3247,6 +3440,7 @@
       <div class="card-opp">
         <span class="label">對手</span>胡尋（桃園市文山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#125</span></div>
@@ -3271,6 +3465,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#12</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -3286,6 +3481,7 @@
         <span class="label">對手</span>李米樂／王杏芙（新北市金龍國小）
       </div>
       <div class="card-partner">搭檔：謝佳玲</div>
+      
       
       <div class="card-foot"><span class="mono">#10</span></div>
     </div><div class="card card-done card-lose">
@@ -3303,6 +3499,7 @@
       </div>
       <div class="card-partner">搭檔：謝佳玲</div>
       
+      
       <div class="card-foot"><span class="mono">#20</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3317,6 +3514,7 @@
       <div class="card-opp">
         <span class="label">對手</span>陳若頤（台北市民權國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#50</span></div>
@@ -3341,6 +3539,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#98</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/3（四）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -3355,6 +3554,7 @@
       <div class="card-opp">
         <span class="label">對手</span>方在寅（台北市中山國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#152</span></div>
@@ -3373,6 +3573,7 @@
       </div>
       <div class="card-partner">搭檔：洪永宸</div>
       
+      
       <div class="card-foot"><span class="mono">#16</span></div>
     </div></div></div><div class="day-block"><div class="day-label">9/4（五）</div><div class="card-list"><div class="card card-done card-lose">
       <div class="card-top">
@@ -3389,6 +3590,7 @@
       </div>
       <div class="card-partner">搭檔：洪永宸</div>
       
+      
       <div class="card-foot"><span class="mono">#36</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3404,6 +3606,7 @@
         <span class="label">對手</span>黃允謙／吳瑞恩（新北市義學國小）
       </div>
       <div class="card-partner">搭檔：洪永宸</div>
+      
       
       <div class="card-foot"><span class="mono">#58</span></div>
     </div></div></div></div>
@@ -3433,6 +3636,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#22</span></div>
     </div><div class="card card-done card-win">
       <div class="card-top">
@@ -3447,6 +3651,7 @@
       <div class="card-opp">
         <span class="label">對手</span>鄭可妤（新北市重陽國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#34</span></div>
@@ -3465,6 +3670,7 @@
       </div>
       
       <div class="card-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 2勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-game">三女單#21（資格賽）勝 鄭繡妤（新北市文德國小） 25:18</li><li class="rc-game">三女單#33（資格賽）勝 郭芳廷（桃園市文山國小） 25:5</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext is-none"><div class="rc-ext-head">會長盃／群岳盃／臺北市市長盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">第十六、十七屆臺中市家長會長盃、群岳盃三站、2025 年臺北市市長盃的總成績紀錄裡都沒有她。</div><div class="rc-ext-caveat">群岳盃風城站有一位『謝炘桐』（炘，不同字），但那是桃園市仁和國小的男生、打三年級男單，不是同一人。</div><a class="rc-ext-src" href="https://tsf.mylivescore.link/2025年臺北市市長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
       <div class="card-foot"><span class="mono">#40</span></div>
     </div></div></div><div class="md-block">
       <div class="md-head">若晉級會內賽，包清尹可能的賽程</div>
@@ -3505,6 +3711,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#56</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3519,6 +3726,7 @@
       <div class="card-opp">
         <span class="label">對手</span>張泳樂（台北市濱江國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#97</span></div>
@@ -3543,6 +3751,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#43</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3557,6 +3766,7 @@
       <div class="card-opp">
         <span class="label">對手</span>洪宇熙（新北市麗林國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#84</span></div>
@@ -3581,6 +3791,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#13</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3595,6 +3806,7 @@
       <div class="card-opp">
         <span class="label">對手</span>蔡亞恩（台北市雙蓮國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#54</span></div>
@@ -3619,6 +3831,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#46</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3633,6 +3846,7 @@
       <div class="card-opp">
         <span class="label">對手</span>黃翊宸（新北市昌平國小）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#87</span></div>
@@ -3657,6 +3871,7 @@
       </div>
       
       
+      
       <div class="card-foot"><span class="mono">#7</span></div>
     </div><div class="card card-done card-lose">
       <div class="card-top">
@@ -3671,6 +3886,7 @@
       <div class="card-opp">
         <span class="label">對手</span>陳以芊（林口康橋國際學校）
       </div>
+      
       
       
       <div class="card-foot"><span class="mono">#31</span></div>
@@ -3705,6 +3921,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #106</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 3勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">五男單#165 勝本校 林祐慬 25:16</li><li class="rc-close">最接近的一勝：五男雙#36 25:22 勝 廖進程／尹翊帆（彰化市南郭國小）</li><li class="rc-other">五男單 5勝2敗，止步於32強（敗給 詹承諺（台北市民權國小） 17:25）</li><li class="rc-team">另外代表學校打 六男團，個人該場 0勝2敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">第十七屆臺中市家長會長盃（2025-06-14）<span class="rc-ext-result">小組未出線</span></div><div class="rc-ext-meta">國小中年級組男雙　</div><div class="rc-ext-detail">同一組搭檔（臺中市大勇國小），分在 C 組，未進入取 3 名的決賽階段；同組出線的是南屯國小 王辰方／江和諺。</div><div class="rc-ext-caveat">姓名與學校（臺中市大勇國小）皆吻合，且為同一組搭檔，判定為同一組人。小組三場的個別比分因 PDF 版面排版打散、無法可靠對應到各場，故不列。</div><a class="rc-ext-src" href="https://tcppa.mylivescore.link/第十七屆臺中市家長會長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">第十七屆臺中市家長會長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">2025 端午場（風城站）、港都秋季場、臺北巔峰站三份總成績紀錄裡都沒有這兩個名字。</div><div class="rc-ext-caveat">只查了這三站的成績紀錄，不代表沒參加過其他站。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3721,6 +3938,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地9 · #40</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 2勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-game">三女單#21（資格賽）勝 鄭繡妤（新北市文德國小） 25:18</li><li class="rc-game">三女單#33（資格賽）勝 郭芳廷（桃園市文山國小） 25:5</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext is-none"><div class="rc-ext-head">會長盃／群岳盃／臺北市市長盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">第十六、十七屆臺中市家長會長盃、群岳盃三站、2025 年臺北市市長盃的總成績紀錄裡都沒有她。</div><div class="rc-ext-caveat">群岳盃風城站有一位『謝炘桐』（炘，不同字），但那是桃園市仁和國小的男生、打三年級男單，不是同一人。</div><a class="rc-ext-src" href="https://tsf.mylivescore.link/2025年臺北市市長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3737,6 +3955,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地1 · #62</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 2勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">四女雙#10 勝本校 謝佳玲／黃祤芯 25:22</li><li class="rc-game">四女單#23（資格賽）勝 卓詩涵（新北市義學國小） 25:15</li><li class="rc-game">四女單#42（資格賽）勝 郭辰穎（台北市敦化國小） 25:5</li><li class="rc-other">四女雙 2勝0敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">2025年臺北市市長盃（2025-08-05）<span class="rc-ext-result">八強止步（第5～8名）</span></div><div class="rc-ext-meta">挑戰國小三年級組女單（共22籤取4名）　</div><div class="rc-ext-detail">D 組小組出線，進入取 4 名的決賽階段，八強 22:25 惜敗新北秀山 吳媺暄（吳最後拿下該項第二名）。</div><div class="rc-ext-caveat">姓名與學校（新北市金龍國小）皆吻合；名次由決賽籤表直接讀出。小組三場的個別比分因排版打散未列。</div><a class="rc-ext-src" href="https://tsf.mylivescore.link/2025年臺北市市長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">會長盃／群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">臺中市家長會長盃是臺中在地賽事、群岳盃三站的總成績紀錄裡也沒有她。</div><div class="rc-ext-caveat">只查了這幾份公開成績紀錄。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3752,6 +3971,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #113</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 1 場</span><span class="cond-from">E組第1名</span></div>
+      
       
     </div></div>
             </div><div class="slot">
@@ -3769,6 +3989,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地5 · #44</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 1 場</span><span class="cond-from">J組第1名</span></div>
       
+      
     </div><div class="coach-match is-cond">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -3778,6 +3999,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地6 · #69</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 1 場</span><span class="cond-from">C組第1名</span></div>
+      
       
     </div></div>
             </div><div class="slot">
@@ -3795,6 +4017,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地3 · #117</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 2 場</span><span class="cond-from">E組第1名</span></div>
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3811,6 +4034,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地2 · #46</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 2 場</span><span class="cond-from">J組第1名</span></div>
       
+      
     </div><div class="coach-match is-cond">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -3820,6 +4044,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地3 · #73</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 2 場</span><span class="cond-from">C組第1名</span></div>
+      
       
     </div></div>
             </div><div class="slot">
@@ -3837,6 +4062,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #119</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 3 場</span><span class="cond-from">E組第1名 · 第一、二名</span></div>
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3853,6 +4079,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地1 · #47</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 3 場</span><span class="cond-from">J組第1名</span></div>
       
+      
     </div><div class="coach-match is-cond">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -3862,6 +4089,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地2 · #75</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 3 場</span><span class="cond-from">C組第1名</span></div>
+      
       
     </div></div>
             </div></div>
@@ -3886,6 +4114,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地9 · #9</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3900,6 +4129,7 @@
         <span class="res-badge res-lose">敗 0:3</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #7</div>
+      
       
       
     </div></div>
@@ -3918,6 +4148,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級男子團體 · 場地10 · #18</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3932,6 +4163,7 @@
         <span class="res-badge res-win">勝 3:0</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地3 · #4</div>
+      
       
       
     </div></div>
@@ -3950,6 +4182,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地1 · #18</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -3966,6 +4199,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級女子團體 · 場地3 · #13</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">黃丞禾</span>
@@ -3974,6 +4208,7 @@
         <span class="res-badge res-lose">敗 21:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #6</div>
+      
       
       
     </div></div>
@@ -3992,6 +4227,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #7</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4006,6 +4242,7 @@
         <span class="res-badge res-lose">敗 10:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #22</div>
+      
       
       
     </div></div>
@@ -4024,6 +4261,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #27</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">林芠頡</span>
@@ -4034,6 +4272,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地3 · #29</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">王宥程</span>
@@ -4042,6 +4281,7 @@
         <span class="res-badge res-lose">敗 17:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #31</div>
+      
       
       
     </div></div>
@@ -4058,6 +4298,7 @@
         <span class="res-badge res-lose">敗 10:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #57</div>
+      
       
       
     </div></div>
@@ -4083,6 +4324,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地9 · #29</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4099,6 +4341,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級男子團體 · 場地3 · #28</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">四女團</span>
@@ -4107,6 +4350,7 @@
         <span class="res-badge res-lose">敗 0:3</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地6 · #7</div>
+      
       
       
     </div></div>
@@ -4125,6 +4369,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #31</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4141,6 +4386,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級女子團體 · 場地6 · #20</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">黃丞禾／陳彥森</span>
@@ -4149,6 +4395,7 @@
         <span class="res-badge res-win">勝 25:18</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地9 · #2</div>
+      
       
       
     </div></div>
@@ -4167,6 +4414,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地9 · #22</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">廖思維／鄭韋綸</span>
@@ -4175,6 +4423,7 @@
         <span class="res-badge res-win">勝 25:13</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地10 · #23</div>
+      
       
       
     </div></div>
@@ -4193,6 +4442,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地3 · #26</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4207,6 +4457,7 @@
         <span class="res-badge res-win">勝 25:8</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地6 · #11</div>
+      
       
       
     </div></div>
@@ -4225,6 +4476,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #16</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">李融載</span>
@@ -4233,6 +4485,7 @@
         <span class="res-badge res-lose">敗 10:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地9 · #24</div>
+      
       
       
     </div></div>
@@ -4251,6 +4504,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地6 · #41</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4267,6 +4521,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #46</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">林祐慬</span>
@@ -4275,6 +4530,7 @@
         <span class="res-badge res-win">勝 25:16</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地8 · #53</div>
+      
       
       
     </div></div>
@@ -4293,6 +4549,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地4 · #51</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">張喬椉／詹堉禾</span>
@@ -4301,6 +4558,7 @@
         <span class="res-badge res-lose">敗 13:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #54</div>
+      
       
       
     </div></div>
@@ -4319,6 +4577,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #58</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">蔡皓宇</span>
@@ -4329,6 +4588,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地9 · #66</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">顏弘寔</span>
@@ -4337,6 +4597,7 @@
         <span class="res-badge res-win">勝 25:12</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地10 · #67</div>
+      
       
       
     </div></div>
@@ -4355,6 +4616,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地7 · #74</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4369,6 +4631,7 @@
         <span class="res-badge res-lose">敗 22:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地7 · #94</div>
+      
       
       
     </div></div>
@@ -4387,6 +4650,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地5 · #102</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4401,6 +4665,7 @@
         <span class="res-badge res-win">勝 25:10</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #58</div>
+      
       
       
     </div></div>
@@ -4419,6 +4684,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #78</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4433,6 +4699,7 @@
         <span class="res-badge res-win">勝 25:13</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地5 · #114</div>
+      
       
       
     </div></div>
@@ -4451,6 +4718,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地3 · #122</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">吳梣安</span>
@@ -4459,6 +4727,7 @@
         <span class="res-badge res-win">勝 對手棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地9 · #128</div>
+      
       
       
     </div></div>
@@ -4477,6 +4746,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #130</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">李融載</span>
@@ -4485,6 +4755,7 @@
         <span class="res-badge res-win">勝 25:17</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地7 · #136</div>
+      
       
       
     </div></div>
@@ -4503,6 +4774,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地1 · #150</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">黃梓家</span>
@@ -4511,6 +4783,7 @@
         <span class="res-badge res-lose">敗 17:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地4 · #153</div>
+      
       
       
     </div></div>
@@ -4529,6 +4802,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地6 · #165</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4545,6 +4819,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #64</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">張喬椉</span>
@@ -4553,6 +4828,7 @@
         <span class="res-badge res-lose">敗 8:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地6 · #65</div>
+      
       
       
     </div></div>
@@ -4571,6 +4847,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地4 · #73</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4587,6 +4864,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地1 · #80</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">陳彥森</span>
@@ -4595,6 +4873,7 @@
         <span class="res-badge res-lose">敗 12:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地5 · #84</div>
+      
       
       
     </div></div>
@@ -4611,6 +4890,7 @@
         <span class="res-badge res-lose">敗 棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地4 · #103</div>
+      
       
       
     </div></div>
@@ -4636,6 +4916,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地7 · #11</div>
       
       <div class="coach-note">會內賽・準決賽</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4652,6 +4933,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地3 · #39</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4666,6 +4948,7 @@
         <span class="res-badge res-lose">敗 6:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地5 · #13</div>
+      
       
       
     </div></div>
@@ -4684,6 +4967,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地8 · #169</div>
       
       <div class="coach-note">會內賽・六十四強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4700,6 +4984,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地2 · #173</div>
       
       <div class="coach-note">會內賽・六十四強</div>
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">吳梣安</span>
@@ -4710,6 +4995,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地4 · #175</div>
       
       <div class="coach-note">會內賽・六十四強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4726,6 +5012,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地4 · #36</div>
       
       <div class="coach-note">會內賽・八強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4742,6 +5029,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 四年級女子團體 · 場地1 · #12</div>
       
       <div class="coach-note">會內賽・名次賽（R34）</div>
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">六男團</span>
@@ -4752,6 +5040,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地5 · #43</div>
       
       <div class="coach-note">會內賽・八強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4768,6 +5057,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地7 · #43</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">陳俞儒</span>
@@ -4776,6 +5066,7 @@
         <span class="res-badge res-win">勝 25:7</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地10 · #46</div>
+      
       
       
     </div></div>
@@ -4794,6 +5085,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地8 · #54</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">張時曦</span>
@@ -4802,6 +5094,7 @@
         <span class="res-badge res-lose">敗 2:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地10 · #56</div>
+      
       
       
     </div></div>
@@ -4820,6 +5113,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地7 · #85</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4836,6 +5130,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級男子雙打 · 場地6 · #94</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4852,6 +5147,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地2 · #196</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4866,6 +5162,7 @@
         <span class="res-badge res-lose">敗 16:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地6 · #12</div>
+      
       
       
     </div></div>
@@ -4884,6 +5181,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地10 · #84</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4898,6 +5196,7 @@
         <span class="res-badge res-lose">敗 12:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地3 · #87</div>
+      
       
       
     </div></div>
@@ -4916,6 +5215,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級男子單打 · 場地3 · #97</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4930,6 +5230,7 @@
         <span class="res-badge res-lose">敗 棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地2 · #57</div>
+      
       
       
     </div></div>
@@ -4948,6 +5249,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地6 · #71</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4962,6 +5264,7 @@
         <span class="res-badge res-lose">敗 8:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地3 · #98</div>
+      
       
       
     </div></div>
@@ -4980,6 +5283,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地8 · #131</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -4994,6 +5298,7 @@
         <span class="res-badge res-lose">敗 10:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #143</div>
+      
       
       
     </div></div>
@@ -5012,6 +5317,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地2 · #145</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">王宥程</span>
@@ -5020,6 +5326,7 @@
         <span class="res-badge res-lose">敗 8:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地4 · #147</div>
+      
       
       
     </div></div>
@@ -5038,6 +5345,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地8 · #161</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5052,6 +5360,7 @@
         <span class="res-badge res-lose">敗 棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級男子單打 · 場地10 · #173</div>
+      
       
       
     </div></div>
@@ -5077,6 +5386,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 六年級男子團體 · 場地4 · #48</div>
       
       <div class="coach-note">會內賽・名次賽（F4）</div>
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">五男團</span>
@@ -5087,6 +5397,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">團體</span> 五年級男子團體 · 場地8 · #40</div>
       
       <div class="coach-note">會內賽・名次賽（F4）</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5103,6 +5414,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級男子單打 · 場地4 · #210</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5117,6 +5429,7 @@
         <span class="res-badge res-win">勝 25:6</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地10 · #32</div>
+      
       
       
     </div></div>
@@ -5135,6 +5448,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地6 · #36</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5149,6 +5463,7 @@
         <span class="res-badge res-lose">敗 8:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地7 · #45</div>
+      
       
       
     </div></div>
@@ -5167,6 +5482,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地10 · #2</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5183,6 +5499,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地6 · #8</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">黃祤芯</span>
@@ -5191,6 +5508,7 @@
         <span class="res-badge res-lose">敗 15:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地10 · #12</div>
+      
       
       
     </div></div>
@@ -5209,6 +5527,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地10 · #18</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5225,6 +5544,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地1 · #19</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">羅翊嫙</span>
@@ -5233,6 +5553,7 @@
         <span class="res-badge res-lose">敗 13:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地9 · #27</div>
+      
       
       
     </div></div>
@@ -5251,6 +5572,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地3 · #56</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5265,6 +5587,7 @@
         <span class="res-badge res-lose">敗 9:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 五年級女子單打 · 場地6 · #69</div>
+      
       
       
     </div></div>
@@ -5283,6 +5606,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地2 · #111</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5297,6 +5621,7 @@
         <span class="res-badge res-win">勝 25:22</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地6 · #125</div>
+      
       
       
     </div></div>
@@ -5315,6 +5640,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級男子單打 · 場地3 · #152</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5331,6 +5657,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地5 · #21</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -5339,6 +5666,7 @@
         <span class="res-badge res-win">勝 25:18</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地6 · #22</div>
+      
       
       
     </div></div>
@@ -5357,6 +5685,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地8 · #39</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5373,6 +5702,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地6 · #47</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">包清之</span>
@@ -5381,6 +5711,7 @@
         <span class="res-badge res-win">勝 25:22</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地7 · #48</div>
+      
       
       
     </div></div>
@@ -5399,6 +5730,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地5 · #56</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5415,6 +5747,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地7 · #4</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5429,6 +5762,7 @@
         <span class="res-badge res-lose">敗 棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級男子雙打 · 場地9 · #16</div>
+      
       
       
     </div></div>
@@ -5454,6 +5788,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地4 · #34</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">顏弘寔／吳敏岳</span>
@@ -5462,6 +5797,7 @@
         <span class="res-badge res-win">勝 25:9</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地5 · #35</div>
+      
       
       
     </div></div>
@@ -5480,6 +5816,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地7 · #47</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">吳梣安／陳奕辰</span>
@@ -5488,6 +5825,7 @@
         <span class="res-badge res-win">勝 25:9</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地10 · #50</div>
+      
       
       
     </div></div>
@@ -5506,6 +5844,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地6 · #56</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5520,6 +5859,7 @@
         <span class="res-badge res-lose">敗 棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級男子雙打 · 場地5 · #36</div>
+      
       
       
     </div></div>
@@ -5538,6 +5878,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地4 · #3</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">于衍恩／安在芸</span>
@@ -5546,6 +5887,7 @@
         <span class="res-badge res-win">勝 25:21</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地5 · #4</div>
+      
       
       
     </div></div>
@@ -5564,6 +5906,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地10 · #10</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5578,6 +5921,7 @@
         <span class="res-badge res-lose">敗 21:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地6 · #2</div>
+      
       
       
     </div></div>
@@ -5596,6 +5940,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地4 · #10</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5612,6 +5957,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地1 · #7</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">包清之／羅翊嫙</span>
@@ -5620,6 +5966,7 @@
         <span class="res-badge res-lose">敗 9:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地10 · #16</div>
+      
       
       
     </div></div>
@@ -5638,6 +5985,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地8 · #24</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5652,6 +6000,7 @@
         <span class="res-badge res-lose">敗 棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級男子雙打 · 場地8 · #58</div>
+      
       
       
     </div></div>
@@ -5670,6 +6019,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地3 · #20</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">顏弘寔／吳敏岳</span>
@@ -5678,6 +6028,7 @@
         <span class="res-badge res-win">勝 25:17</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地8 · #65</div>
+      
       
       
     </div></div>
@@ -5696,6 +6047,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地10 · #77</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5712,6 +6064,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地3 · #80</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">楊富凱／林祐慬</span>
@@ -5720,6 +6073,7 @@
         <span class="res-badge res-win">勝 對手棄權</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地9 · #86</div>
+      
       
       
     </div></div>
@@ -5738,6 +6092,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地10 · #22</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5754,6 +6109,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地5 · #41</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">彭怡臻</span>
@@ -5762,6 +6118,7 @@
         <span class="res-badge res-win">勝 25:10</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地10 · #46</div>
+      
       
       
     </div></div>
@@ -5780,6 +6137,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地4 · #50</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5794,6 +6152,7 @@
         <span class="res-badge res-win">勝 25:7</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 六年級女子單打 · 場地5 · #68</div>
+      
       
       
     </div></div>
@@ -5812,6 +6171,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地4 · #92</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">顏弘寔／吳敏岳</span>
@@ -5822,6 +6182,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地4 · #92</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5838,6 +6199,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #100</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">楊富凱／林祐慬</span>
@@ -5848,6 +6210,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地5 · #103</div>
       
       <div class="coach-note">會內賽・三十二強</div>
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5864,6 +6227,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地5 · #21</div>
       
       
+      
     </div><div class="coach-match is-done is-lose">
       <div class="coach-match-top">
         <span class="coach-player">于衍恩／安在芸</span>
@@ -5872,6 +6236,7 @@
         <span class="res-badge res-lose">敗 18:25</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級女子雙打 · 場地6 · #22</div>
+      
       
       
     </div></div>
@@ -5890,6 +6255,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 四年級女子雙打 · 場地3 · #22</div>
       
       
+      
     </div></div>
             </div><div class="slot">
               <div class="slot-head">
@@ -5904,6 +6270,7 @@
         <span class="res-badge res-win">勝 25:20</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 六年級女子雙打 · 場地3 · #30</div>
+      
       
       
     </div></div>
@@ -5922,6 +6289,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地2 · #31</div>
       
       
+      
     </div><div class="coach-match is-done is-win">
       <div class="coach-match-top">
         <span class="coach-player">包清尹</span>
@@ -5930,6 +6298,7 @@
         <span class="res-badge res-win">勝 25:18</span>
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地5 · #34</div>
+      
       
       
     </div></div>
@@ -5955,6 +6324,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #106</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 3勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">五男單#165 勝本校 林祐慬 25:16</li><li class="rc-close">最接近的一勝：五男雙#36 25:22 勝 廖進程／尹翊帆（彰化市南郭國小）</li><li class="rc-other">五男單 5勝2敗，止步於32強（敗給 詹承諺（台北市民權國小） 17:25）</li><li class="rc-team">另外代表學校打 六男團，個人該場 0勝2敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">第十七屆臺中市家長會長盃（2025-06-14）<span class="rc-ext-result">小組未出線</span></div><div class="rc-ext-meta">國小中年級組男雙　</div><div class="rc-ext-detail">同一組搭檔（臺中市大勇國小），分在 C 組，未進入取 3 名的決賽階段；同組出線的是南屯國小 王辰方／江和諺。</div><div class="rc-ext-caveat">姓名與學校（臺中市大勇國小）皆吻合，且為同一組搭檔，判定為同一組人。小組三場的個別比分因 PDF 版面排版打散、無法可靠對應到各場，故不列。</div><a class="rc-ext-src" href="https://tcppa.mylivescore.link/第十七屆臺中市家長會長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">第十七屆臺中市家長會長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">2025 端午場（風城站）、港都秋季場、臺北巔峰站三份總成績紀錄裡都沒有這兩個名字。</div><div class="rc-ext-caveat">只查了這三站的成績紀錄，不代表沒參加過其他站。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">08:40</td><td><details class="grid-cell">
               <summary><span class="grid-count">1</span></summary>
@@ -5968,6 +6338,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地9 · #40</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 2勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-game">三女單#21（資格賽）勝 鄭繡妤（新北市文德國小） 25:18</li><li class="rc-game">三女單#33（資格賽）勝 郭芳廷（桃園市文山國小） 25:5</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext is-none"><div class="rc-ext-head">會長盃／群岳盃／臺北市市長盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">第十六、十七屆臺中市家長會長盃、群岳盃三站、2025 年臺北市市長盃的總成績紀錄裡都沒有她。</div><div class="rc-ext-caveat">群岳盃風城站有一位『謝炘桐』（炘，不同字），但那是桃園市仁和國小的男生、打三年級男單，不是同一人。</div><a class="rc-ext-src" href="https://tsf.mylivescore.link/2025年臺北市市長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">09:00</td><td><details class="grid-cell">
               <summary><span class="grid-count">1</span></summary>
@@ -5981,6 +6352,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地1 · #62</div>
       
       <div class="coach-note">會內賽・十六強</div>
+      <details class="rc"><summary><span class="rc-tag">對手近況</span><span class="rc-head">本項 2勝0敗，尚未掉過一場</span></summary><div class="rc-body"><ul class="rc-list"><li class="rc-vsus">四女雙#10 勝本校 謝佳玲／黃祤芯 25:22</li><li class="rc-game">四女單#23（資格賽）勝 卓詩涵（新北市義學國小） 25:15</li><li class="rc-game">四女單#42（資格賽）勝 郭辰穎（台北市敦化國小） 25:5</li><li class="rc-other">四女雙 2勝0敗</li></ul><div class="rc-ext-head-row">其他賽事</div><div class="rc-ext"><div class="rc-ext-head">2025年臺北市市長盃（2025-08-05）<span class="rc-ext-result">八強止步（第5～8名）</span></div><div class="rc-ext-meta">挑戰國小三年級組女單（共22籤取4名）　</div><div class="rc-ext-detail">D 組小組出線，進入取 4 名的決賽階段，八強 22:25 惜敗新北秀山 吳媺暄（吳最後拿下該項第二名）。</div><div class="rc-ext-caveat">姓名與學校（新北市金龍國小）皆吻合；名次由決賽籤表直接讀出。小組三場的個別比分因排版打散未列。</div><a class="rc-ext-src" href="https://tsf.mylivescore.link/2025年臺北市市長盃羽球錦標賽_總成績紀錄.pdf" target="_blank" rel="noopener">2025年臺北市市長盃羽球錦標賽 總成績紀錄</a></div><div class="rc-ext is-none"><div class="rc-ext-head">會長盃／群岳盃<span class="rc-ext-result">查無</span></div><div class="rc-ext-meta"></div><div class="rc-ext-detail">臺中市家長會長盃是臺中在地賽事、群岳盃三站的總成績紀錄裡也沒有她。</div><div class="rc-ext-caveat">只查了這幾份公開成績紀錄。</div><a class="rc-ext-src" href="https://cysports.mylivescore.link/" target="_blank" rel="noopener">群岳運動 成績紀錄</a></div><div class="rc-foot">本屆戰績來自大會即時計分系統；其他賽事整理自公開成績紀錄，同名者一律比對學校後才採用，僅供參考。</div></div></details>
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">10:00</td><td><details class="grid-cell">
               <summary><span class="grid-count grid-none">0</span><span class="grid-maybe ">+1</span></summary>
@@ -5993,6 +6365,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #113</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 1 場</span><span class="cond-from">E組第1名</span></div>
+      
       
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">10:40</td><td><details class="grid-cell">
@@ -6007,6 +6380,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地5 · #44</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 1 場</span><span class="cond-from">J組第1名</span></div>
       
+      
     </div><div class="coach-match is-cond">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -6016,6 +6390,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地6 · #69</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 1 場</span><span class="cond-from">C組第1名</span></div>
+      
       
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">11:40</td><td><details class="grid-cell">
@@ -6030,6 +6405,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地3 · #117</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 2 場</span><span class="cond-from">E組第1名</span></div>
       
+      
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">12:20</td><td><details class="grid-cell">
               <summary><span class="grid-count grid-none">0</span><span class="grid-maybe ">+2</span></summary>
@@ -6043,6 +6419,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地2 · #46</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 2 場</span><span class="cond-from">J組第1名</span></div>
       
+      
     </div><div class="coach-match is-cond">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -6052,6 +6429,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地3 · #73</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 2 場</span><span class="cond-from">C組第1名</span></div>
+      
       
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">13:20</td><td><details class="grid-cell">
@@ -6066,6 +6444,7 @@
       <div class="coach-meta"><span class="type-badge type-duo">雙打</span> 五年級男子雙打 · 場地2 · #119</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 3 場</span><span class="cond-from">E組第1名 · 第一、二名</span></div>
       
+      
     </div></div>
             </details></td></tr><tr><td class="mono grid-time">13:40</td><td><details class="grid-cell">
               <summary><span class="grid-count grid-none">0</span><span class="grid-maybe ">+2</span></summary>
@@ -6079,6 +6458,7 @@
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 三年級女子單打 · 場地1 · #47</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 3 場</span><span class="cond-from">J組第1名</span></div>
       
+      
     </div><div class="coach-match is-cond">
       <div class="coach-match-top">
         <span class="coach-player">林芸安</span>
@@ -6088,6 +6468,7 @@
       </div>
       <div class="coach-meta"><span class="type-badge type-solo">單打</span> 四年級女子單打 · 場地2 · #75</div>
       <div class="coach-cond"><span class="cond-tag">需再贏 3 場</span><span class="cond-from">C組第1名</span></div>
+      
       
     </div></div>
             </details></td></tr>
